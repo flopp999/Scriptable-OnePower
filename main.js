@@ -3,20 +3,19 @@
 // icon-color: green; icon-glyph: magic;
 const today = new Date();
 const yyyy = today.getFullYear();
-const mm = String(today.getMonth() + 1).padStart(2, '0'); // månader är 0-indexerade
+const mm = String(today.getMonth() + 1).padStart(2, '0'); // month are indexed from 0
 const dd = String(today.getDate()).padStart(2, '0');
 const formattedDate = `${yyyy}-${mm}-${dd}`;
 const hour = today.getHours();
 const minute = today.getMinutes();
 const url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${formattedDate}&market=DayAhead&indexNames=SE4&currency=SEK&resolutionInMinutes=15`;
 const request = new Request(url);
-hours=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+const hours=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
 let data = (await request.loadJSON());
-updated = data.updatedAt
+let updated = data.updatedAt
 updated = updated.replace(/\.\d+Z$/, '').replace('T', ' ');
-let day = data.deliveryDateCET
+const day = data.deliveryDateCET
 data = data.multiIndexEntries
-log(day)
 let allValues = [];
 
 for (let i = 0; i < data.length; i++) {
@@ -111,145 +110,144 @@ for (let i = 0; i < 6; i++) {
   }
 
 for (let i = 0; i < 24; i++) {
-let uterum1 = firstprice.addText(String((datatoday[i]*1.25).toFixed(0)));
-uterum1.leftAlignText();
+let price = firstprice.addText(String(Math.round(datatoday[i]*1.25)));
+price.leftAlignText();
 
-uterum1.font = Font.lightSystemFont(11);
+price.font = Font.lightSystemFont(11);
 if (datatoday[i] < avgtoday+todaylow){
-  uterum1.textColor = Color.green()
+  price.textColor = Color.green()
 }
 else if (datatoday[i] > todayhigh-avgtoday){
-  uterum1.textColor = Color.red()
+  price.textColor = Color.red()
 }
-
 else {
-  uterum1.textColor = Color.orange()
+  price.textColor = Color.orange()
   }
 }
 
 for (let i = 6; i < 12; i++) {
-  let uterum1
+  let time
   for (let a = 0; a < 4; a++) {
     if (a===0){
-      uterum1 = secondtime.addText(i+":00 ");
+      time = secondtime.addText(i+":00 ");
     }
     if (a===1){
-      uterum1 = secondtime.addText(i+":15 ");
+      time = secondtime.addText(i+":15 ");
     }
     if (a===2){
-      uterum1 = secondtime.addText(i+":30 ");
+      time = secondtime.addText(i+":30 ");
     }
     if (a===3){
-      uterum1 = secondtime.addText(i+":45 ");
+      time = secondtime.addText(i+":45 ");
     }
-    uterum1.leftAlignText();
+    time.leftAlignText();
     if (i === hour && minute >= a*15 && minute <= (a+1)*15) {
-      uterum1.textColor = new Color("#ff00ff");
+      time.textColor = new Color("#ff00ff");
     }
     else{
-      uterum1.textColor = new Color("#ffffff");
+      time.textColor = new Color("#ffffff");
     }
-    uterum1.font = Font.lightSystemFont(11);
+    time.font = Font.lightSystemFont(11);
     }
   }
 
 for (let i = 24; i < 48; i++) {
-let uterum1 = secondprice.addText(String((datatoday[i]*1.25).toFixed(0)));
-uterum1.leftAlignText();
-uterum1.font = Font.lightSystemFont(11);
+let price = secondprice.addText(String(Math.round(datatoday[i]*1.25)));
+price.leftAlignText();
+price.font = Font.lightSystemFont(11);
 if (datatoday[i] < avgtoday+todaylow){
-  uterum1.textColor = Color.green()
+  price.textColor = Color.green()
 }
 else if (datatoday[i] > todayhigh-avgtoday){
-  uterum1.textColor = Color.red()
+  price.textColor = Color.red()
 }
 else {
-  uterum1.textColor = Color.orange()
+  price.textColor = Color.orange()
 }
 }
 
 for (let i = 12; i < 18; i++) {
-  let uterum1
+  let time
   for (let a = 0; a < 4; a++) {
     if (a===0){
-      uterum1 = thirdtime.addText(i+":00 ");
+      time = thirdtime.addText(i+":00 ");
     }
     if (a===1){
-      uterum1 = thirdtime.addText(i+":15 ");
+      time = thirdtime.addText(i+":15 ");
     }
     if (a===2){
-      uterum1 = thirdtime.addText(i+":30 ");
+      time = thirdtime.addText(i+":30 ");
     }
     if (a===3){
-      uterum1 = thirdtime.addText(i+":45 ");
+      time = thirdtime.addText(i+":45 ");
     }
-    uterum1.leftAlignText();
+    time.leftAlignText();
     if (i === hour && minute >= a*15 && minute <= (a+1)*15) {
-      uterum1.textColor = new Color("#ff00ff");
+      time.textColor = new Color("#ff00ff");
     }
     else{
-      uterum1.textColor = new Color("#ffffff");
+      time.textColor = new Color("#ffffff");
     }
-    uterum1.font = Font.lightSystemFont(11);
+    time.font = Font.lightSystemFont(11);
     }
   }
 
 for (let i = 48; i < 72; i++) {
-  let uterum1 = thirdprice.addText(String((datatoday[i]*1.25).toFixed(0)));
-  uterum1.leftAlignText();
-  uterum1.font = Font.lightSystemFont(11);
+  let price = thirdprice.addText(String(Math.round(datatoday[i]*1.25)));
+  price.leftAlignText();
+  price.font = Font.lightSystemFont(11);
   if (datatoday[i] < avgtoday+todaylow){
     //log(datatoday[i])
     //log(avgtoday+todaylow)
-    uterum1.textColor = Color.green()
+    price.textColor = Color.green()
   }
   else if (datatoday[i] > todayhigh-avgtoday){
-    uterum1.textColor = Color.red()
+    price.textColor = Color.red()
   }
   else {
-    uterum1.textColor = Color.orange()
+    price.textColor = Color.orange()
   }
 }
 
 for (let i = 18; i < 24; i++) {
-  let uterum1
+  let time
   for (let a = 0; a < 4; a++) {
     if (a===0){
-      uterum1 = fourthtime.addText(i+":00 ");
+      time = fourthtime.addText(i+":00 ");
     }
     if (a===1){
-      uterum1 = fourthtime.addText(i+":15 ");
+      time = fourthtime.addText(i+":15 ");
     }
     if (a===2){
-      uterum1 = fourthtime.addText(i+":30 ");
+      time = fourthtime.addText(i+":30 ");
     }
     if (a===3){
-      uterum1 = fourthtime.addText(i+":45 ");
+      time = fourthtime.addText(i+":45 ");
     }
-    uterum1.leftAlignText();
+    time.leftAlignText();
     if (i === hour && minute >= a*15 && minute <= (a+1)*15) {
-      uterum1.textColor = new Color("#ff00ff");
+      time.textColor = new Color("#ff00ff");
     }
     else{
-      uterum1.textColor = new Color("#ffffff");
+      time.textColor = new Color("#ffffff");
     }
-    uterum1.font = Font.lightSystemFont(11);
+    time.font = Font.lightSystemFont(11);
     }
   }
 
 for (let i = 72; i < 96; i++) {
-  let uterum1 = fourthprice.addText(String((datatoday[i]*1.25).toFixed(0)));
-  uterum1.leftAlignText();
-  uterum1.font = Font.lightSystemFont(11);
+  let price = fourthprice.addText(String(Math.round(datatoday[i]*1.25)));
+  price.leftAlignText();
+  price.font = Font.lightSystemFont(11);
   log(datatoday[i])
   if (datatoday[i] < avgtoday+todaylow){
-    uterum1.textColor = Color.green()
+    price.textColor = Color.green()
   }
   else if (datatoday[i] > todayhigh-avgtoday){
-    uterum1.textColor = Color.red()
+    price.textColor = Color.red()
   }
   else {
-    uterum1.textColor = Color.orange()
+    price.textColor = Color.orange()
   }
 }
 

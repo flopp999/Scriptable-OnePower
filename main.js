@@ -53,13 +53,16 @@ async function createWidget(){
   fff.font = Font.lightSystemFont(10)
   fff.textColor = new Color("#ffffff");
   let head = listwidget.addStack()
-  
-  let firsttime = head.addStack()
-  firsttime.layoutVertically()
-  head.addSpacer(4)
-  let firstprice = head.addStack()
-  firstprice.layoutVertically()
-  head.addSpacer()
+
+  for (let i = 1; i < 5; i++) {
+    let [i]time = head.addStack()
+    [i]time.layoutVertically()
+    head.addSpacer(4)
+    let [i]price = head.addStack()
+    [i]price.layoutVertically()
+    head.addSpacer()
+  }
+
   
   let secondtime = head.addStack()
   secondtime.layoutVertically()
@@ -98,7 +101,6 @@ async function createWidget(){
       }
       uterum1.leftAlignText();
       if (i === hour && minute >= a*15 && minute <= (a+1)*15) {
-      //if (i===hour){
         uterum1.textColor = new Color("#ff00ff");
       }
       else{
@@ -109,18 +111,17 @@ async function createWidget(){
     }
   
   for (let i = 0; i < 24; i++) {
-  let price = firstprice.addText(String(Math.round(pricesJSON[i]*1.25)));
-  price.leftAlignText();
-  
-  price.font = Font.lightSystemFont(11);
-  if (pricesJSON[i] < priceAvg+priceLowest){
-    price.textColor = Color.green()
-  }
-  else if (pricesJSON[i] > priceHighest-priceAvg){
-    price.textColor = Color.red()
-  }
-  else {
-    price.textColor = Color.orange()
+    let price = firstprice.addText(String(Math.round(pricesJSON[i]*1.25)));
+    price.leftAlignText();
+    price.font = Font.lightSystemFont(11);
+    if (pricesJSON[i] < priceAvg+priceLowest){
+      price.textColor = Color.green()
+    }
+    else if (pricesJSON[i] > priceHighest-priceAvg){
+      price.textColor = Color.red()
+    }
+    else {
+      price.textColor = Color.orange()
     }
   }
   
@@ -151,20 +152,19 @@ async function createWidget(){
     }
   
   for (let i = 24; i < 48; i++) {
-  let price = secondprice.addText(String(Math.round(pricesJSON[i]*1.25)));
-  price.leftAlignText();
-  price.font = Font.lightSystemFont(11);
-  if (pricesJSON[i] < priceAvg+priceLowest){
-    price.textColor = Color.green()
+    let price = secondprice.addText(String(Math.round(pricesJSON[i]*1.25)));
+    price.leftAlignText();
+    price.font = Font.lightSystemFont(11);
+    if (pricesJSON[i] < priceAvg+priceLowest){
+      price.textColor = Color.green()
+    }
+    else if (pricesJSON[i] > priceHighest-priceAvg){
+      price.textColor = Color.red()
+    }
+    else {
+      price.textColor = Color.orange()
+    }
   }
-  else if (pricesJSON[i] > priceHighest-priceAvg){
-    price.textColor = Color.red()
-  }
-  else {
-    price.textColor = Color.orange()
-  }
-  }
-  
   for (let i = 12; i < 18; i++) {
     let time
     for (let a = 0; a < 4; a++) {

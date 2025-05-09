@@ -1,3 +1,8 @@
+//support me with a coffee
+//buymeacoffee.com/flopp999
+//Thanks to Max Zeryck for the download-solution
+let version = 0.9
+
 const date = new Date();
 const yyyy = date.getFullYear();
 const mm = String(date.getMonth() + 1).padStart(2, '0'); // month are indexed from 0
@@ -134,19 +139,11 @@ log("rr")
 return listwidget
 }
 
-
-
-
 // This script was created by Max Zeryck.
 response = 2
-let version = 1
-// Determine if user has taken the screenshot.
-var message
 
 // Update the code.
 if (response == 2) {
-  log("dd")
-  
   // Try to download the file.
   try {
     const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/version.txt")
@@ -160,7 +157,7 @@ if (response == 2) {
       widget.presentLarge()
     }
   } catch {
-    message = "The update failed. Please try again later."
+    log("The update failed. Please try again later.")
   }
 }
 

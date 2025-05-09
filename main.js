@@ -90,14 +90,14 @@ async function createWidget(){
     priceStacks[name] = priceStack;
   }
 
-// Loop för att fylla alla stacks
+// Loop to fill all stacks
 for (let s = 0; s < stackNames.length; s++) {
   let name = stackNames[s];
   let timeStack = timeStacks[name];
   let priceStack = priceStacks[name];
 
   let hourOffset = 0 + s * 5; // t.ex. 6, 8, 10
-  // ⏰ Lägg till tider (exakt samma logik du hade)
+  // add time
   for (let i = hourOffset; i < hourOffset + 5; i++) {
     if (i == 24) {continue}
     for (let a = 0; a < 4; a++) {
@@ -112,10 +112,9 @@ for (let s = 0; s < stackNames.length; s++) {
     }
   }
 
-  // 💰 Lägg till priser
+  // add price
   let priceStart = 0 + s * 20;
   for (let i = priceStart; i < priceStart + 20; i++) {
-
     if (i==96) {break}
     let priceVal = Math.round(pricesJSON[i] * 1.25);
     let priceText = priceStack.addText(String(priceVal));
@@ -139,12 +138,9 @@ log("rr")
 return listwidget
 }
 
-// This script was created by Max Zeryck.
 response = 2
 
-// Update the code.
 if (response == 2) {
-  // Try to download the file.
   try {
     const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/version.txt")
     const codeString = await req.loadString()

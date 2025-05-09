@@ -1,13 +1,10 @@
-// Variables used by Scriptable.
-// These must be at the very top of the file. Do not edit.
-// icon-color: green; icon-glyph: magic;
 const date = new Date();
 const yyyy = date.getFullYear();
 const mm = String(date.getMonth() + 1).padStart(2, '0'); // month are indexed from 0
 const dd = String(date.getDate()).padStart(2, '0');
 const formattedDate = `${yyyy}-${mm}-${dd}`;
-const hour = today.getHours();
-const minute = today.getMinutes();
+const hour = date.getHours();
+const minute = date.getMinutes();
 const url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${formattedDate}&market=DayAhead&indexNames=SE4&currency=SEK&resolutionInMinutes=15`;
 const request = new Request(url);
 const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
@@ -24,236 +21,147 @@ for (let i = 0; i < prices.length; i++) {
 }
 let pricesJSON = JSON.parse(JSON.stringify(allValues));
 
-const priceLowest = Math.round(Math.min(...pricesJSON.map(Number)));
-const priceHighest = Math.round(Math.max(...pricesJSON.map(Number)));
-const priceAvg = Math.round(pricesJSON.reduce((sum, val) => sum + Number(val), 0) / pricesJSON.length / 3);
+//pricesJSON = ["53.7", "89.1", "60.2", "97.9", "70.8", "40.3", "48.6", "81.7", "26.4", "73.5","75.1", "39.7", "62.8", "18.5", "92.6", "33.1", "20.7", "11.4", "55.5", "46.9","85.0", "35.6", "79.2", "90.4", "66.7", "67.3", "28.8", "15.3", "99.6", "64.5","38.9", "57.2", "19.8", "71.6", "84.4", "49.5", "14.7", "63.1", "21.6", "44.2","78.5", "37.4", "17.2", "13.8", "12.6", "45.3", "58.6", "43.8", "16.9", "69.2","24.1", "41.6", "50.8", "36.3", "59.9", "95.4", "42.5", "93.7", "61.4", "27.5","47.7", "31.9", "32.8", "25.2", "83.6", "30.5", "74.2", "22.4", "77.1", "29.6","34.7", "52.1", "56.8", "23.3", "86.3", "65.4", "91.2", "68.4", "94.9", "98.5","76.3", "87.5", "88.7", "51.3", "80.1", "82.2", "72.7", "96.8", "87.0", "10.9","10.1", "10.4", "10.7", "11.9", "12.2", "13.5", "14.1", "15.8", "16.4", "17.7"]
+  
+const priceLowest = (Math.min(...pricesJSON.map(Number)));
+const priceHighest = (Math.max(...pricesJSON.map(Number)));
+const priceAvg = (pricesJSON.reduce((sum, val) => sum + Number(val), 0) / pricesJSON.length / 3);
 
-log(priceHighest)
+async function createUpdate(){
+
+  let listwidget = new ListWidget();
+  listwidget.backgroundColor = new Color("#000000");
+  let row = listwidget.addStack()
+  row.layoutVertically()
+  let left = row.addStack()
+  left.layoutHorizontally()
+  let whatday = left.addText("New update available")
+  whatday.textColor = new Color("#ffffff");
+  whatday.font = Font.lightSystemFont(20)
+  return listwidget
+  }
+
 async function createWidget(){
 
   let listwidget = new ListWidget();
   listwidget.backgroundColor = new Color("#000000");
-  let first = listwidget.addStack()
-  first.addSpacer()
-  let moms = first.addStack()
-  moms.layoutVertically()
-  let update = moms.addStack()
-  let rrrr = moms.addStack()
-  let ab = update.addText(day)
-  ab.textColor = new Color("#ffffff");
-  ab.font = Font.lightSystemFont(10)
-  update.addSpacer(75)
-  rrrr.addSpacer(250)
+  let row = listwidget.addStack()
+  row.layoutVertically()
+  let left = row.addStack()
+  left.layoutHorizontally()
+  let whatday = left.addText(day)
+  whatday.textColor = new Color("#ffffff");
+  whatday.font = Font.lightSystemFont(20)
+  let right = left.addStack()
+  right.layoutVertically()
+  let update = right.addStack()
+  update.addSpacer()
+  let updatetext = update.addText("uppdaterad "+updated);
+  updatetext.font = Font.lightSystemFont(10)
+  updatetext.textColor = new Color("#ffffff");
+  let moms = right.addStack()
+  moms.addSpacer()
+  let momstext = moms.addText("ink.moms")
+  momstext.font = Font.lightSystemFont(10)
+  momstext.textColor = new Color("#ffffff");
   
-  let ute = update.addText("uppdaterad "+updated);
-  
-  ute.font = Font.lightSystemFont(10)
-  ute.textColor = new Color("#ffffff");
-  let fff = rrrr.addText("ink.moms")
-  fff.font = Font.lightSystemFont(10)
-  fff.textColor = new Color("#ffffff");
   let head = listwidget.addStack()
+  let stackNames = ["first", "second", "third", "fourth","fifth"];
+  let timeStacks = {};
+  let priceStacks = {};
 
-  for (let i = 1; i < 5; i++) {
-    let [i]time = head.addStack()
-    [i]time.layoutVertically()
-    head.addSpacer(4)
-    let [i]price = head.addStack()
-    [i]price.layoutVertically()
-    head.addSpacer()
+  for (let name of stackNames) {
+    let timeStack = head.addStack();
+    timeStack.layoutVertically();
+    head.addSpacer(4);
+  
+    let priceStack = head.addStack();
+    priceStack.layoutVertically();
+    if (name !== stackNames[stackNames.length - 1]) {
+      head.addSpacer();
+    }
+    
+    timeStacks[name] = timeStack;
+    priceStacks[name] = priceStack;
   }
 
-  
-  let secondtime = head.addStack()
-  secondtime.layoutVertically()
-  head.addSpacer(4)
-  let secondprice = head.addStack();
-  secondprice.layoutVertically()
-  head.addSpacer()
-  
-  let thirdtime = head.addStack()
-  thirdtime.layoutVertically()
-  head.addSpacer(4)
-  let thirdprice = head.addStack()
-  thirdprice.layoutVertically()
-  head.addSpacer()
-  
-  let fourthtime = head.addStack()
-  fourthtime.layoutVertically()
-  head.addSpacer(4)
-  let fourthprice = head.addStack()
-  fourthprice.layoutVertically()
-  
-  for (let i = 0; i < 6; i++) {
-    let uterum1
+// Loop för att fylla alla stacks
+for (let s = 0; s < stackNames.length; s++) {
+  let name = stackNames[s];
+  let timeStack = timeStacks[name];
+  let priceStack = priceStacks[name];
+
+  let hourOffset = 0 + s * 5; // t.ex. 6, 8, 10
+  // ⏰ Lägg till tider (exakt samma logik du hade)
+  for (let i = hourOffset; i < hourOffset + 5; i++) {
+    if (i == 24) {continue}
     for (let a = 0; a < 4; a++) {
-      if (a===0){
-        uterum1 = firsttime.addText(i+":00 ");
+      let timeText = timeStack.addText(`${i}:${a === 0 ? "00" : a * 15}`);
+      timeText.leftAlignText();
+      timeText.font = Font.lightSystemFont(12.3);
+      if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) {
+        timeText.textColor = new Color("#00ffff");
+      } else {
+        timeText.textColor = new Color("#ffffff");
       }
-      else if (a===1){
-        uterum1 = firsttime.addText(i+":15 ");
-      }
-      else if (a===2){
-        uterum1 = firsttime.addText(i+":30 ");
-      }
-      else if (a===3){
-        uterum1 = firsttime.addText(i+":45 ");
-      }
-      uterum1.leftAlignText();
-      if (i === hour && minute >= a*15 && minute <= (a+1)*15) {
-        uterum1.textColor = new Color("#ff00ff");
-      }
-      else{
-        uterum1.textColor = new Color("#ffffff");
-      }
-      uterum1.font = Font.lightSystemFont(11);
-      }
-    }
-  
-  for (let i = 0; i < 24; i++) {
-    let price = firstprice.addText(String(Math.round(pricesJSON[i]*1.25)));
-    price.leftAlignText();
-    price.font = Font.lightSystemFont(11);
-    if (pricesJSON[i] < priceAvg+priceLowest){
-      price.textColor = Color.green()
-    }
-    else if (pricesJSON[i] > priceHighest-priceAvg){
-      price.textColor = Color.red()
-    }
-    else {
-      price.textColor = Color.orange()
     }
   }
-  
-  for (let i = 6; i < 12; i++) {
-    let time
-    for (let a = 0; a < 4; a++) {
-      if (a===0){
-        time = secondtime.addText(i+":00 ");
-      }
-      if (a===1){
-        time = secondtime.addText(i+":15 ");
-      }
-      if (a===2){
-        time = secondtime.addText(i+":30 ");
-      }
-      if (a===3){
-        time = secondtime.addText(i+":45 ");
-      }
-      time.leftAlignText();
-      if (i === hour && minute >= a*15 && minute <= (a+1)*15) {
-        time.textColor = new Color("#ff00ff");
-      }
-      else{
-        time.textColor = new Color("#ffffff");
-      }
-      time.font = Font.lightSystemFont(11);
-      }
-    }
-  
-  for (let i = 24; i < 48; i++) {
-    let price = secondprice.addText(String(Math.round(pricesJSON[i]*1.25)));
-    price.leftAlignText();
-    price.font = Font.lightSystemFont(11);
-    if (pricesJSON[i] < priceAvg+priceLowest){
-      price.textColor = Color.green()
-    }
-    else if (pricesJSON[i] > priceHighest-priceAvg){
-      price.textColor = Color.red()
-    }
-    else {
-      price.textColor = Color.orange()
+
+  // 💰 Lägg till priser
+  let priceStart = 0 + s * 20;
+  for (let i = priceStart; i < priceStart + 20; i++) {
+
+    if (i==96) {break}
+    let priceVal = Math.round(pricesJSON[i] * 1.25);
+    let priceText = priceStack.addText(String(priceVal));
+    priceText.leftAlignText();
+    priceText.font = Font.lightSystemFont(12.3);
+    
+    if (pricesJSON[i] == priceLowest){
+      priceText.textColor = new Color("#00ff00");
+    } else if (pricesJSON[i] < priceAvg + priceLowest) {
+      priceText.textColor = new Color("#ffff00")
+    } else if (pricesJSON[i] == priceHighest){
+      priceText.textColor = new Color("#ff00ff");
+    } else if (pricesJSON[i] > priceHighest - priceAvg) {
+      priceText.textColor =  new Color("#ff0000")
+    } else {
+      priceText.textColor = new Color("#f38")
     }
   }
-  for (let i = 12; i < 18; i++) {
-    let time
-    for (let a = 0; a < 4; a++) {
-      if (a===0){
-        time = thirdtime.addText(i+":00 ");
-      }
-      if (a===1){
-        time = thirdtime.addText(i+":15 ");
-      }
-      if (a===2){
-        time = thirdtime.addText(i+":30 ");
-      }
-      if (a===3){
-        time = thirdtime.addText(i+":45 ");
-      }
-      time.leftAlignText();
-      if (i === hour && minute >= a*15 && minute <= (a+1)*15) {
-        time.textColor = new Color("#ff00ff");
-      }
-      else{
-        time.textColor = new Color("#ffffff");
-      }
-      time.font = Font.lightSystemFont(11);
-      }
-    }
-  
-  for (let i = 48; i < 72; i++) {
-    let price = thirdprice.addText(String(Math.round(pricesJSON[i]*1.25)));
-    price.leftAlignText();
-    price.font = Font.lightSystemFont(11);
-    if (pricesJSON[i] < priceAvg+priceLowest){
-      
-      
-      price.textColor = Color.green()
-    }
-    else if (pricesJSON[i] > priceHighest-priceAvg){
-      price.textColor = Color.red()
-    }
-    else {
-      price.textColor = Color.orange()
-    }
-  }
-  
-  for (let i = 18; i < 24; i++) {
-    let time
-    for (let a = 0; a < 4; a++) {
-      if (a===0){
-        time = fourthtime.addText(i+":00 ");
-      }
-      if (a===1){
-        time = fourthtime.addText(i+":15 ");
-      }
-      if (a===2){
-        time = fourthtime.addText(i+":30 ");
-      }
-      if (a===3){
-        time = fourthtime.addText(i+":45 ");
-      }
-      time.leftAlignText();
-      if (i === hour && minute >= a*15 && minute <= (a+1)*15) {
-        time.textColor = new Color("#ff00ff");
-      }
-      else{
-        time.textColor = new Color("#ffffff");
-      }
-      time.font = Font.lightSystemFont(11);
-      }
-    }
-  
-  for (let i = 72; i < 96; i++) {
-    let price = fourthprice.addText(String(Math.round(pricesJSON[i]*1.25)));
-    price.leftAlignText();
-    price.font = Font.lightSystemFont(11);
-    log(pricesJSON[i])
-    if (pricesJSON[i] < priceAvg+priceLowest){
-      price.textColor = Color.green()
-    }
-    else if (pricesJSON[i] > priceHighest-priceAvg){
-      price.textColor = Color.red()
-    }
-    else {
-      price.textColor = Color.orange()
-    }
 }
-
+log("rr")
 return listwidget
 }
 
-let widget = await createWidget();
-widget.presentLarge()
+
+
+
+// This script was created by Max Zeryck.
+response = 2
+let version = 1
+// Determine if user has taken the screenshot.
+var message
+
+// Update the code.
+if (response == 2) {
+  log("dd")
+  
+  // Try to download the file.
+  try {
+    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/version.txt")
+    const codeString = await req.loadString()
+    if (version < codeString){
+      let widget = await createUpdate();
+      widget.presentLarge()
+    }
+    else {
+      let widget = await createWidget();
+      widget.presentLarge()
+    }
+  } catch {
+    message = "The update failed. Please try again later."
+  }
+}
 
 Script.complete();

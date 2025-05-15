@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.47;
+let version = 0.48;
 
 // Update the code.
 try {
@@ -45,11 +45,11 @@ try {
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
 
-let area = settings.area;
-let resolution = settings.resolution;
-let currency = settings.currency;
-let vat = settings.vat;
-
+const area = settings.area;
+const resolution = settings.resolution;
+const currency = settings.currency;
+const vat = settings.vat;
+const includevat = settings.includevat;
 
 // Select area
 async function askForArea() {
@@ -145,8 +145,8 @@ async function askIncludeVAT() {
   alert.message = "Do you want the electricity price with or without VAT?";
   alert.addAction("With VAT");
   alert.addAction("Without VAT");
-  let response = await alert.presentAlert();
-  return response === 0; // true = with VAT, false = without
+  let index = await alert.presentAlert();
+  return ["BGN","DKK"][index];
 }
 
 const smallFont = 10;
@@ -294,7 +294,7 @@ for (let s = 0; s < stackNames.length; s++) {
       priceText.textColor = new Color("#ffffff");
       break
     }
-    let priceVal = Math.round(pricesJSON[i] * 1.25);
+    let priceVal = Math.round(pricesJSON[i] * (1+"."+(ivat*vat)));
     let priceText = priceStack.addText(String(priceVal));
     priceText.leftAlignText();
     if (i === (hour * 4) + Math.floor(minute / 15)) {

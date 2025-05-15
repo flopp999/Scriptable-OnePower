@@ -23,8 +23,6 @@ try {
       message = "The update failed. Please try again later."
     }
   }
-  let widget = await createWidget();
-  widget.presentLarge()
 } catch {
   message = "The update failed. Please try again later."
 }
@@ -196,5 +194,6 @@ for (let s = 0; s < stackNames.length; s++) {
 }
 return listwidget
 }
-
+let widget = await createWidget();
+widget.presentLarge()
 Script.complete();

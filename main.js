@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.49;
+let version = 0.50;
 
 // Update the code.
 try {
@@ -41,7 +41,7 @@ try {
   [settings.area, settings.vat] = await askForArea();
   settings.resolution = await askForResolution();
   settings.currency = await askForCurrency();
-  settings.includedat = await askIncludeVAT();
+  settings.includevat = await askIncludeVAT();
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
 
@@ -146,7 +146,7 @@ async function askIncludeVAT() {
   alert.addAction("With VAT");
   alert.addAction("Without VAT");
   let index = await alert.presentAlert();
-  return ["BGN","DKK"][index];
+  return [1,0][index];
 }
 
 const smallFont = 10;

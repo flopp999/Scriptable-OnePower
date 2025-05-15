@@ -3,8 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.36
-var message
+let version = 0.36;
 
 // Update the code.
 try {
@@ -19,14 +18,16 @@ try {
       const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/main.js")
       const codeString = await req.loadString()
       files.writeString(module.filename, codeString)
-    } catch {
-      message = "The update failed. Please try again later."
+    } catch (error) {
+      
     }
   }
-} catch {
-  message = "The update failed. Please try again later."
+} catch (error){
+  
 }
-
+const smallFont = 10;
+const mediumFont = 12;
+const bigFont = 13.5;
 const date = new Date();
 const yyyy = date.getFullYear();
 const mm = String(date.getMonth() + 1).padStart(2, '0'); // month are indexed from 0
@@ -37,12 +38,12 @@ const minute = date.getMinutes();
 const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 const url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${formattedDate}&market=DayAhead&indexNames=SE4&currency=SEK&resolutionInMinutes=15`;
 const request = new Request(url);
-request.timeoutInterval = 1
+request.timeoutInterval = 1;
 let response = (await request.loadJSON());
-let updated = response.updatedAt
+let updated = response.updatedAt;
 updated = updated.replace(/\.\d+Z$/, '').replace('T', ' ');
-const day = response.deliveryDateCET
-let prices = response.multiIndexEntries
+const day = response.deliveryDateCET;
+let prices = response.multiIndexEntries;
 let allValues = [];
 
 for (let i = 0; i < prices.length; i++) {
@@ -93,7 +94,7 @@ async function createWidget(){
   momstext.textColor = new Color("#ffffff");
   
   let head = listwidget.addStack()
-  let stackNames = ["first", "second", "third", "fourth","fifth"];
+  let stackNames = ["first", "second", "third", "fourth", "fifth"];
   let timeStacks = {};
   let priceStacks = {};
 
@@ -122,11 +123,11 @@ for (let s = 0; s < stackNames.length; s++) {
       for (let a=0; a<3;a++){
         let timeText = timeStack.addText(" ");
         timeText.leftAlignText();
-        timeText.font = Font.lightSystemFont(12);
+        timeText.font = Font.lightSystemFont(mediumFont);
         timeText.textColor = new Color("#ffffff");
       }
       timeText = timeStack.addText("version");
-      timeText.font = Font.lightSystemFont(10);
+      timeText.font = Font.lightSystemFont(mediumFont);
       timeText.leftAlignText();
       timeText.textColor = new Color("#ffffff");
       continue
@@ -136,15 +137,15 @@ for (let s = 0; s < stackNames.length; s++) {
       timeText.leftAlignText();
       if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) {
         timeText.textColor = new Color("#00ffff");
-        timeText.font = Font.lightSystemFont(13.5);
+        timeText.font = Font.lightSystemFont(bigFont);
       } else {
         timeText.textColor = new Color("#ffffff");
-        timeText.font = Font.lightSystemFont(12);
+        timeText.font = Font.lightSystemFont(mediumFont);
       }
       if (allValues.length  == 24) {
         if (i === hour) {
           timeText.textColor = new Color("#00ffff");
-          timeText.font = Font.lightSystemFont(13.5);
+          timeText.font = Font.lightSystemFont(bigFont);
         }
       break
       }
@@ -159,12 +160,12 @@ for (let s = 0; s < stackNames.length; s++) {
       for (let a=0; a<3;a++){
         let timeText = priceStack.addText(" ");
         timeText.leftAlignText();
-        timeText.font = Font.lightSystemFont(12);
+        timeText.font = Font.lightSystemFont(mediumFont);
         timeText.textColor = new Color("#ffffff");
       }
       timeText = priceStack.addText(`${version}`);
       timeText.leftAlignText();
-      timeText.font = Font.lightSystemFont(10);
+      timeText.font = Font.lightSystemFont(smallFont);
       timeText.textColor = new Color("#ffffff");
       break
     }
@@ -172,9 +173,9 @@ for (let s = 0; s < stackNames.length; s++) {
     let priceText = priceStack.addText(String(priceVal));
     priceText.leftAlignText();
     if (i === (hour * 4) + Math.floor(minute / 15)) {
-        priceText.font = Font.lightSystemFont(13.5);
+        priceText.font = Font.lightSystemFont(bigFont);
       } else {
-        priceText.font = Font.lightSystemFont(12);
+        priceText.font = Font.lightSystemFont(mediumFont);
       }
     if (pricesJSON[i] == priceLowest){
       priceText.textColor = new Color("#00af00");

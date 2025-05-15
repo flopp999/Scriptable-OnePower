@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.36;
+let version = 0.37;
 
 // Update the code.
 try {
@@ -26,7 +26,7 @@ try {
   
 }
 
-let fileName = "NordPoolSettings.json";
+let fileName = Script.name() + "Settings.json";
 let fm = FileManager.iCloud(); // Or .local() if preferred
 let dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
@@ -61,12 +61,32 @@ async function askForArea() {
   let alert = new Alert();
   alert.title = "Select Area";
   alert.message = "Choose your electricity area:";
+  alert.addAction("AT");
+  alert.addAction("BE");
+  alert.addAction("BG");
+  alert.addAction("DK1");
+  alert.addAction("DK2");
+  alert.addAction("EE");
+  alert.addAction("FI");
+  alert.addAction("FR");
+  alert.addAction("GER");
+  alert.addAction("LT");
+  alert.addAction("LV");
+  alert.addAction("NL");
+  alert.addAction("NO1");
+  alert.addAction("NO2");
+  alert.addAction("NO3");
+  alert.addAction("NO4");
+  alert.addAction("NO5");
+  alert.addAction("PL");
   alert.addAction("SE1");
   alert.addAction("SE2");
   alert.addAction("SE3");
   alert.addAction("SE4");
+  alert.addAction("TEL");
+  alert.addAction("SYS");
   let index = await alert.presentAlert();
-  return ["SE1", "SE2", "SE3", "SE4"][index];
+  return ["AT","BE","BG","DK1","DK2","EE","FI","FR","GER","LT","LV","NL","NO1","NO2","NO3","NO4","NO5","PL","SE1","SE2","SE3","SE4","TEL","SYS"][index];
 }
 
 // Select resolution
@@ -85,7 +105,12 @@ async function askForCurrency() {
   let alert = new Alert();
   alert.title = "Select Currency";
   alert.message = "Choose your currency:";
+  alert.addAction("BGN");
+  alert.addAction("DKK");
   alert.addAction("EUR");
+  alert.addAction("NOK");
+  alert.addAction("PLN");
+  alert.addAction("RON");
   alert.addAction("SEK");
   let index = await alert.presentAlert();
   return ["EUR", "SEK"][index];

@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.52;
+let version = 0.53;
 
 // Update the code.
 try {
@@ -30,7 +30,7 @@ try {
     let raw = fm.readString(filePath);
     settings = JSON.parse(raw);
     let keys = Object.keys(settings);
-    if (keys.length < 5 || !settings.area || !settings.resolution || !settings.currency || !settings.vat) || !settings.includevat) {
+    if (keys.length < 5 || !settings.area || !settings.resolution || !settings.currency || !settings.vat || !settings.includevat) {
       throw new Error("Settings file is incomplete or corrupted");
     }
   } else {

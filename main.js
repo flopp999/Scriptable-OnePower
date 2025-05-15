@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.3
+let version = 0.35
 var message
 
 // Update the code.
@@ -141,7 +141,13 @@ for (let s = 0; s < stackNames.length; s++) {
         timeText.textColor = new Color("#ffffff");
         timeText.font = Font.lightSystemFont(12);
       }
-      if (allValues.length  == 24) {break}
+      if (allValues.length  == 24) {
+        if (i === hour) {
+          timeText.textColor = new Color("#00ffff");
+          timeText.font = Font.lightSystemFont(14);
+        }
+      break
+      }
     }
   }
 

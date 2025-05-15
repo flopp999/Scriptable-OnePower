@@ -122,11 +122,11 @@ for (let s = 0; s < stackNames.length; s++) {
       for (let a=0; a<3;a++){
         let timeText = timeStack.addText(" ");
         timeText.leftAlignText();
-        timeText.font = Font.lightSystemFont(11);
+        timeText.font = Font.lightSystemFont(10);
         timeText.textColor = new Color("#ffffff");
       }
       timeText = timeStack.addText("version");
-      timeText.font = Font.lightSystemFont(11);
+      timeText.font = Font.lightSystemFont(10);
       timeText.leftAlignText();
       timeText.textColor = new Color("#ffffff");
       continue
@@ -144,7 +144,7 @@ for (let s = 0; s < stackNames.length; s++) {
       if (allValues.length  == 24) {
         if (i === hour) {
           timeText.textColor = new Color("#00ffff");
-          timeText.font = Font.lightSystemFont(13.5;
+          timeText.font = Font.lightSystemFont(13.5);
         }
       break
       }
@@ -159,12 +159,12 @@ for (let s = 0; s < stackNames.length; s++) {
       for (let a=0; a<3;a++){
         let timeText = priceStack.addText(" ");
         timeText.leftAlignText();
-        timeText.font = Font.lightSystemFont(11);
+        timeText.font = Font.lightSystemFont(10);
         timeText.textColor = new Color("#ffffff");
       }
       timeText = priceStack.addText(`${version}`);
       timeText.leftAlignText();
-      timeText.font = Font.lightSystemFont(11);
+      timeText.font = Font.lightSystemFont(10);
       timeText.textColor = new Color("#ffffff");
       break
     }

@@ -7,19 +7,11 @@ let version = 0.38;
 
 // Update the code.
 try {
-  const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/version.txt")
-  const serverVersion = await req.loadString()
-  if (version < serverVersion){
-    let files = FileManager.local()
-    const iCloudInUse = files.isFileStoredIniCloud(module.filename)
-    files = iCloudInUse ? FileManager.iCloud() : files
-    // Try to download the file.
-    try {
-      const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/main.js")
-      const codeString = await req.loadString()
-      files.writeString(module.filename, codeString)
+  const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/main.js")
+  const codeString = await req.loadString()
+  if (version < codeString[1]){
+    files.writeString(module.filename, codeString)
     } catch (error) {
-      
     }
   }
 } catch (error){

@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.51;
+let version = 0.52;
 
 // Update the code.
 try {
@@ -215,10 +215,10 @@ async function createWidget(){
   let moms = right.addStack()
   moms.addSpacer()
   if (includevat == 1) {
-    let momstext = moms.addText("incl. VAT")
+    momstext = moms.addText("incl. VAT")
   }
   else {
-    let momstext = moms.addText("excl. VAT")
+    momstext = moms.addText("excl. VAT")
   }
   momstext.font = Font.lightSystemFont(10)
   momstext.textColor = new Color("#ffffff");

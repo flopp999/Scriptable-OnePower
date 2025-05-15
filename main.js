@@ -179,7 +179,7 @@ return listwidget
 
 // This script was created by Max Zeryck.
 response = 2
-let version = 1.2
+let version = 1.3
 // Determine if user has taken the screenshot.
 var message
 

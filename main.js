@@ -1,6 +1,48 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
 // icon-color: green; icon-glyph: magic;
+
+
+// This script was created by Flopp999
+// Support me with a coffee https://www.buymeacoffee.com/flopp999 
+response = 2
+let version = 1.3
+// Determine if user has taken the screenshot.
+var message
+
+// Update the code.
+if (response == 2) {
+  // Try to download the file.
+  try {
+    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/version.txt")
+    const serverVersion = await req.loadString()
+    if (version < serverVersion){
+      let files = FileManager.local()
+      const iCloudInUse = files.isFileStoredIniCloud(module.filename)
+      files = iCloudInUse ? FileManager.iCloud() : files
+
+      // Try to download the file.
+      try {
+        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/main.js")
+        const codeString = await req.loadString()
+        files.writeString(module.filename, codeString)
+        //message = "The code has been updated. If the script is open, close it for the change to take effect."
+      } catch {
+        message = "The update failed. Please try again later."
+      }
+      let widget = await createUpdate();
+      widget.presentLarge()
+    }
+    else {
+      let widget = await createWidget();
+      widget.presentLarge()
+    }
+  } catch {
+    message = "The update failed. Please try again later."
+  }
+}
+
+
 const date = new Date();
 const yyyy = date.getFullYear();
 const mm = String(date.getMonth() + 1).padStart(2, '0'); // month are indexed from 0
@@ -177,42 +219,5 @@ for (let s = 0; s < stackNames.length; s++) {
 return listwidget
 }
 
-// This script was created by Max Zeryck.
-response = 2
-let version = 1.3
-// Determine if user has taken the screenshot.
-var message
-
-// Update the code.
-if (response == 2) {
-  // Try to download the file.
-  try {
-    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/version.txt")
-    const serverVersion = await req.loadString()
-    if (version < serverVersion){
-      let files = FileManager.local()
-      const iCloudInUse = files.isFileStoredIniCloud(module.filename)
-      files = iCloudInUse ? FileManager.iCloud() : files
-
-      // Try to download the file.
-      try {
-        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/main.js")
-        const codeString = await req.loadString()
-        files.writeString(module.filename, codeString)
-        //message = "The code has been updated. If the script is open, close it for the change to take effect."
-      } catch {
-        message = "The update failed. Please try again later."
-      }
-      let widget = await createUpdate();
-      widget.presentLarge()
-    }
-    else {
-      let widget = await createWidget();
-      widget.presentLarge()
-    }
-  } catch {
-    message = "The update failed. Please try again later."
-  }
-}
 
 Script.complete();

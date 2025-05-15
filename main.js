@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.44
+let version = 0.45;
 
 // Update the code.
 try {
@@ -30,7 +30,7 @@ try {
     let raw = fm.readString(filePath);
     settings = JSON.parse(raw);
     let keys = Object.keys(settings);
-    if (keys.length < 3 || !settings.area || !settings.resolution) {
+    if (keys.length < 4 || !settings.area || !settings.resolution || !settings.currency || !settings.vat) {
       throw new Error("Settings file is incomplete or corrupted");
     }
   } else {
@@ -41,12 +41,15 @@ try {
   settings.area = await askForArea();
   settings.resolution = await askForResolution();
   settings.currency = await askForCurrency();
+  settings.vat = await askIncludeVAT();
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
 
 let area = settings.area;
 let resolution = settings.resolution;
 let currency = settings.currency;
+let currency = settings.present;
+
 
 // Select area
 async function askForArea() {
@@ -106,6 +109,17 @@ async function askForCurrency() {
   alert.addAction("SEK");
   let index = await alert.presentAlert();
   return ["BGN","DKK","EUR","NOK","PLN","RON","SEK"][index];
+}
+
+// Include VAT?
+async function askIncludeVAT() {
+  let alert = new Alert();
+  alert.title = "Include VAT?";
+  alert.message = "Do you want the electricity price with or without VAT?";
+  alert.addAction("With VAT");
+  alert.addAction("Without VAT");
+  let response = await alert.present();
+  return response === 0; // true = with VAT, false = without
 }
 
 const smallFont = 10;

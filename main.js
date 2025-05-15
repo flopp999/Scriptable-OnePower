@@ -136,7 +136,7 @@ for (let s = 0; s < stackNames.length; s++) {
       timeText.leftAlignText();
       if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) {
         timeText.textColor = new Color("#00ffff");
-        timeText.font = Font.lightSystemFont(14);
+        timeText.font = Font.lightSystemFont(13.5);
       } else {
         timeText.textColor = new Color("#ffffff");
         timeText.font = Font.lightSystemFont(12);
@@ -144,7 +144,7 @@ for (let s = 0; s < stackNames.length; s++) {
       if (allValues.length  == 24) {
         if (i === hour) {
           timeText.textColor = new Color("#00ffff");
-          timeText.font = Font.lightSystemFont(14);
+          timeText.font = Font.lightSystemFont(13.5;
         }
       break
       }
@@ -172,7 +172,7 @@ for (let s = 0; s < stackNames.length; s++) {
     let priceText = priceStack.addText(String(priceVal));
     priceText.leftAlignText();
     if (i === (hour * 4) + Math.floor(minute / 15)) {
-        priceText.font = Font.lightSystemFont(14);
+        priceText.font = Font.lightSystemFont(13.5);
       } else {
         priceText.font = Font.lightSystemFont(12);
       }

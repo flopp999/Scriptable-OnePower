@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.38;
+let version = 0.39;
 
 // Update the code.
 try {
@@ -11,7 +11,6 @@ try {
   const codeString = await req.loadString()
   if (version < codeString[1]){
     files.writeString(module.filename, codeString)
-    } catch (error) {
     }
   }
 } catch (error){

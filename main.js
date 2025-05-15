@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.46;
+let version = 0.47;
 
 // Update the code.
 try {
@@ -41,7 +41,7 @@ try {
   [settings.area, settings.vat] = await askForArea();
   settings.resolution = await askForResolution();
   settings.currency = await askForCurrency();
-  settings.vat = await askIncludeVAT();
+  settings.includedat = await askIncludeVAT();
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
 

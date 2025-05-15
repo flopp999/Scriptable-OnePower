@@ -38,7 +38,7 @@ try {
   }
 } catch (err) {
   console.warn("Settings not found or error reading file: " + err.message);
-  settings.area = await askForArea();
+  [settings.area, settings.vat] = await askForArea();
   settings.resolution = await askForResolution();
   settings.currency = await askForCurrency();
   settings.vat = await askIncludeVAT();
@@ -81,7 +81,34 @@ async function askForArea() {
   alert.addAction("TEL");
   alert.addAction("SYS");
   let index = await alert.presentAlert();
-  return ["AT","BE","BG","DK1","DK2","EE","FI","FR","GER","LT","LV","NL","NO1","NO2","NO3","NO4","NO5","PL","SE1","SE2","SE3","SE4","TEL","SYS"][index];
+  let resolution: ["AT","BE","BG","DK1","DK2","EE","FI","FR","GER","LT","LV","NL","NO1","NO2","NO3","NO4","NO5","PL","SE1","SE2","SE3","SE4","TEL","SYS"][index]
+  let vat: [
+    20,  // AT - Austria
+    6,   // BE - Belgium
+    20,  // BG - Bulgaria
+    25,  // DK1 - Denmark (East)
+    25,  // DK2 - Denmark (West)
+    20,  // EE - Estonia
+    24,  // FI - Finland
+    20,  // FR - France
+    19,  // GER - Germany
+    21,  // LT - Lithuania
+    21,  // LV - Latvia
+    21,  // NL - Netherlands
+    25,  // NO1 - Norway
+    25,  // NO2 - Norway
+    25,  // NO3 - Norway
+    25,  // NO4 - Norway
+    25,  // NO5 - Norway
+    23,  // PL - Poland
+    25,  // SE1 - Sweden
+    25,  // SE2 - Sweden
+    25,  // SE3 - Sweden
+    25,  // SE4 - Sweden
+    19,   // TEL - Unknown (set to 0)
+    0    // SYS - System price or not applicable (set to 0)
+    ][index];
+    return [resolution, vat];
 }
 
 // Select resolution

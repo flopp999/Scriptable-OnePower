@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.43
+let version = 0.44
 
 // Update the code.
 try {
@@ -242,15 +242,15 @@ for (let s = 0; s < stackNames.length; s++) {
 
     if (i==allValues.length){
       for (let a=0; a<3;a++){
-        let timeText = priceStack.addText(" ");
-        timeText.leftAlignText();
-        timeText.font = Font.lightSystemFont(smallFont);
-        timeText.textColor = new Color("#ffffff");
+        let priceText = priceStack.addText(" ");
+        priceText.leftAlignText();
+        priceText.font = Font.lightSystemFont(smallFont);
+        priceText.textColor = new Color("#ffffff");
       }
-      timeText = priceStack.addText(`${version}`);
-      timeText.leftAlignText();
-      timeText.font = Font.lightSystemFont(smallFont);
-      timeText.textColor = new Color("#ffffff");
+      priceText = priceStack.addText(`${version}`);
+      priceText.leftAlignText();
+      priceText.font = Font.lightSystemFont(smallFont);
+      priceText.textColor = new Color("#ffffff");
       break
     }
     let priceVal = Math.round(pricesJSON[i] * 1.25);
@@ -261,6 +261,11 @@ for (let s = 0; s < stackNames.length; s++) {
       } else {
         priceText.font = Font.lightSystemFont(mediumFont);
       }
+    if (allValues.length  == 24) {
+      if (i === hour) {
+        priceText.font = Font.lightSystemFont(bigFont);
+      }
+    }
     if (pricesJSON[i] == priceLowest){
       priceText.textColor = new Color("#00af00");
     } else if (pricesJSON[i] < priceDiff + priceLowest) {

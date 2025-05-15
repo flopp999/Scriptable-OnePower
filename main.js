@@ -86,7 +86,7 @@ async function askForResolution() {
   alert.addAction("15 min");
   alert.addAction("60 min");
   let index = await alert.presentAlert();
-  return index === 0 ? "15 min" : "60 min";
+  return ["15", "60"][index];
 }
 
 // Select currency

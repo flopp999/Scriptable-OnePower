@@ -105,7 +105,7 @@ async function askForCurrency() {
   alert.addAction("RON");
   alert.addAction("SEK");
   let index = await alert.presentAlert();
-  return ["BGN","DKK","","EUR","NOK","PLN","RON","SEK"][index];
+  return ["BGN","DKK","EUR","NOK","PLN","RON","SEK"][index];
 }
 
 const smallFont = 10;

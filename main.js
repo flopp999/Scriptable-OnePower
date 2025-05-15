@@ -48,7 +48,7 @@ try {
 let area = settings.area;
 let resolution = settings.resolution;
 let currency = settings.currency;
-let currency = settings.present;
+let vat = settings.vat;
 
 
 // Select area
@@ -118,7 +118,7 @@ async function askIncludeVAT() {
   alert.message = "Do you want the electricity price with or without VAT?";
   alert.addAction("With VAT");
   alert.addAction("Without VAT");
-  let response = await alert.present();
+  let response = await alert.presentAlert();
   return response === 0; // true = with VAT, false = without
 }
 

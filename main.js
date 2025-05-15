@@ -81,7 +81,7 @@ async function askForArea() {
   alert.addAction("TEL");
   alert.addAction("SYS");
   let index = await alert.presentAlert();
-  let resolution = ["AT","BE","BG","DK1","DK2","EE","FI","FR","GER","LT","LV","NL","NO1","NO2","NO3","NO4","NO5","PL","SE1","SE2","SE3","SE4","TEL","SYS"][index];
+  let area = ["AT","BE","BG","DK1","DK2","EE","FI","FR","GER","LT","LV","NL","NO1","NO2","NO3","NO4","NO5","PL","SE1","SE2","SE3","SE4","TEL","SYS"][index];
   let vat = [
     20,  // AT - Austria
     6,   // BE - Belgium
@@ -108,7 +108,7 @@ async function askForArea() {
     19,   // TEL - Unknown (set to 0)
     0    // SYS - System price or not applicable (set to 0)
     ][index];
-    return [resolution, vat];
+    return [area, vat];
 }
 
 // Select resolution

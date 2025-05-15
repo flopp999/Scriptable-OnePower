@@ -25,6 +25,81 @@ try {
 } catch (error){
   
 }
+
+let fileName = "NordPoolSettings.json";
+let fm = FileManager.iCloud(); // Or .local() if preferred
+let dir = fm.documentsDirectory();
+let filePath = fm.joinPath(dir, fileName);
+
+let settings = {};
+
+try {
+  if (fm.fileExists(filePath)) {
+    console.log("Settings file exists. Reading...");
+    let raw = fm.readString(filePath);
+    settings = JSON.parse(raw);
+    console.log("Loaded settings from file:");
+    console.log("Area: " + settings.area);
+    console.log("Resolution: " + settings.resolution);
+    console.log("Currency: " + settings.currency);
+  } else {
+    throw new Error("Settings file not found");
+  }
+} catch (err) {
+  console.warn("Settings not found or error reading file: " + err.message);
+  settings.area = await askForArea();
+  settings.resolution = await askForResolution();
+  settings.currency = await askForCurrency();
+  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  console.log("Saved new settings:");
+  console.log("Area: " + settings.area);
+  console.log("Resolution: " + settings.resolution);
+  console.log("Currency: " + settings.currency);
+}
+
+let area = settings.area;
+let resolution = settings.resolution;
+let currency = settings.currency;
+
+console.log("Final values being used:");
+console.log("Area: " + area);
+console.log("Resolution: " + resolution);
+
+// Select area
+async function askForArea() {
+  let alert = new Alert();
+  alert.title = "Select Area";
+  alert.message = "Choose your electricity area:";
+  alert.addAction("SE1");
+  alert.addAction("SE2");
+  alert.addAction("SE3");
+  alert.addAction("SE4");
+  let index = await alert.presentAlert();
+  return ["SE1", "SE2", "SE3", "SE4"][index];
+}
+
+// Select resolution
+async function askForResolution() {
+  let alert = new Alert();
+  alert.title = "Select Resolution";
+  alert.message = "Choose data resolution:";
+  alert.addAction("15 min");
+  alert.addAction("60 min");
+  let index = await alert.presentAlert();
+  return index === 0 ? "15 min" : "60 min";
+}
+
+// Select currency
+async function askForCurrency() {
+  let alert = new Alert();
+  alert.title = "Select Currency";
+  alert.message = "Choose your currency:";
+  alert.addAction("EUR");
+  alert.addAction("SEK");
+  let index = await alert.presentAlert();
+  return ["EUR", "SEK"][index];
+}
+
 const smallFont = 10;
 const mediumFont = 12;
 const bigFont = 13.5;
@@ -36,7 +111,7 @@ const formattedDate = `${yyyy}-${mm}-${dd}`;
 const hour = date.getHours();
 const minute = date.getMinutes();
 const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
-const url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${formattedDate}&market=DayAhead&indexNames=SE4&currency=SEK&resolutionInMinutes=15`;
+const url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${formattedDate}&market=DayAhead&indexNames=${area}&currency=SEK&resolutionInMinutes=${resolution}`;
 const request = new Request(url);
 request.timeoutInterval = 1;
 let response = (await request.loadJSON());
@@ -52,6 +127,7 @@ for (let i = 0; i < prices.length; i++) {
 }
 
 let pricesJSON = JSON.parse(JSON.stringify(allValues));
+// Test data for 15 min values
 //pricesJSON = ["53.7", "89.1", "60.2", "97.9", "70.8", "40.3", "48.6", "81.7", "26.4", "73.5","75.1", "39.7", "62.8", "18.5", "92.6", "33.1", "20.7", "11.4", "55.5", "46.9","85.0", "35.6", "79.2", "90.4", "66.7", "67.3", "28.8", "15.3", "99.6", "64.5","38.9", "57.2", "19.8", "71.6", "84.4", "49.5", "14.7", "63.1", "21.6", "44.2","78.5", "37.4", "17.2", "13.8", "12.6", "45.3", "58.6", "43.8", "16.9", "69.2","24.1", "41.6", "50.8", "36.3", "59.9", "95.4", "42.5", "93.7", "61.4", "27.5","47.7", "31.9", "32.8", "25.2", "83.6", "30.5", "74.2", "22.4", "77.1", "29.6","34.7", "52.1", "56.8", "23.3", "86.3", "65.4", "91.2", "68.4", "94.9", "98.5","76.3", "87.5", "88.7", "51.3", "80.1", "82.2", "72.7", "96.8", "87.0", "10.9","10.1", "10.4", "10.7", "11.9", "12.2", "13.5", "14.1", "15.8", "16.4", "17.7"]
   
 const priceLowest = (Math.min(...pricesJSON.map(Number)));

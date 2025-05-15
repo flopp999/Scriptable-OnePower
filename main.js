@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.7
+let version = 0.71
 var message
 
 // Update the code.
@@ -110,7 +110,7 @@ async function createWidget(){
     priceStacks[name] = priceStack;
   }
 
-// Loop to add time and price
+// Loop to add time and prices
 for (let s = 0; s < stackNames.length; s++) {
   let name = stackNames[s];
   let timeStack = timeStacks[name];
@@ -119,24 +119,9 @@ for (let s = 0; s < stackNames.length; s++) {
   // Add time
   for (let i = hourOffset; i < hourOffset + 5; i++) {
     if (i == 24) {
-      for (let a=0; a<2;a++){
-        let timeText = timeStack.addText(" ");
-        timeText.leftAlignText();
-        timeText.font = Font.lightSystemFont(11);
-        timeText.textColor = new Color("#ffffff");
-      }
-      let timeText = timeStack.addText("update");
-      timeText.leftAlignText();
-      timeText.font = Font.lightSystemFont(11);
-      timeText.textColor = new Color("#ffffff");
-      timeText = timeStack.addText("version");
-      timeText.font = Font.lightSystemFont(11);
-      timeText.leftAlignText();
-      timeText.textColor = new Color("#ffffff");
-      continue
+       continue
     }
     for (let a = 0; a < 4; a++) {
-      
       let timeText = timeStack.addText(`${i}:${a === 0 ? "00" : a * 15}`);
       timeText.leftAlignText();
       if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) {
@@ -155,20 +140,6 @@ for (let s = 0; s < stackNames.length; s++) {
   for (let i = priceStart; i < priceStart + Math.ceil(allValues.length*0.2083); i++) {
 
     if (i==allValues.length){
-      for (let a=0; a<2;a++){
-        let timeText = priceStack.addText(" ");
-        timeText.leftAlignText();
-        timeText.font = Font.lightSystemFont(11);
-        timeText.textColor = new Color("#ffffff");
-      }
-      let timeText = priceStack.addText("1.02");
-      timeText.leftAlignText();
-      timeText.font = Font.lightSystemFont(11);
-      timeText.textColor = new Color("#ffffff");
-      timeText = priceStack.addText(`${version}`);
-      timeText.leftAlignText();
-      timeText.font = Font.lightSystemFont(11);
-      timeText.textColor = new Color("#ffffff");
       break
     }
     let priceVal = Math.round(pricesJSON[i] * 1.25);

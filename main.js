@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.41;
+let version = 0.42;
 
 // Update the code.
 try {
@@ -12,7 +12,7 @@ try {
   const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
   if (version < serverVersion[1]){
     let files = FileManager.iCould();
-    files.writeString(Script.name, codeString);
+    files.writeString(module.filename, codeString);
   }
 } catch (error){
   log(error)

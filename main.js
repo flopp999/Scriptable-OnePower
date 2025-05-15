@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.48;
+let version = 0.49;
 
 // Update the code.
 try {
@@ -288,13 +288,13 @@ for (let s = 0; s < stackNames.length; s++) {
         priceText.font = Font.lightSystemFont(smallFont);
         priceText.textColor = new Color("#ffffff");
       }
-      priceText = priceStack.addText(`${version}`);
+      let priceText = priceStack.addText(`${version}`);
       priceText.leftAlignText();
       priceText.font = Font.lightSystemFont(smallFont);
       priceText.textColor = new Color("#ffffff");
       break
     }
-    let priceVal = Math.round(pricesJSON[i] * (1+"."+(ivat*vat)));
+    let priceVal = Math.round(pricesJSON[i] * (1+"."+(includevat*vat)));
     let priceText = priceStack.addText(String(priceVal));
     priceText.leftAlignText();
     if (i === (hour * 4) + Math.floor(minute / 15)) {

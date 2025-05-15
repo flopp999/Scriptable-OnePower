@@ -188,8 +188,21 @@ if (response == 2) {
   // Try to download the file.
   try {
     const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/version.txt")
-    const codeString = await req.loadString()
-    if (version < codeString){
+    const serverVersion = await req.loadString()
+    if (version < serverVersion){
+      let files = FileManager.local()
+      const iCloudInUse = files.isFileStoredIniCloud(module.filename)
+      files = iCloudInUse ? FileManager.iCloud() : files
+
+      // Try to download the file.
+      try {
+        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/main.js")
+        const codeString = await req.loadString()
+        files.writeString(module.filename, codeString)
+        //message = "The code has been updated. If the script is open, close it for the change to take effect."
+      } catch {
+        message = "The update failed. Please try again later."
+      }
       let widget = await createUpdate();
       widget.presentLarge()
     }

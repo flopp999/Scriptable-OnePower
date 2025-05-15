@@ -30,7 +30,7 @@ try {
     let raw = fm.readString(filePath);
     settings = JSON.parse(raw);
     let keys = Object.keys(settings);
-    if (keys.length < 4 || !settings.area || !settings.resolution || !settings.currency || !settings.vat) {
+    if (keys.length < 5 || !settings.area || !settings.resolution || !settings.currency || !settings.vat) || !settings.includevat) {
       throw new Error("Settings file is incomplete or corrupted");
     }
   } else {

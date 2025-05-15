@@ -1,8 +1,6 @@
-//support me with a coffee
-//buymeacoffee.com/flopp999
-//Thanks to Max Zeryck for the download-solution
-let version = 0.9
-
+// Variables used by Scriptable.
+// These must be at the very top of the file. Do not edit.
+// icon-color: green; icon-glyph: magic;
 const date = new Date();
 const yyyy = date.getFullYear();
 const mm = String(date.getMonth() + 1).padStart(2, '0'); // month are indexed from 0
@@ -10,9 +8,10 @@ const dd = String(date.getDate()).padStart(2, '0');
 const formattedDate = `${yyyy}-${mm}-${dd}`;
 const hour = date.getHours();
 const minute = date.getMinutes();
+const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 const url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${formattedDate}&market=DayAhead&indexNames=SE4&currency=SEK&resolutionInMinutes=15`;
 const request = new Request(url);
-const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+request.timeoutInterval = 1
 let response = (await request.loadJSON());
 let updated = response.updatedAt
 updated = updated.replace(/\.\d+Z$/, '').replace('T', ' ');
@@ -30,8 +29,8 @@ let pricesJSON = JSON.parse(JSON.stringify(allValues));
   
 const priceLowest = (Math.min(...pricesJSON.map(Number)));
 const priceHighest = (Math.max(...pricesJSON.map(Number)));
-const priceAvg = (pricesJSON.reduce((sum, val) => sum + Number(val), 0) / pricesJSON.length / 3);
-
+let priceDiff = (pricesJSON.reduce((sum, val) => sum + Number(val), 0) / pricesJSON.length / 3);
+priceDiff = (priceHighest - priceLowest)/3
 async function createUpdate(){
 
   let listwidget = new ListWidget();
@@ -90,57 +89,103 @@ async function createWidget(){
     priceStacks[name] = priceStack;
   }
 
-// Loop to fill all stacks
+// Loop för att fylla alla stacks
 for (let s = 0; s < stackNames.length; s++) {
   let name = stackNames[s];
   let timeStack = timeStacks[name];
   let priceStack = priceStacks[name];
 
   let hourOffset = 0 + s * 5; // t.ex. 6, 8, 10
-  // add time
+  // ⏰ Lägg till tider (exakt samma logik du hade)
   for (let i = hourOffset; i < hourOffset + 5; i++) {
-    if (i == 24) {continue}
-    for (let a = 0; a < 4; a++) {
-      let timeText = timeStack.addText(`${i}:${a === 0 ? "00" : a * 15}`);
-      timeText.leftAlignText();
-      timeText.font = Font.lightSystemFont(12.3);
-      if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) {
-        timeText.textColor = new Color("#00ffff");
-      } else {
+    if (i == 24) {
+      for (let a=0; a<2;a++){
+        let timeText = timeStack.addText(" ");
+        timeText.leftAlignText();
+        timeText.font = Font.lightSystemFont(11);
         timeText.textColor = new Color("#ffffff");
       }
+      let timeText = timeStack.addText("update");
+        timeText.leftAlignText();
+        timeText.font = Font.lightSystemFont(11);
+        timeText.textColor = new Color("#ffffff");
+      
+      timeText = timeStack.addText("version");
+      timeText.font = Font.lightSystemFont(11);
+      timeText.leftAlignText();
+      
+      timeText.textColor = new Color("#ffffff");
+      continue
+    }
+    for (let a = 0; a < 4; a++) {
+      
+      let timeText = timeStack.addText(`${i}:${a === 0 ? "00" : a * 15}`);
+      timeText.leftAlignText();
+      if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) {
+        timeText.textColor = new Color("#00ffff");
+        timeText.font = Font.lightSystemFont(14);
+      } else {
+        timeText.textColor = new Color("#ffffff");
+        timeText.font = Font.lightSystemFont(12);
+      }
+      if (allValues.length  == 24) {break}
     }
   }
 
-  // add price
-  let priceStart = 0 + s * 20;
-  for (let i = priceStart; i < priceStart + 20; i++) {
-    if (i==96) {break}
+  // 💰 Lägg till priser
+  let priceStart = 0 + s * Math.ceil(allValues.length*0.2083);
+  for (let i = priceStart; i < priceStart + Math.ceil(allValues.length*0.2083); i++) {
+
+    if (i==allValues.length){
+      for (let a=0; a<2;a++){
+        let timeText = priceStack.addText(" ");
+        timeText.leftAlignText();
+        timeText.font = Font.lightSystemFont(11);
+        timeText.textColor = new Color("#ffffff");
+      }
+      let timeText = priceStack.addText("1.02");
+        timeText.leftAlignText();
+        timeText.font = Font.lightSystemFont(11);
+        timeText.textColor = new Color("#ffffff");
+      timeText = priceStack.addText(`${version}`);
+      timeText.leftAlignText();
+      timeText.font = Font.lightSystemFont(11);
+      timeText.textColor = new Color("#ffffff");
+      break
+    }
     let priceVal = Math.round(pricesJSON[i] * 1.25);
     let priceText = priceStack.addText(String(priceVal));
     priceText.leftAlignText();
-    priceText.font = Font.lightSystemFont(12.3);
-    
+    if (i === (hour * 4) + Math.floor(minute / 15)) {
+        priceText.font = Font.lightSystemFont(14);
+      } else {
+        priceText.font = Font.lightSystemFont(12);
+      }
     if (pricesJSON[i] == priceLowest){
-      priceText.textColor = new Color("#00ff00");
-    } else if (pricesJSON[i] < priceAvg + priceLowest) {
+      priceText.textColor = new Color("#00af00");
+    } else if (pricesJSON[i] < priceDiff + priceLowest) {
       priceText.textColor = new Color("#ffff00")
     } else if (pricesJSON[i] == priceHighest){
-      priceText.textColor = new Color("#ff00ff");
-    } else if (pricesJSON[i] > priceHighest - priceAvg) {
-      priceText.textColor =  new Color("#ff0000")
+      priceText.textColor = new Color("#9f00ff");
+    } else if (pricesJSON[i] > priceHighest - priceDiff) {
+      priceText.textColor =  new Color("#ff0030")
     } else {
       priceText.textColor = new Color("#f38")
     }
   }
 }
-log("rr")
 return listwidget
 }
 
+// This script was created by Max Zeryck.
 response = 2
+let version = 1.01
+// Determine if user has taken the screenshot.
+var message
 
+// Update the code.
 if (response == 2) {
+  // Try to download the file.
   try {
     const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/version.txt")
     const codeString = await req.loadString()
@@ -153,7 +198,7 @@ if (response == 2) {
       widget.presentLarge()
     }
   } catch {
-    log("The update failed. Please try again later.")
+    message = "The update failed. Please try again later."
   }
 }
 

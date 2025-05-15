@@ -122,7 +122,7 @@ for (let s = 0; s < stackNames.length; s++) {
       for (let a=0; a<3;a++){
         let timeText = timeStack.addText(" ");
         timeText.leftAlignText();
-        timeText.font = Font.lightSystemFont(10);
+        timeText.font = Font.lightSystemFont(12);
         timeText.textColor = new Color("#ffffff");
       }
       timeText = timeStack.addText("version");
@@ -159,7 +159,7 @@ for (let s = 0; s < stackNames.length; s++) {
       for (let a=0; a<3;a++){
         let timeText = priceStack.addText(" ");
         timeText.leftAlignText();
-        timeText.font = Font.lightSystemFont(10);
+        timeText.font = Font.lightSystemFont(12);
         timeText.textColor = new Color("#ffffff");
       }
       timeText = priceStack.addText(`${version}`);

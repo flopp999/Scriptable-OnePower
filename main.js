@@ -9,8 +9,9 @@ let version = 0.39;
 try {
   const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/main.js")
   const codeString = await req.loadString()
-  if (version < codeString[1]){
-    files.writeString(module.filename, codeString)
+  const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
+  if (version < serverVersion[1]){
+    files.writeString(Script.name, codeString)
   }
 } catch (error){
   

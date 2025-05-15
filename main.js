@@ -35,17 +35,12 @@ let settings = {};
 
 try {
   if (fm.fileExists(filePath)) {
-    console.log("Settings file exists. Reading...");
     let raw = fm.readString(filePath);
     settings = JSON.parse(raw);
     let keys = Object.keys(settings);
     if (keys.length < 3 || !settings.area || !settings.resolution) {
       throw new Error("Settings file is incomplete or corrupted");
     }
-    console.log("Loaded settings from file:");
-    console.log("Area: " + settings.area);
-    console.log("Resolution: " + settings.resolution);
-    console.log("Currency: " + settings.currency);
   } else {
     throw new Error("Settings file not found");
   }
@@ -55,19 +50,11 @@ try {
   settings.resolution = await askForResolution();
   settings.currency = await askForCurrency();
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  console.log("Saved new settings:");
-  console.log("Area: " + settings.area);
-  console.log("Resolution: " + settings.resolution);
-  console.log("Currency: " + settings.currency);
 }
 
 let area = settings.area;
 let resolution = settings.resolution;
 let currency = settings.currency;
-
-console.log("Final values being used:");
-console.log("Area: " + area);
-console.log("Resolution: " + resolution);
 
 // Select area
 async function askForArea() {
@@ -203,11 +190,11 @@ for (let s = 0; s < stackNames.length; s++) {
       for (let a=0; a<3;a++){
         let timeText = timeStack.addText(" ");
         timeText.leftAlignText();
-        timeText.font = Font.lightSystemFont(mediumFont);
+        timeText.font = Font.lightSystemFont(smallFont);
         timeText.textColor = new Color("#ffffff");
       }
       timeText = timeStack.addText("version");
-      timeText.font = Font.lightSystemFont(mediumFont);
+      timeText.font = Font.lightSystemFont(smallFont);
       timeText.leftAlignText();
       timeText.textColor = new Color("#ffffff");
       continue
@@ -240,7 +227,7 @@ for (let s = 0; s < stackNames.length; s++) {
       for (let a=0; a<3;a++){
         let timeText = priceStack.addText(" ");
         timeText.leftAlignText();
-        timeText.font = Font.lightSystemFont(mediumFont);
+        timeText.font = Font.lightSystemFont(smallFont);
         timeText.textColor = new Color("#ffffff");
       }
       timeText = priceStack.addText(`${version}`);

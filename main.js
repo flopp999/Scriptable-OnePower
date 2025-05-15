@@ -3,19 +3,19 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.40;
+let version = 0.41;
 
 // Update the code.
 try {
   const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/main.js");
   const codeString = await req.loadString();
   const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
-  let files = FileManager.iCould();
   if (version < serverVersion[1]){
+    let files = FileManager.iCould();
     files.writeString(Script.name, codeString);
   }
 } catch (error){
-  
+  log(error)
 }
 
 let fileName = Script.name() + "Settings.json";

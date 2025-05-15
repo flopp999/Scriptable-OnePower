@@ -119,7 +119,7 @@ for (let s = 0; s < stackNames.length; s++) {
   // Add time
   for (let i = hourOffset; i < hourOffset + 5; i++) {
     if (i == 24) {
-      for (let a=0; a<2;a++){
+      for (let a=0; a<3;a++){
         let timeText = timeStack.addText(" ");
         timeText.leftAlignText();
         timeText.font = Font.lightSystemFont(11);
@@ -150,7 +150,7 @@ for (let s = 0; s < stackNames.length; s++) {
   for (let i = priceStart; i < priceStart + Math.ceil(allValues.length*0.2083); i++) {
 
     if (i==allValues.length){
-      for (let a=0; a<2;a++){
+      for (let a=0; a<3;a++){
         let timeText = priceStack.addText(" ");
         timeText.leftAlignText();
         timeText.font = Font.lightSystemFont(11);

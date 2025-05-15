@@ -9,7 +9,7 @@ let version = 0.41;
 try {
   const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/main.js");
   const codeString = await req.loadString();
-  const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
+  const serverVersion < codeString.match(/version\s*=\s*([0-9.]+)/);
   if (version < serverVersion[1]){
     let files = FileManager.iCould();
     files.writeString(Script.name, codeString);

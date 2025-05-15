@@ -11,7 +11,6 @@ try {
   const codeString = await req.loadString()
   if (version < codeString[1]){
     files.writeString(module.filename, codeString)
-    }
   }
 } catch (error){
   

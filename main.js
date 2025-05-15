@@ -38,6 +38,10 @@ try {
     console.log("Settings file exists. Reading...");
     let raw = fm.readString(filePath);
     settings = JSON.parse(raw);
+    let keys = Object.keys(settings);
+    if (keys.length < 3 || !settings.area || !settings.resolution) {
+      throw new Error("Settings file is incomplete or corrupted");
+    }
     console.log("Loaded settings from file:");
     console.log("Area: " + settings.area);
     console.log("Resolution: " + settings.resolution);

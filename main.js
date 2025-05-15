@@ -209,12 +209,17 @@ async function createWidget(){
   right.layoutVertically()
   let update = right.addStack()
   update.addSpacer()
-  let updatetext = update.addText("uppdaterad "+updated);
+  let updatetext = update.addText("updated "+updated);
   updatetext.font = Font.lightSystemFont(10)
   updatetext.textColor = new Color("#ffffff");
   let moms = right.addStack()
   moms.addSpacer()
-  let momstext = moms.addText("ink.moms")
+  if (includevat == 1) {
+    let momstext = moms.addText("incl. VAT")
+  }
+  else {
+    let momstext = moms.addText("excl. VAT")
+  }
   momstext.font = Font.lightSystemFont(10)
   momstext.textColor = new Color("#ffffff");
   

@@ -11,7 +11,7 @@ try {
   const codeString = await req.loadString();
   const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
   if (version < serverVersion[1]){
-    let files = FileManager.iCould();
+    let files = FileManager.iCloud();
     files.writeString(module.filename, codeString);
   }
 } catch (error){

@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.53;
+let version = 0.54;
 
 // Update the code.
 try {
@@ -119,7 +119,7 @@ async function askForResolution() {
   alert.addAction("15 min");
   alert.addAction("60 min");
   let index = await alert.presentAlert();
-  return ["15", "60"][index];
+  return [15, 60][index];
 }
 
 // Select currency
@@ -182,18 +182,6 @@ let pricesJSON = JSON.parse(JSON.stringify(allValues));
 const priceLowest = (Math.min(...pricesJSON.map(Number)));
 const priceHighest = (Math.max(...pricesJSON.map(Number)));
 const priceDiff = (priceHighest - priceLowest)/3
-async function createUpdate(){
-  let listwidget = new ListWidget();
-  listwidget.backgroundColor = new Color("#000000");
-  let row = listwidget.addStack()
-  row.layoutVertically()
-  let left = row.addStack()
-  left.layoutHorizontally()
-  let whatday = left.addText("New update available")
-  whatday.textColor = new Color("#ffffff");
-  whatday.font = Font.lightSystemFont(20)
-  return listwidget
-  }
 
 async function createWidget(){
   let listwidget = new ListWidget();
@@ -325,6 +313,33 @@ for (let s = 0; s < stackNames.length; s++) {
     }
   }
 }
+  let bottom = listwidget.addStack();
+  
+  let low = bottom.addText("lowest");
+  low.font = Font.lightSystemFont(11);
+  low.textColor = Color.white();
+  bottom.addSpace();
+  let lowtext = bottom.addText("-1");
+  lowtext.font = Font.lightSystemFont(11);
+  lowtext.textColor = Color.green();
+  bottom.addSpace();
+  
+  let avg = bottom.addText("avg");
+  avg.font = Font.lightSystemFont(11);
+  avg.textColor = Color.white();
+  bottom.addSpace();
+  let avgtext = bottom.addText("66");
+  avgtext.font = Font.lightSystemFont(11);
+  avgtext.textColor = Color.orange();
+  bottom.addSpace();
+  
+  let high = bottom.addText("high");
+  high.font = Font.lightSystemFont(11);
+  high.textColor = Color.white();
+  let hightext = bottom.addText("444");
+  hightext.font = Font.lightSystemFont(11);
+  hightext.textColor = Color.red();
+  
 return listwidget
 }
 let widget = await createWidget();

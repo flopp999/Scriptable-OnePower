@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.56;
+let version = 0.57;
 
 // Update the code.
 try {
@@ -171,8 +171,8 @@ let prices = response.multiIndexEntries;
 let allValues = [];
 
 for (let i = 0; i < prices.length; i++) {
-  const value = prices[i]["entryPerArea"]["SE4"];
-  allValues.push(String(value/10));
+  const value = prices[i]["entryPerArea"][`${area}`];
+  allValues.push(String(value/10* (1+"."+(includevat*vat))));
 }
 
 let pricesJSON = JSON.parse(JSON.stringify(allValues));
@@ -287,7 +287,7 @@ for (let s = 0; s < stackNames.length; s++) {
       priceText.textColor = new Color("#ffffff");
       break
     }
-    let priceVal = Math.round(pricesJSON[i] * (1+"."+(includevat*vat)));
+    let priceVal = Math.round(pricesJSON[i]);
     let priceText = priceStack.addText(String(priceVal));
     priceText.leftAlignText();
     if (i === (hour * 4) + Math.floor(minute / 15)) {
@@ -319,7 +319,8 @@ for (let s = 0; s < stackNames.length; s++) {
   low.font = Font.lightSystemFont(11);
   low.textColor = Color.white();
   bottom.addSpacer(4);
-  let lowtext = bottom.addText(`${priceLowest}`);
+  let priceLowestRound = Math.round(priceLowest)
+  let lowtext = bottom.addText(`${priceLowestRound}`);
   lowtext.font = Font.lightSystemFont(11);
   lowtext.textColor = Color.green();
   bottom.addSpacer();
@@ -332,12 +333,12 @@ for (let s = 0; s < stackNames.length; s++) {
   avgtext.font = Font.lightSystemFont(11);
   avgtext.textColor = Color.orange();
   bottom.addSpacer();
-  
+  let priceHighestRound = Math.round(priceHighest)
   let high = bottom.addText("highest");
   high.font = Font.lightSystemFont(11);
   high.textColor = Color.white();
   bottom.addSpacer(4);
-  let lowtext = bottom.addText(`${priceHighest}`);
+  let hightext = bottom.addText(`${priceHighestRound}`);
   hightext.font = Font.lightSystemFont(11);
   hightext.textColor = Color.red();
   

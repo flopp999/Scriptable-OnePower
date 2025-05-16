@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.58;
+let version = 0.59;
 
 // Update the code.
 try {
@@ -182,6 +182,7 @@ let pricesJSON = JSON.parse(JSON.stringify(allValues));
 const priceLowest = (Math.min(...pricesJSON.map(Number)));
 const priceHighest = (Math.max(...pricesJSON.map(Number)));
 const priceDiff = (priceHighest - priceLowest)/3;
+const priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
 
 async function createWidget(){
   let listwidget = new ListWidget();
@@ -238,12 +239,13 @@ for (let s = 0; s < stackNames.length; s++) {
   // Add time
   for (let i = hourOffset; i < hourOffset + 5; i++) {
     if (i == 24) {
-      for (let a=0; a<3;a++){
+      if (allValues.length = 96){
+      for (let a = 0; a < 3; a++){ // after hours are printed
         let timeText = timeStack.addText(" ");
         timeText.leftAlignText();
         timeText.font = Font.lightSystemFont(smallFont);
-        timeText.textColor = new Color("#ffffff");
-      }
+        //timeText.textColor = new Color("#ffffff");
+      }}
       timeText = timeStack.addText("version");
       timeText.font = Font.lightSystemFont(smallFont);
       timeText.leftAlignText();
@@ -253,7 +255,7 @@ for (let s = 0; s < stackNames.length; s++) {
     for (let a = 0; a < 4; a++) {
       let timeText = timeStack.addText(`${i}:${a === 0 ? "00" : a * 15}`);
       timeText.leftAlignText();
-      if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) {
+      if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) { // actual hour and identifies which 15-minute interval (quarter-hour segment) the current time falls into. e.g., 00–14, 15–29, 30–44, or 45–59
         timeText.textColor = new Color("#00ffff");
         timeText.font = Font.lightSystemFont(bigFont);
       } else {
@@ -274,13 +276,14 @@ for (let s = 0; s < stackNames.length; s++) {
   let priceStart = 0 + s * Math.ceil(allValues.length*0.2083); // 0.2083 is the difference between 24 and 96 values
   for (let i = priceStart; i < priceStart + Math.ceil(allValues.length*0.2083); i++) {
 
-    if (i==allValues.length){
-      for (let a=0; a<3;a++){
+    if (i == allValues.length){
+      if (allValues.length = 96){
+      for (let a = 0; a < 3; a++){ // after prices are printed
         let priceText = priceStack.addText(" ");
         priceText.leftAlignText();
         priceText.font = Font.lightSystemFont(smallFont);
-        priceText.textColor = new Color("#ffffff");
-      }
+        //priceText.textColor = new Color("#ffffff");
+      }}
       let priceText = priceStack.addText(`${version}`);
       priceText.leftAlignText();
       priceText.font = Font.lightSystemFont(smallFont);
@@ -329,7 +332,8 @@ for (let s = 0; s < stackNames.length; s++) {
   avg.font = Font.lightSystemFont(11);
   avg.textColor = new Color("#f38");
   bottom.addSpacer(4);
-  let avgtext = bottom.addText("66");
+  let priceAvgRound = Math.round(priceAvg);
+  let avgtext = bottom.addText(`${priceAvgRound}`);
   avgtext.font = Font.lightSystemFont(11);
   avgtext.textColor = new Color("#f38");
   bottom.addSpacer();

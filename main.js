@@ -304,13 +304,13 @@ for (let s = 0; s < stackNames.length; s++) {
       }
     }
     if (pricesJSON[i] == priceLowest){
-      priceText.textColor = new Color("#00af00"); // green
+      priceText.textColor = new Color("#00cf00"); // green
     } else if (pricesJSON[i] < priceDiff + priceLowest) {
-      priceText.textColor = new Color("#ffff00"); // red
+      priceText.textColor = new Color("#ffff00"); // yellow
     } else if (pricesJSON[i] == priceHighest){
-      priceText.textColor = new Color("#9f00ff"); // purple
+      priceText.textColor = new Color("#fa60ff"); // purple
     } else if (pricesJSON[i] > priceHighest - priceDiff) {
-      priceText.textColor =  new Color("#ff0030"); // yellow
+      priceText.textColor =  new Color("#ff3000"); // red
     } else {
       priceText.textColor = new Color("#f38"); // orange
     }
@@ -320,12 +320,12 @@ for (let s = 0; s < stackNames.length; s++) {
   // lowest
   let low = bottom.addText("lowest");
   low.font = Font.lightSystemFont(11);
-  low.textColor = new Color("#00af00");
+  low.textColor = new Color("#00cf00");
   bottom.addSpacer(4);
   let priceLowestRound = Math.round(priceLowest);
   let lowtext = bottom.addText(`${priceLowestRound}`);
   lowtext.font = Font.lightSystemFont(11);
-  lowtext.textColor = new Color("#00af00");
+  lowtext.textColor = new Color("#00cf00");
   bottom.addSpacer();
   // average
   let avg = bottom.addText("average");
@@ -340,12 +340,12 @@ for (let s = 0; s < stackNames.length; s++) {
   // highest
   let high = bottom.addText("highest");
   high.font = Font.lightSystemFont(11);
-  high.textColor = new Color("#9f00ff");
+  high.textColor = new Color("#fa60ff");
   bottom.addSpacer(4);
   let priceHighestRound = Math.round(priceHighest);
   let hightext = bottom.addText(`${priceHighestRound}`);
   hightext.font = Font.lightSystemFont(11);
-  hightext.textColor = new Color("#9f00ff");
+  hightext.textColor = new Color("#fa60ff");
   
 return listwidget
 }

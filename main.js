@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.57;
+let version = 0.58;
 
 // Update the code.
 try {
@@ -15,7 +15,7 @@ try {
     files.writeString(module.filename, codeString);
   }
 } catch (error){
-  console.error(error)
+  console.error(error);
 }
 
 let fileName = Script.name() + "Settings.json";
@@ -30,7 +30,7 @@ try {
     let raw = fm.readString(filePath);
     settings = JSON.parse(raw);
     let keys = Object.keys(settings);
-    if (keys.length < 5 || !settings.area || !settings.resolution || !settings.currency || !settings.vat || !settings.includevat) {
+    if (keys.length < 5) {
       throw new Error("Settings file is incomplete or corrupted");
     }
   } else {
@@ -181,34 +181,34 @@ let pricesJSON = JSON.parse(JSON.stringify(allValues));
   
 const priceLowest = (Math.min(...pricesJSON.map(Number)));
 const priceHighest = (Math.max(...pricesJSON.map(Number)));
-const priceDiff = (priceHighest - priceLowest)/3
+const priceDiff = (priceHighest - priceLowest)/3;
 
 async function createWidget(){
   let listwidget = new ListWidget();
   listwidget.backgroundColor = new Color("#000000");
-  let row = listwidget.addStack()
-  row.layoutVertically()
-  let left = row.addStack()
-  left.layoutHorizontally()
-  let whatday = left.addText(day)
+  let row = listwidget.addStack();
+  row.layoutVertically();
+  let left = row.addStack();
+  left.layoutHorizontally();
+  let whatday = left.addText(day);
   whatday.textColor = new Color("#ffffff");
-  whatday.font = Font.lightSystemFont(20)
-  let right = left.addStack()
-  right.layoutVertically()
-  let update = right.addStack()
-  update.addSpacer()
+  whatday.font = Font.lightSystemFont(20);
+  let right = left.addStack();
+  right.layoutVertically();
+  let update = right.addStack();
+  update.addSpacer();
   let updatetext = update.addText("updated "+updated);
-  updatetext.font = Font.lightSystemFont(10)
+  updatetext.font = Font.lightSystemFont(10);
   updatetext.textColor = new Color("#ffffff");
-  let moms = right.addStack()
-  moms.addSpacer()
+  let moms = right.addStack();
+  moms.addSpacer();
   if (includevat == 1) {
-    momstext = moms.addText("incl. VAT")
+    momstext = moms.addText("incl. VAT");
   }
   else {
-    momstext = moms.addText("excl. VAT")
+    momstext = moms.addText("excl. VAT");
   }
-  momstext.font = Font.lightSystemFont(10)
+  momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   
   let head = listwidget.addStack()
@@ -271,7 +271,7 @@ for (let s = 0; s < stackNames.length; s++) {
   }
 
   // Add prices
-  let priceStart = 0 + s * Math.ceil(allValues.length*0.2083);
+  let priceStart = 0 + s * Math.ceil(allValues.length*0.2083); // 0.2083 is the difference between 24 and 96 values
   for (let i = priceStart; i < priceStart + Math.ceil(allValues.length*0.2083); i++) {
 
     if (i==allValues.length){
@@ -301,15 +301,15 @@ for (let s = 0; s < stackNames.length; s++) {
       }
     }
     if (pricesJSON[i] == priceLowest){
-      priceText.textColor = new Color("#00af00");
+      priceText.textColor = new Color("#00af00"); // green
     } else if (pricesJSON[i] < priceDiff + priceLowest) {
-      priceText.textColor = new Color("#ffff00")
+      priceText.textColor = new Color("#ffff00"); // red
     } else if (pricesJSON[i] == priceHighest){
-      priceText.textColor = new Color("#9f00ff");
+      priceText.textColor = new Color("#9f00ff"); // purple
     } else if (pricesJSON[i] > priceHighest - priceDiff) {
-      priceText.textColor =  new Color("#ff0030")
+      priceText.textColor =  new Color("#ff0030"); // yellow
     } else {
-      priceText.textColor = new Color("#f38")
+      priceText.textColor = new Color("#f38"); // orange
     }
   }
 }
@@ -317,30 +317,31 @@ for (let s = 0; s < stackNames.length; s++) {
   
   let low = bottom.addText("lowest");
   low.font = Font.lightSystemFont(11);
-  low.textColor = Color.white();
+  low.textColor = new Color("#00af00");
   bottom.addSpacer(4);
-  let priceLowestRound = Math.round(priceLowest)
+  let priceLowestRound = Math.round(priceLowest);
   let lowtext = bottom.addText(`${priceLowestRound}`);
   lowtext.font = Font.lightSystemFont(11);
-  lowtext.textColor = Color.green();
+  lowtext.textColor = new Color("#00af00");
   bottom.addSpacer();
   
   let avg = bottom.addText("average");
   avg.font = Font.lightSystemFont(11);
-  avg.textColor = Color.white();
+  avg.textColor = new Color("#f38");
   bottom.addSpacer(4);
   let avgtext = bottom.addText("66");
   avgtext.font = Font.lightSystemFont(11);
-  avgtext.textColor = Color.orange();
+  avgtext.textColor = new Color("#f38");
   bottom.addSpacer();
-  let priceHighestRound = Math.round(priceHighest)
+  
+  let priceHighestRound = Math.round(priceHighest);
   let high = bottom.addText("highest");
   high.font = Font.lightSystemFont(11);
-  high.textColor = Color.white();
+  high.textColor = new Color("#9f00ff");
   bottom.addSpacer(4);
   let hightext = bottom.addText(`${priceHighestRound}`);
   hightext.font = Font.lightSystemFont(11);
-  hightext.textColor = Color.red();
+  hightext.textColor = new Color("#9f00ff");
   
 return listwidget
 }

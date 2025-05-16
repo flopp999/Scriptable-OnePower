@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.54;
+let version = 0.55;
 
 // Update the code.
 try {
@@ -318,25 +318,26 @@ for (let s = 0; s < stackNames.length; s++) {
   let low = bottom.addText("lowest");
   low.font = Font.lightSystemFont(11);
   low.textColor = Color.white();
-  bottom.addSpace();
-  let lowtext = bottom.addText("-1");
+  bottom.addSpacer(4);
+  let lowtext = bottom.addText(priceLowest);
   lowtext.font = Font.lightSystemFont(11);
   lowtext.textColor = Color.green();
-  bottom.addSpace();
+  bottom.addSpacer();
   
-  let avg = bottom.addText("avg");
+  let avg = bottom.addText("average");
   avg.font = Font.lightSystemFont(11);
   avg.textColor = Color.white();
-  bottom.addSpace();
+  bottom.addSpacer(4);
   let avgtext = bottom.addText("66");
   avgtext.font = Font.lightSystemFont(11);
   avgtext.textColor = Color.orange();
   bottom.addSpace();
   
-  let high = bottom.addText("high");
+  let high = bottom.addText("highest");
   high.font = Font.lightSystemFont(11);
   high.textColor = Color.white();
-  let hightext = bottom.addText("444");
+  bottom.addSpacer(4);
+  let hightext = bottom.addText(priceHighest);
   hightext.font = Font.lightSystemFont(11);
   hightext.textColor = Color.red();
   

@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.59;
+let version = 0.60;
 
 // Update the code.
 try {
@@ -239,7 +239,7 @@ for (let s = 0; s < stackNames.length; s++) {
   // Add time
   for (let i = hourOffset; i < hourOffset + 5; i++) {
     if (i == 24) {
-      if (allValues.length = 96){
+      if (allValues.length == 96){
       for (let a = 0; a < 3; a++){ // after hours are printed
         let timeText = timeStack.addText(" ");
         timeText.leftAlignText();
@@ -262,7 +262,7 @@ for (let s = 0; s < stackNames.length; s++) {
         timeText.textColor = new Color("#ffffff");
         timeText.font = Font.lightSystemFont(mediumFont);
       }
-      if (allValues.length  == 24) {
+      if (allValues.length == 24) {
         if (i === hour) {
           timeText.textColor = new Color("#00ffff");
           timeText.font = Font.lightSystemFont(bigFont);
@@ -277,7 +277,7 @@ for (let s = 0; s < stackNames.length; s++) {
   for (let i = priceStart; i < priceStart + Math.ceil(allValues.length*0.2083); i++) {
 
     if (i == allValues.length){
-      if (allValues.length = 96){
+      if (allValues.length == 96){
       for (let a = 0; a < 3; a++){ // after prices are printed
         let priceText = priceStack.addText(" ");
         priceText.leftAlignText();
@@ -298,7 +298,7 @@ for (let s = 0; s < stackNames.length; s++) {
       } else {
         priceText.font = Font.lightSystemFont(mediumFont);
       }
-    if (allValues.length  == 24) {
+    if (allValues.length == 24) {
       if (i === hour) {
         priceText.font = Font.lightSystemFont(bigFont);
       }
@@ -317,7 +317,7 @@ for (let s = 0; s < stackNames.length; s++) {
   }
 }
   let bottom = listwidget.addStack();
-  
+  // lowest
   let low = bottom.addText("lowest");
   low.font = Font.lightSystemFont(11);
   low.textColor = new Color("#00af00");
@@ -327,7 +327,7 @@ for (let s = 0; s < stackNames.length; s++) {
   lowtext.font = Font.lightSystemFont(11);
   lowtext.textColor = new Color("#00af00");
   bottom.addSpacer();
-  
+  // average
   let avg = bottom.addText("average");
   avg.font = Font.lightSystemFont(11);
   avg.textColor = new Color("#f38");
@@ -337,12 +337,12 @@ for (let s = 0; s < stackNames.length; s++) {
   avgtext.font = Font.lightSystemFont(11);
   avgtext.textColor = new Color("#f38");
   bottom.addSpacer();
-  
-  let priceHighestRound = Math.round(priceHighest);
+  // highest
   let high = bottom.addText("highest");
   high.font = Font.lightSystemFont(11);
   high.textColor = new Color("#9f00ff");
   bottom.addSpacer(4);
+  let priceHighestRound = Math.round(priceHighest);
   let hightext = bottom.addText(`${priceHighestRound}`);
   hightext.font = Font.lightSystemFont(11);
   hightext.textColor = new Color("#9f00ff");

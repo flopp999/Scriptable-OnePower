@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.60;
+let version = 0.61;
 
 // Update the code.
 try {
@@ -18,7 +18,7 @@ try {
   console.error(error);
 }
 
-let fileName = Script.name() + "Settings.json";
+let fileName = Script.name() + "_Settings.json";
 let fm = FileManager.iCloud(); // Or .local() if preferred
 let dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);

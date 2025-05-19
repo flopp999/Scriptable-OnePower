@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.625;
+let version = 0.626;
 
 // Update the code.
 try {
@@ -392,7 +392,7 @@ for (let s = 0; s < stackNames.length; s++) {
   hightext.font = Font.lightSystemFont(11);
   hightext.textColor = new Color("#fa60ff");
   //chart
-  if (resolution == 15){
+  if (resolution == 60){
     let emptyrow = listwidget.addStack()
     listwidget.addSpacer(10)
     let chart = listwidget.addStack()

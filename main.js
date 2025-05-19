@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.622;
+let version = 0.623;
 
 // Update the code.
 try {
@@ -400,5 +400,21 @@ for (let s = 0; s < stackNames.length; s++) {
 return listwidget
 }
 let widget = await createWidget();
+if (config.runsInWidget) {
+  Script.setWidget(widget);
+} else {
+  if (Math.random() < 0.5) {
+    let alert = new Alert();
+    alert.title = "Support";
+    alert.message = "Do you want to buy me a coffee?";
+    alert.addAction = ("Ofcourse");
+    alert.addCancelAction("No way :)");
+    let response = await alert.present();
+    if (response === 0) {
+      Safari.open("https://buymeacoffee.com/flopp999");
+    }
+  }
+}
+
 widget.presentLarge()
 Script.complete();

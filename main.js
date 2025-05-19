@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.624;
+let version = 0.625;
 
 // Update the code.
 try {
@@ -265,7 +265,7 @@ async function createWidget(){
   updatetext.font = Font.lightSystemFont(10);
   updatetext.textColor = new Color("#ffffff");
   let moms = right.addStack();
-  moms.addSpacer(30);
+  moms.addSpacer(60);
   momstext = moms.addText("version: "+version);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
@@ -392,10 +392,12 @@ for (let s = 0; s < stackNames.length; s++) {
   hightext.font = Font.lightSystemFont(11);
   hightext.textColor = new Color("#fa60ff");
   //chart
-  let emptyrow = listwidget.addStack()
-  listwidget.addSpacer(10)
-  let chart = listwidget.addStack()
-  chart.addImage(GRAPH)  
+  if (resolution == 15){
+    let emptyrow = listwidget.addStack()
+    listwidget.addSpacer(10)
+    let chart = listwidget.addStack()
+    chart.addImage(GRAPH) 
+  }
   
 return listwidget
 }
@@ -407,7 +409,7 @@ if (config.runsInWidget) {
     let alert = new Alert();
     alert.title = "Support";
     alert.message = "Do you want to buy me a coffee?";
-    alert.addAction("Ofcourse");
+    alert.addAction("Of course");
     alert.addCancelAction("No way :)");
     let response = await alert.present();
     if (response === 0) {

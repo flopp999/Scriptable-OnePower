@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.61;
+let version = 0.62;
 
 // Update the code.
 try {
@@ -184,6 +184,60 @@ const priceHighest = (Math.max(...pricesJSON.map(Number)));
 const priceDiff = (priceHighest - priceLowest)/3;
 const priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
 
+let avgtoday=[]
+let countertoday=0
+do{
+  avgtoday += priceAvg + ","
+  countertoday+=1
+}
+while (countertoday < 24)
+let dotNow = ",,,,,,,100,,,,,,,,,,,,,,,,"
+let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h=770&c="
+graphtoday += encodeURI("{\
+  data: { \
+    labels: ["+hours+"],\
+    datasets: [\
+    {\
+        data:["+dotNow+"],\
+        type:'line',\
+        fill:false,\
+        borderColor:'white',\
+        borderWidth:25,\
+        pointRadius:10\
+      },\
+      {\
+        data:["+avgtoday+"],\
+        type:'line',\
+        fill:false,\
+        borderColor: 'orange',\
+        borderWidth:6,\
+        pointRadius:0\
+      },\
+      {\
+        data:["+pricesJSON+"],\
+        type:'bar',\
+        fill:false,\
+        borderColor: getGradientFillHelper('vertical',['red','orange','darkgreen']),\
+        borderWidth: 20, \
+      },\
+    ]\
+  },\
+    options:\
+      {\
+        legend:\
+        {\
+          display:false\
+        },\
+        scales:\
+        {\
+          xAxes:[{offset:true,ticks:{fontSize:35,fontColor:'white'}}],\
+          yAxes:[{ticks:{beginAtZero:true,fontSize:35,fontColor:'white'}}]\
+        }\
+      }\
+}")
+
+const GRAPH = await new Request(graphtoday).loadImage()
+
 async function createWidget(){
   let listwidget = new ListWidget();
   listwidget.backgroundColor = new Color("#000000");
@@ -202,6 +256,8 @@ async function createWidget(){
   updatetext.font = Font.lightSystemFont(10);
   updatetext.textColor = new Color("#ffffff");
   let moms = right.addStack();
+  moms.addSpacer(30);
+  momstext = moms.addText("version: "+version);
   moms.addSpacer();
   if (includevat == 1) {
     momstext = moms.addText("incl. VAT");
@@ -235,21 +291,10 @@ for (let s = 0; s < stackNames.length; s++) {
   let name = stackNames[s];
   let timeStack = timeStacks[name];
   let priceStack = priceStacks[name];
-  let hourOffset = 0 + s * 5; // t.ex. 6, 8, 10
+  let hourOffset = 0 + s * 5; // how many hours in coloum
   // Add time
   for (let i = hourOffset; i < hourOffset + 5; i++) {
     if (i == 24) {
-      if (allValues.length == 96){
-      for (let a = 0; a < 3; a++){ // after hours are printed
-        let timeText = timeStack.addText(" ");
-        timeText.leftAlignText();
-        timeText.font = Font.lightSystemFont(smallFont);
-        //timeText.textColor = new Color("#ffffff");
-      }}
-      timeText = timeStack.addText("version");
-      timeText.font = Font.lightSystemFont(smallFont);
-      timeText.leftAlignText();
-      timeText.textColor = new Color("#ffffff");
       continue
     }
     for (let a = 0; a < 4; a++) {
@@ -277,17 +322,6 @@ for (let s = 0; s < stackNames.length; s++) {
   for (let i = priceStart; i < priceStart + Math.ceil(allValues.length*0.2083); i++) {
 
     if (i == allValues.length){
-      if (allValues.length == 96){
-      for (let a = 0; a < 3; a++){ // after prices are printed
-        let priceText = priceStack.addText(" ");
-        priceText.leftAlignText();
-        priceText.font = Font.lightSystemFont(smallFont);
-        //priceText.textColor = new Color("#ffffff");
-      }}
-      let priceText = priceStack.addText(`${version}`);
-      priceText.leftAlignText();
-      priceText.font = Font.lightSystemFont(smallFont);
-      priceText.textColor = new Color("#ffffff");
       break
     }
     let priceVal = Math.round(pricesJSON[i]);
@@ -346,6 +380,11 @@ for (let s = 0; s < stackNames.length; s++) {
   let hightext = bottom.addText(`${priceHighestRound}`);
   hightext.font = Font.lightSystemFont(11);
   hightext.textColor = new Color("#fa60ff");
+  //chart
+  let emptyrow = listwidget.addStack()
+  listwidget.addSpacer(10)
+  let chart = listwidget.addStack()
+  chart.addImage(GRAPH)  
   
 return listwidget
 }

@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.626;
+let version = 0.627;
 
 // Update the code.
 try {
@@ -193,57 +193,6 @@ const priceHighest = (Math.max(...pricesJSON.map(Number)));
 const priceDiff = (priceHighest - priceLowest)/3;
 const priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
 
-let avgtoday=[]
-let countertoday=0
-do{
-  avgtoday += priceAvg + ","
-  countertoday+=1
-}
-while (countertoday < 24)
-let dotNow = ",,,,,,,100,,,,,,,,,,,,,,,,"
-let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h=770&c="
-graphtoday += encodeURI("{\
-  data: { \
-    labels: ["+hours+"],\
-    datasets: [\
-    {\
-        data:["+dotNow+"],\
-        type:'line',\
-        fill:false,\
-        borderColor:'white',\
-        borderWidth:25,\
-        pointRadius:10\
-      },\
-      {\
-        data:["+avgtoday+"],\
-        type:'line',\
-        fill:false,\
-        borderColor: 'orange',\
-        borderWidth:6,\
-        pointRadius:0\
-      },\
-      {\
-        data:["+pricesJSON+"],\
-        type:'bar',\
-        fill:false,\
-        borderColor: getGradientFillHelper('vertical',['red','orange','darkgreen']),\
-        borderWidth: 20, \
-      },\
-    ]\
-  },\
-    options:\
-      {\
-        legend:\
-        {\
-          display:false\
-        },\
-        scales:\
-        {\
-          xAxes:[{offset:true,ticks:{fontSize:35,fontColor:'white'}}],\
-          yAxes:[{ticks:{beginAtZero:true,fontSize:35,fontColor:'white'}}]\
-        }\
-      }\
-}")
 
 const GRAPH = await new Request(graphtoday).loadImage()
 
@@ -392,7 +341,71 @@ for (let s = 0; s < stackNames.length; s++) {
   hightext.font = Font.lightSystemFont(11);
   hightext.textColor = new Color("#fa60ff");
   //chart
-  if (resolution == 60){
+  if (resolution == 60
+    let avgtoday=[]
+    let dotNow = ""
+    let countertoday=0
+    let counterdot=0
+    do{
+      avgtoday += priceAvg + ","
+      countertoday+=1
+    }
+    while (counterdot < 24)
+    do{
+      if (hour == dotNow) {
+        dotNow += pricesJSON[counterdot] + ","
+      }
+      else {
+        dotNow += ","
+      }
+      counterdot+=1
+    }
+    while (counterdot < 24)
+    //let dotNow = ",,,,,,,100,,,,,,,,,,,,,,,,"
+    let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h=770&c="
+    graphtoday += encodeURI("{\
+      data: { \
+        labels: ["+hours+"],\
+        datasets: [\
+        {\
+            data:["+dotNow+"],\
+            type:'line',\
+            fill:false,\
+            borderColor:'white',\
+            borderWidth:25,\
+            pointRadius:10\
+          },\
+          {\
+            data:["+avgtoday+"],\
+            type:'line',\
+            fill:false,\
+            borderColor: 'orange',\
+            borderWidth:6,\
+            pointRadius:0\
+          },\
+          {\
+            data:["+pricesJSON+"],\
+            type:'bar',\
+            fill:false,\
+            borderColor: getGradientFillHelper('vertical',['red','orange','darkgreen']),\
+            borderWidth: 20, \
+          },\
+        ]\
+      },\
+        options:\
+          {\
+            legend:\
+            {\
+              display:false\
+            },\
+            scales:\
+            {\
+              xAxes:[{offset:true,ticks:{fontSize:35,fontColor:'white'}}],\
+              yAxes:[{ticks:{beginAtZero:true,fontSize:35,fontColor:'white'}}]\
+            }\
+          }\
+    }")
+
     let emptyrow = listwidget.addStack()
     listwidget.addSpacer(10)
     let chart = listwidget.addStack()

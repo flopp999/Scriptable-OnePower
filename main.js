@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.62;
+let version = 0.621;
 
 // Update the code.
 try {
@@ -34,6 +34,15 @@ try {
       throw new Error("Settings file is incomplete or corrupted");
     }
   } else {
+    let alert = new Alert();
+    alert.title = "Support";
+    alert.message = "Do you want to buy me a coffee?";
+    alert.addAction("Ofcourse");
+    alert.addCancelAction("No way :)");
+    let response = await alert.present();
+    if response === 0) {
+      Safari.open("buymeacoffee.com/flopp999");
+    }
     throw new Error("Settings file not found");
   }
 } catch (err) {
@@ -258,6 +267,8 @@ async function createWidget(){
   let moms = right.addStack();
   moms.addSpacer(30);
   momstext = moms.addText("version: "+version);
+  momstext.font = Font.lightSystemFont(10);
+  momstext.textColor = new Color("#ffffff");
   moms.addSpacer();
   if (includevat == 1) {
     momstext = moms.addText("incl. VAT");

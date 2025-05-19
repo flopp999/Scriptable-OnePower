@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.627;
+let version = 0.628;
 
 // Update the code.
 try {
@@ -193,9 +193,6 @@ const priceHighest = (Math.max(...pricesJSON.map(Number)));
 const priceDiff = (priceHighest - priceLowest)/3;
 const priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
 
-
-const GRAPH = await new Request(graphtoday).loadImage()
-
 async function createWidget(){
   let listwidget = new ListWidget();
   listwidget.backgroundColor = new Color("#000000");
@@ -361,7 +358,6 @@ for (let s = 0; s < stackNames.length; s++) {
       counterdot+=1
     }
     while (counterdot < 24)
-    //let dotNow = ",,,,,,,100,,,,,,,,,,,,,,,,"
     let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h=770&c="
     graphtoday += encodeURI("{\
       data: { \
@@ -405,7 +401,7 @@ for (let s = 0; s < stackNames.length; s++) {
             }\
           }\
     }")
-
+    const GRAPH = await new Request(graphtoday).loadImage()
     let emptyrow = listwidget.addStack()
     listwidget.addSpacer(10)
     let chart = listwidget.addStack()
@@ -414,6 +410,7 @@ for (let s = 0; s < stackNames.length; s++) {
   
 return listwidget
 }
+
 let widget = await createWidget();
 if (config.runsInWidget) {
   Script.setWidget(widget);

@@ -3,11 +3,11 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.628;
+let version = 0.629;
 
 // Update the code.
 try {
-  const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/main.js");
+  const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Nordpool.js");
   const codeString = await req.loadString();
   const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
   if (version < serverVersion[1]){
@@ -248,7 +248,7 @@ for (let s = 0; s < stackNames.length; s++) {
   let name = stackNames[s];
   let timeStack = timeStacks[name];
   let priceStack = priceStacks[name];
-  let hourOffset = 0 + s * 5; // how many hours in coloum
+  let hourOffset = 0 + s * 5; // how many hours per column
   // Add time
   for (let i = hourOffset; i < hourOffset + 5; i++) {
     if (i == 24) {
@@ -275,7 +275,7 @@ for (let s = 0; s < stackNames.length; s++) {
   }
 
   // Add prices
-  let priceStart = 0 + s * Math.ceil(allValues.length*0.2083); // 0.2083 is the difference between 24 and 96 values
+  let priceStart = 0 + s * Math.ceil(allValues.length*0.2083); // 0.2083 is the factor between 24 and 96
   for (let i = priceStart; i < priceStart + Math.ceil(allValues.length*0.2083); i++) {
 
     if (i == allValues.length){
@@ -309,14 +309,14 @@ for (let s = 0; s < stackNames.length; s++) {
 }
   let bottom = listwidget.addStack();
   // lowest
-  let low = bottom.addText("lowest");
-  low.font = Font.lightSystemFont(11);
-  low.textColor = new Color("#00cf00");
+  let lowest = bottom.addText("lowest");
+  lowest.font = Font.lightSystemFont(11);
+  lowest.textColor = new Color("#00cf00");
   bottom.addSpacer(4);
   let priceLowestRound = Math.round(priceLowest);
-  let lowtext = bottom.addText(`${priceLowestRound}`);
-  lowtext.font = Font.lightSystemFont(11);
-  lowtext.textColor = new Color("#00cf00");
+  let lowesttext = bottom.addText(`${priceLowestRound}`);
+  lowesttext.font = Font.lightSystemFont(11);
+  lowesttext.textColor = new Color("#00cf00");
   bottom.addSpacer();
   // average
   let avg = bottom.addText("average");
@@ -329,25 +329,25 @@ for (let s = 0; s < stackNames.length; s++) {
   avgtext.textColor = new Color("#f38");
   bottom.addSpacer();
   // highest
-  let high = bottom.addText("highest");
-  high.font = Font.lightSystemFont(11);
-  high.textColor = new Color("#fa60ff");
+  let highest = bottom.addText("highest");
+  highest.font = Font.lightSystemFont(11);
+  highest.textColor = new Color("#fa60ff");
   bottom.addSpacer(4);
   let priceHighestRound = Math.round(priceHighest);
-  let hightext = bottom.addText(`${priceHighestRound}`);
-  hightext.font = Font.lightSystemFont(11);
-  hightext.textColor = new Color("#fa60ff");
+  let highesttext = bottom.addText(`${priceHighestRound}`);
+  highesttext.font = Font.lightSystemFont(11);
+  highesttext.textColor = new Color("#fa60ff");
   //chart
-  if (resolution == 60
-    let avgtoday=[]
+  if (resolution == 60) {
+    let avgtoday = []
     let dotNow = ""
-    let countertoday=0
-    let counterdot=0
+    let countertoday = 0
+    let counterdot = 0
     do{
       avgtoday += priceAvg + ","
-      countertoday+=1
+      countertoday += 1
     }
-    while (counterdot < 24)
+    while (countertoday < 24)
     do{
       if (hour == dotNow) {
         dotNow += pricesJSON[counterdot] + ","
@@ -355,7 +355,7 @@ for (let s = 0; s < stackNames.length; s++) {
       else {
         dotNow += ","
       }
-      counterdot+=1
+      counterdot += 1
     }
     while (counterdot < 24)
     let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h=770&c="

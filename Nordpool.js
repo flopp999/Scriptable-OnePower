@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.629;
+let version = 0.630;
 
 // Update the code.
 try {
@@ -349,7 +349,7 @@ for (let s = 0; s < stackNames.length; s++) {
     }
     while (countertoday < 24)
     do{
-      if (hour == dotNow) {
+      if (hour == counterdot) {
         dotNow += pricesJSON[counterdot] + ","
       }
       else {

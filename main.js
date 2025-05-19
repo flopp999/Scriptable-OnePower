@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.621;
+let version = 0.622;
 
 // Update the code.
 try {
@@ -37,11 +37,11 @@ try {
     let alert = new Alert();
     alert.title = "Support";
     alert.message = "Do you want to buy me a coffee?";
-    alert.addAction("Ofcourse");
+    alert.addAction = ("Ofcourse");
     alert.addCancelAction("No way :)");
     let response = await alert.present();
-    if response === 0) {
-      Safari.open("buymeacoffee.com/flopp999");
+    if (response === 0) {
+      Safari.open("https://buymeacoffee.com/flopp999");
     }
     throw new Error("Settings file not found");
   }

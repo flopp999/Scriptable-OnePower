@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.630;
+let version = 0.631;
 
 // Update the code.
 try {
@@ -169,7 +169,7 @@ const formattedDate = `${yyyy}-${mm}-${dd}`;
 const hour = date.getHours();
 const minute = date.getMinutes();
 const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
-const url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${formattedDate}&market=DayAhead&indexNames=${area}&currency=SEK&resolutionInMinutes=${resolution}`;
+const url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${formattedDate}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
 const request = new Request(url);
 request.timeoutInterval = 1;
 let response = (await request.loadJSON());

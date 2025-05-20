@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.637;
+let version = 0.64;
 
 // Update the code.
 try {
@@ -191,17 +191,15 @@ async function askForIncludeVAT() {
 
 // Include extra cost?
 async function askForExtras() {
-let alert = new Alert();
-alert.title = "Extra Electricity Cost";
-alert.message = `Enter the total extra cost per kWh (e.g. grid fees, taxes, markup). Current: ${settings.currency}`;
-alert.addTextField("e.g. 0.30");
-alert.addAction("OK");
-
-await alert.present();
-
-let input = alert.textFieldValue(0);
-let newCost = parseFloat(input);
-return newCost;
+  let alert = new Alert();
+  alert.title = "Extra Electricity Cost";
+  alert.message = `Enter the total extra cost per kWh (e.g. grid fees, taxes, markup). Current: ${settings.currency}`;
+  alert.addTextField("e.g. 0.30");
+  alert.addAction("OK");
+  await alert.present();
+  let input = alert.textFieldValue(0);
+  let newCost = parseFloat(input);
+  return newCost;
 }
 
 const smallFont = 10;
@@ -253,20 +251,28 @@ async function createWidget(){
   right.layoutVertically();
   let update = right.addStack();
   update.addSpacer();
-  let updatetext = update.addText("updated "+updated);
+  let updatetext = update.addText("🕒 " + updated);
   updatetext.font = Font.lightSystemFont(10);
   updatetext.textColor = new Color("#ffffff");
   let moms = right.addStack();
-  moms.addSpacer(60);
-  momstext = moms.addText("version: "+version);
+  moms.addSpacer();
+  momstext = moms.addText("v. " + version);
+  momstext.font = Font.lightSystemFont(10);
+  momstext.textColor = new Color("#ffffff");
+  moms.addSpacer();
+  momstext = moms.addText(currency);
+  momstext.font = Font.lightSystemFont(10);
+  momstext.textColor = new Color("#ffffff");
+  moms.addSpacer();
+  momstext = moms.addText("Extras: " + extras);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   moms.addSpacer();
   if (includevat == 1) {
-    momstext = moms.addText("incl. VAT");
+    momstext = moms.addText("Incl. VAT");
   }
   else {
-    momstext = moms.addText("excl. VAT");
+    momstext = moms.addText("Excl. VAT");
   }
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");

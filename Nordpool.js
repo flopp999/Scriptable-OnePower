@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.631;
+let version = 0.632;
 
 // Update the code.
 try {
@@ -50,7 +50,8 @@ try {
   [settings.area, settings.vat] = await askForArea();
   settings.resolution = await askForResolution();
   settings.currency = await askForCurrency();
-  settings.includevat = await askIncludeVAT();
+  settings.includevat = await askForIncludeVAT();
+  settings.extras = await askForExtras();
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
 
@@ -148,7 +149,38 @@ async function askForCurrency() {
 }
 
 // Include VAT?
-async function askIncludeVAT() {
+async function askForIncludeVAT() {
+  let alert = new Alert();
+  alert.title = "Include VAT?";
+  alert.message = "Do you want the electricity price with or without VAT?";
+  alert.addAction("With VAT");
+  alert.addAction("Without VAT");
+  let index = await alert.presentAlert();
+  return [1,0][index];
+}
+
+// Include extra cost?
+async function askForExtras() {
+
+let prompt = new Prompt();
+prompt.title = "Extra cost per kWh";
+prompt.message = `Enter the total extra cost per kWh without VAT, in currency ${settings.currency}`;
+prompt.addTextField("Skriv här", "", {
+  keyboardType: "numberPad"
+});
+prompt.addAction("OK");
+
+await prompt.present();
+
+let input = prompt.textFieldValue(0);
+let number = parseInt(input);
+
+if (!isNaN(number)) {
+  console.log("Du skrev: " + number);
+} else {
+  console.log("Ogiltigt tal.");
+}
+  
   let alert = new Alert();
   alert.title = "Include VAT?";
   alert.message = "Do you want the electricity price with or without VAT?";

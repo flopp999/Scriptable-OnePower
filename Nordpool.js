@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.635;
+let version = 0.636;
 
 // Update the code.
 try {
@@ -58,6 +58,7 @@ const resolution = settings.resolution;
 const currency = settings.currency;
 const vat = settings.vat;
 const includevat = settings.includevat;
+const extras = settings.extras;
 
 // Start
 async function start() {
@@ -184,15 +185,8 @@ await alert.present();
 
 let input = alert.textFieldValue(0);
 let newCost = parseFloat(input);
-
-if (!isNaN(newCost)) {
-  settings.extras = newCost;
-  console.log(`New extra cost set to ${settings.extras} ${settings.currency}`);
-} else {
-  console.log("Invalid input. Keeping previous value.");
+return newCost;
 }
-  
-
 
 const smallFont = 10;
 const mediumFont = 12;

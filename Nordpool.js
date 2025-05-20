@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.632;
+let version = 0.633;
 
 // Update the code.
 try {
@@ -161,24 +161,22 @@ async function askForIncludeVAT() {
 
 // Include extra cost?
 async function askForExtras() {
+let alert = new Alert();
+alert.title = "Extra Electricity Cost";
+alert.message = `Enter the total extra cost per kWh (e.g. grid fees, taxes, markup). Current: ${settings.currency} SEK`;
+alert.addTextField("e.g. 0.30", settings.extras.toString());
+alert.addAction("OK");
 
-let prompt = new Prompt();
-prompt.title = "Extra cost per kWh";
-prompt.message = `Enter the total extra cost per kWh without VAT, in currency ${settings.currency}`;
-prompt.addTextField("Skriv här", "", {
-  keyboardType: "numberPad"
-});
-prompt.addAction("OK");
+await alert.present();
 
-await prompt.present();
+let input = alert.textFieldValue(0);
+let newCost = parseFloat(input);
 
-let input = prompt.textFieldValue(0);
-let number = parseInt(input);
-
-if (!isNaN(number)) {
-  console.log("Du skrev: " + number);
+if (!isNaN(newCost)) {
+  settings.extras = newCost;
+  console.log(`New extra cost set to ${settings.extras} ${settings.currency}`);
 } else {
-  console.log("Ogiltigt tal.");
+  console.log("Invalid input. Keeping previous value.");
 }
   
   let alert = new Alert();

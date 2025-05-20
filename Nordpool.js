@@ -30,7 +30,7 @@ try {
     let raw = fm.readString(filePath);
     settings = JSON.parse(raw);
     let keys = Object.keys(settings);
-    if (keys.length < 5) {
+    if (keys.length < 6) {
       throw new Error("Settings file is incomplete or corrupted");
     }
   } else {

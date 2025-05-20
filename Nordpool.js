@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.633;
+let version = 0.634;
 
 // Update the code.
 try {
@@ -163,8 +163,8 @@ async function askForIncludeVAT() {
 async function askForExtras() {
 let alert = new Alert();
 alert.title = "Extra Electricity Cost";
-alert.message = `Enter the total extra cost per kWh (e.g. grid fees, taxes, markup). Current: ${settings.currency} SEK`;
-alert.addTextField("e.g. 0.30", settings.extras.toString());
+alert.message = `Enter the total extra cost per kWh (e.g. grid fees, taxes, markup). Current: ${settings.currency}`;
+alert.addTextField("e.g. 0.30");
 alert.addAction("OK");
 
 await alert.present();
@@ -179,14 +179,7 @@ if (!isNaN(newCost)) {
   console.log("Invalid input. Keeping previous value.");
 }
   
-  let alert = new Alert();
-  alert.title = "Include VAT?";
-  alert.message = "Do you want the electricity price with or without VAT?";
-  alert.addAction("With VAT");
-  alert.addAction("Without VAT");
-  let index = await alert.presentAlert();
-  return [1,0][index];
-}
+
 
 const smallFont = 10;
 const mediumFont = 12;

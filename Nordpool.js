@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.634;
+let version = 0.635;
 
 // Update the code.
 try {
@@ -47,19 +47,32 @@ try {
   }
 } catch (err) {
   console.warn("Settings not found or error reading file: " + err.message);
-  [settings.area, settings.vat] = await askForArea();
-  settings.resolution = await askForResolution();
-  settings.currency = await askForCurrency();
-  settings.includevat = await askForIncludeVAT();
-  settings.extras = await askForExtras();
+  await ask();
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
+
+await ask();
 
 const area = settings.area;
 const resolution = settings.resolution;
 const currency = settings.currency;
 const vat = settings.vat;
 const includevat = settings.includevat;
+
+// Start
+async function start() {
+  log("start")
+}
+
+async function ask() {
+  [settings.area, settings.vat] = await askForArea();
+  settings.resolution = await askForResolution();
+  settings.currency = await askForCurrency();
+  settings.includevat = await askForIncludeVAT();
+  settings.extras = await askForExtras();
+  return settings
+}
+
 
 // Select area
 async function askForArea() {

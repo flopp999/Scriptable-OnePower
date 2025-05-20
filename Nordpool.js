@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.636;
+let version = 0.637;
 
 // Update the code.
 try {
@@ -51,7 +51,7 @@ try {
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
 
-await ask();
+await start();
 
 const area = settings.area;
 const resolution = settings.resolution;
@@ -80,30 +80,15 @@ async function askForArea() {
   let alert = new Alert();
   alert.title = "Select Area";
   alert.message = "Choose your electricity area:";
-  alert.addAction("AT");
-  alert.addAction("BE");
-  alert.addAction("BG");
-  alert.addAction("DK1");
-  alert.addAction("DK2");
-  alert.addAction("EE");
-  alert.addAction("FI");
-  alert.addAction("FR");
-  alert.addAction("GER");
-  alert.addAction("LT");
-  alert.addAction("LV");
-  alert.addAction("NL");
-  alert.addAction("NO1");
-  alert.addAction("NO2");
-  alert.addAction("NO3");
-  alert.addAction("NO4");
-  alert.addAction("NO5");
-  alert.addAction("PL");
-  alert.addAction("SE1");
-  alert.addAction("SE2");
-  alert.addAction("SE3");
-  alert.addAction("SE4");
-  alert.addAction("TEL");
-  alert.addAction("SYS");
+  let areas = [
+    "AT","BE","BG","DK1","DK2","EE","FI","FR","GER",
+    "LT","LV","NL","NO1","NO2","NO3","NO4","NO5",
+    "PL","SE1","SE2","SE3","SE4","TEL","SYS"
+  ];
+  for (let area of areas) {
+    alert.addAction(area);
+  }
+
   let index = await alert.presentAlert();
   let area = ["AT","BE","BG","DK1","DK2","EE","FI","FR","GER","LT","LV","NL","NO1","NO2","NO3","NO4","NO5","PL","SE1","SE2","SE3","SE4","TEL","SYS"][index];
   let vat = [
@@ -148,18 +133,49 @@ async function askForResolution() {
 
 // Select currency
 async function askForCurrency() {
+  let allowedCurrencies = {
+    AT: ["EUR"],
+    BE: ["EUR"],
+    BG: ["BGN"],
+    DK1: ["DKK"],
+    DK2: ["DKK"],
+    EE: ["EUR"],
+    FI: ["EUR"],
+    FR: ["EUR"],
+    GER: ["EUR"],
+    LT: ["EUR"],
+    LV: ["EUR"],
+    NL: ["EUR"],
+    NO1: ["NOK"],
+    NO2: ["NOK"],
+    NO3: ["NOK"],
+    NO4: ["NOK"],
+    NO5: ["NOK"],
+    PL: ["PLN"],
+    SE1: ["SEK", "NOK"],
+    SE2: ["SEK", "NOK"],
+    SE3: ["SEK", "NOK"],
+    SE4: ["SEK", "NOK"],
+    TEL: ["EUR"],
+    SYS: ["EUR"]
+  };
   let alert = new Alert();
   alert.title = "Select Currency";
   alert.message = "Choose your currency:";
-  alert.addAction("BGN");
-  alert.addAction("DKK");
-  alert.addAction("EUR");
-  alert.addAction("NOK");
-  alert.addAction("PLN");
-  alert.addAction("RON");
-  alert.addAction("SEK");
+  let currencies = allowedCurrencies[area] || [];
+  for (let currency of currencies) {
+    alert.addAction(currency);
+  }
+  if (currencies.length === 0) {
+    alert.addAction("No options");
+    await alert.presentAlert();
+    return null;
+  }
+
   let index = await alert.presentAlert();
-  return ["BGN","DKK","EUR","NOK","PLN","RON","SEK"][index];
+  return currencies[index];
+  //let index = await alert.presentAlert();
+  //return ["BGN","DKK","EUR","NOK","PLN","RON","SEK"][index];
 }
 
 // Include VAT?

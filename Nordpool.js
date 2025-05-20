@@ -67,10 +67,10 @@ async function start() {
 
 async function ask() {
   [settings.area, settings.vat] = await askForArea();
-  settings.resolution = await askForResolution();
   settings.currency = await askForCurrency();
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
+  settings.resolution = await askForResolution();
   return settings
 }
 
@@ -136,33 +136,33 @@ async function askForCurrency() {
   let allowedCurrencies = {
     AT: ["EUR"],
     BE: ["EUR"],
-    BG: ["BGN"],
-    DK1: ["DKK"],
-    DK2: ["DKK"],
-    EE: ["EUR"],
-    FI: ["EUR"],
+    BG: ["BGN", "EUR"],
+    DK1: ["DKK", "EUR", "NOK", "SEK"],
+    DK2: ["DKK", "EUR", "NOK", "SEK"],
+    EE: ["EUR", "DKK", "NOK", "SEK"],
+    FI: ["EUR", "DKK", "NOK", "SEK"],
     FR: ["EUR"],
     GER: ["EUR"],
-    LT: ["EUR"],
-    LV: ["EUR"],
+    LT: ["EUR", "DKK", "NOK", "SEK"],
+    LV: ["EUR", "DKK", "NOK", "SEK"],
     NL: ["EUR"],
-    NO1: ["NOK"],
-    NO2: ["NOK"],
-    NO3: ["NOK"],
-    NO4: ["NOK"],
-    NO5: ["NOK"],
-    PL: ["PLN"],
-    SE1: ["SEK", "NOK"],
-    SE2: ["SEK", "NOK"],
-    SE3: ["SEK", "NOK"],
-    SE4: ["SEK", "NOK"],
-    TEL: ["EUR"],
-    SYS: ["EUR"]
+    NO1: ["NOK", "DKK", "EUR", "SEK"],
+    NO2: ["NOK", "DKK", "EUR", "SEK"],
+    NO3: ["NOK", "DKK", "EUR", "SEK"],
+    NO4: ["NOK", "DKK", "EUR", "SEK"],
+    NO5: ["NOK", "DKK", "EUR", "SEK"],
+    PL: ["PLN", "EUR"],
+    SE1: ["SEK", "DKK", "EUR", "NOK"],
+    SE2: ["SEK", "DKK", "EUR", "NOK"],
+    SE3: ["SEK", "DKK", "EUR", "NOK"],
+    SE4: ["SEK", "DKK", "EUR", "NOK"],
+    TEL: ["RON", "EUR"],
+    SYS: ["EUR", "DKK", "NOK", "SEK"],
   };
   let alert = new Alert();
   alert.title = "Select Currency";
   alert.message = "Choose your currency:";
-  let currencies = allowedCurrencies[area] || [];
+  let currencies = allowedCurrencies[settings.area] || [];
   for (let currency of currencies) {
     alert.addAction(currency);
   }

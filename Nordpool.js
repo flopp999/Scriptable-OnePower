@@ -3,7 +3,30 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.644
+let version = 0.65
+
+const langId = 2; // T.ex. 1 = ENG, 2 = SV, 3 = DE
+
+const langMap = {
+  1: "en",
+  2: "sv",
+  3: "de"
+};
+
+try {
+  const fm = FileManager.iCloud()
+  const path = fm.joinPath(fm.documentsDirectory(), "Translations.json");
+  const translationData = JSON.parse(fm.readString(path));
+} catch (error) {
+  console.error(error);
+}
+
+function t(key) {
+  const entry = translationData[key];
+  if (!entry) return `[${key}]`; // nyckel saknas
+  return entry[currentLang] || entry["en"] || `[${key}]`;
+}
+
 
 // Update the code.
 try {
@@ -259,7 +282,7 @@ async function createWidget(){
   right.layoutVertically();
   let update = right.addStack();
   update.addSpacer();
-  let updatetext = update.addText("updated " + updated);
+  let updatetext = update.addText(t("updated) " + updated);
   updatetext.font = Font.lightSystemFont(10);
   updatetext.textColor = new Color("#ffffff");
   let moms = right.addStack();

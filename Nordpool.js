@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.67;
+let version = 0.671;
 
 const langId = 2; // T.ex. 1 = ENG, 2 = SV, 3 = DE
 
@@ -31,7 +31,7 @@ let path = fm.joinPath(dir, filename);
 fm.writeString(path, content);
 
 console.log(`File saved to: ${path}`);
-
+let translationData;
 try {
   const fm = FileManager.iCloud()
   const path = fm.joinPath(fm.documentsDirectory(), "Translations.json");
@@ -39,7 +39,7 @@ try {
 } catch (error) {
   console.error(error);
 }
-let translationData;
+
 function t(key) {
   const entry = translationData[key];
   if (!entry) return `[${key}]`; // nyckel saknas

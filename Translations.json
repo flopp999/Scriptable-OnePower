@@ -4,20 +4,25 @@
     "sv": "Kunde inte ladda bilden",
     "de": "Bild konnte nicht geladen werden"
   },
-  "network_error": {
-    "en": "Network error",
-    "sv": "Nätverksfel",
+  "lowest": {
+    "en": "lowest",
+    "sv": "lägsta",
     "de": "Netzwerkfehler"
   },
-  "hello": {
-    "en": "Hello",
-    "sv": "Hej",
-    "de": "Hallo"
+  "average": {
+    "en": "average",
+    "sv": "medel",
+    "de": "average"
   },
-  "goodbye": {
-    "en": "Goodbye",
-    "sv": "Hej då",
-    "de": "Auf Wiedersehen"
+  "highest": {
+    "en": "highest",
+    "sv": "högsta",
+    "de": "highest"
+  },
+  "vat": {
+    "en": "Incl. VAT",
+    "sv": "Inkl. moms",
+    "de": "Incl. VAT"
   },
   "updated": {
     "en": "Updated ",

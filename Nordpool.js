@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.671;
+let version = 0.672;
 
 const langId = 2; // T.ex. 1 = ENG, 2 = SV, 3 = DE
 
@@ -103,7 +103,8 @@ if (!config.runsInWidget){
     alert.addAction("No");
     let index = await alert.presentAlert();
     if (index ===0) {
-      await ask();
+      settings = await ask();
+      fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
     }
   }
 }
@@ -116,12 +117,25 @@ const includevat = settings.includevat;
 const extras = settings.extras;
 
 async function ask() {
+  settings.language = await askForLanguage();
   [settings.area, settings.vat] = await askForArea();
   settings.currency = await askForCurrency();
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
   settings.resolution = await askForResolution();
   return settings
+}
+
+// Select resolution
+async function askForLanguage() {
+  let alert = new Alert();
+  //alert.title = "Select Resolution";
+  alert.message = "Choose data resolution:";
+  alert.addAction("English");
+  alert.addAction("Deutsch");
+  alert.addAction("Svenska");
+  let index = await alert.presentAlert();
+  return [1,2,3][index];
 }
 
 

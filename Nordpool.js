@@ -56,15 +56,15 @@ await start();
 // Start
 async function start() {
   let alert = new Alert();
-  alert.title = "C";
-  alert.message = "Dpo you";
+  //alert.title = "";
+  alert.message = "Do you want to change the setup?";
   alert.addAction("Y");
   alert.addAction("N");
   let index = await alert.presentAlert();
   if (index ===0){ask();}
 }
 }
-}
+
 const area = settings.area;
 const resolution = settings.resolution;
 const currency = settings.currency;

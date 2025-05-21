@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.679;
+let version = 0.68
 
 // Update the code.
 try {
@@ -17,9 +17,9 @@ try {
 } catch (error) {
   console.error(error);
 }
-
-await askForLanguage();
-
+if (!config.runsInWidget){
+  await askForLanguage();
+}
 const langId = 3; // T.ex. 1 = ENG, 2 = SV, 3 = DE
 
 const langMap = {

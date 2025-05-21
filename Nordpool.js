@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.675
+let version = 0.676
 
 // Update the code.
 try {
@@ -258,8 +258,8 @@ async function askForIncludeVAT() {
 // Include extra cost?
 async function askForExtras() {
   let alert = new Alert();
-  alert.title = "Extra Electricity Cost";
-  alert.message = `Enter the total extra cost per kWh (e.g. grid fees, taxes, markup) in currency: ${settings.currency}`;
+  alert.title = t("extraelectricitycost");enterextra
+  alert.message = `t("enterextra") ${settings.currency}`;
   alert.addTextField("e.g. 0.30");
   alert.addAction("OK");
   await alert.present();

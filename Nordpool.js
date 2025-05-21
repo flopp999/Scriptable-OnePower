@@ -260,7 +260,7 @@ async function askForIncludeVAT() {
 // Include extra cost?
 async function askForExtras() {
   let alert = new Alert();
-  alert.title = t("extraelectricitycost");enterextra
+  alert.title = t("extraelectricitycost");
   alert.message = (t("enterextra") + `${settings.currency}`);
   alert.addTextField("e.g. 0.30");
   alert.addAction("OK");

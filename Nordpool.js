@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.686
+let version = 0.687
 let area
 let resolution
 let currency
@@ -12,51 +12,76 @@ let includevat
 let extras
 let language
 
-// Update the code.
-try {
-  const req = new Request("https://github.com/flopp999/Scriptable-NordPool/releases/latest/download/Nordpool.js");
-  const codeString = await req.loadString();
-  const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
-  if (version < serverVersion[1]){
-    let files = FileManager.iCloud(); // Or .local() if preferred
-    files.writeString(module.filename, codeString);
-  }
-} catch (error) {
-  console.error(error);
-}
-
-let fileName = Script.name() + "_Settings.json";
-fm = FileManager.iCloud(); // Or .local() if preferred
-dir = fm.documentsDirectory();
-let filePath = fm.joinPath(dir, fileName);
-let settings = {};
-
-try {
-  if (fm.fileExists(filePath)) {
-    let raw = fm.readString(filePath);
-    settings = JSON.parse(raw);
-    let keys = Object.keys(settings);
-    if (keys.length < 6) {
-      throw new Error("Settings file is incomplete or corrupted");
-    }
-  } else {
+if (!config.runsInWidget){
+  await start();
+  
+  // Start
+  async function start() {
     let alert = new Alert();
-    alert.title = "Support";
-    alert.message = "Do you want to buy me a coffee?";
-    alert.addAction(t("ofcourse"));
-    alert.addCancelAction(t("noway"));
-    let response = await alert.present();
-    if (response === 0) {
-      Safari.open("https://buymeacoffee.com/flopp999");
+    //alert.title = "";
+    alert.message = t("changesetup") + "?";
+    alert.addAction(t("yes"));
+    alert.addAction(t("no"));
+    let index = await alert.presentAlert();
+    if (index ===0) {
+      settings = await ask();
+      fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
     }
-    throw new Error("Settings file not found");
   }
-} catch (error) {
-  console.warn("Settings file not found or error reading file: " + error.message);
-  await ask();
-  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
 
+if (config.runsInWidget){
+  await updatecode();
+  await readsettings();
+}
+
+async function updatecode() {
+  // Update the code.
+  try {
+    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
+    const codeString = await req.loadString();
+    const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
+    if (version < serverVersion[1]){
+      let files = FileManager.iCloud(); // Or .local() if preferred
+      files.writeString(module.filename, codeString);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+async function readsettings() {
+  let fileName = Script.name() + "_Settings.json";
+  fm = FileManager.iCloud(); // Or .local() if preferred
+  dir = fm.documentsDirectory();
+  let filePath = fm.joinPath(dir, fileName);
+  let settings = {};
+  
+  try {
+    if (fm.fileExists(filePath)) {
+      let raw = fm.readString(filePath);
+      settings = JSON.parse(raw);
+      let keys = Object.keys(settings);
+      if (keys.length < 6) {
+        throw new Error("Settings file is incomplete or corrupted");
+      }
+    } else {
+      let alert = new Alert();
+      alert.title = "Support";
+      alert.message = t("buymeacoffee") + "?";
+      alert.addAction(t("ofcourse"));
+      alert.addCancelAction(t("noway"));
+      let response = await alert.present();
+      if (response === 0) {
+        Safari.open("https://buymeacoffee.com/flopp999");
+      }
+      throw new Error("Settings file not found");
+    }
+  } catch (error) {
+    console.warn("Settings file not found or error reading file: " + error.message);
+    await ask();
+    fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  }
+}
 //if (!config.runsInWidget){
 //  await askForLanguage();
 //}
@@ -85,7 +110,7 @@ let translationData;
 const currentLang = langMap[langId] || "en"; // fallback to english
 
 async function readTranslations() {
-  let url = "https://github.com/flopp999/Scriptable-NordPool/releases/latest/download/Translations.json";
+  let url = "https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Translations.json";
   let filename = "Translations.json";
   let req = new Request(url);
   let content = await req.loadString();
@@ -110,23 +135,7 @@ function t(key) {
   return entry[currentLang] || entry["en"] || `[${key}]`;
 }
 
-if (!config.runsInWidget){
-  await start();
-  
-  // Start
-  async function start() {
-    let alert = new Alert();
-    //alert.title = "";
-    alert.message = t("changesetup") + "?";
-    alert.addAction(t("yes"));
-    alert.addAction(t("no"));
-    let index = await alert.presentAlert();
-    if (index ===0) {
-      settings = await ask();
-      fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-    }
-  }
-}
+
 
 
 async function ask() {

@@ -19,11 +19,17 @@
     "sv": "högsta",
     "de": "highest"
   },
-  "vat": {
+  "inclvat": {
     "en": "Incl. VAT",
     "sv": "Inkl. moms",
     "de": "Incl. VAT"
   },
+  "exclvat": {
+    "en": "Excl. VAT",
+    "sv": "Exkl. moms",
+    "de": "Excl. VAT"
+  },
+
   "updated": {
     "en": "Updated ",
     "sv": "Uppdaterad ",

@@ -551,7 +551,7 @@ if (config.runsInWidget) {
     alert.title = "Support";
     alert.message = t("buymeacoffee") + "?";
     alert.addCancelAction(t("ofcourse"));
-    alert.addCAction(t("noway"));
+    alert.addAction(t("noway"));
     let response = await alert.present();
     if (response === 0) {
       Safari.open("https://buymeacoffee.com/flopp999");

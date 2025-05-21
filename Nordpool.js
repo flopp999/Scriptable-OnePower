@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.682
+let version = 0.683
 let area
 let resolution
 let currency
@@ -80,8 +80,10 @@ const langMap = {
   2: "de",
   3: "sv"
 };
+
 let translationData;
 const currentLang = langMap[langId] || "en"; // fallback to english
+
 async function readTranslations() {
   let url = "https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Translations.json";
   let filename = "Translations.json";
@@ -115,7 +117,7 @@ if (!config.runsInWidget){
   async function start() {
     let alert = new Alert();
     //alert.title = "";
-    alert.message = "Do you want to change the setup?";
+    alert.message = t("changesetup") + "?";
     alert.addAction(t("yes"));
     alert.addAction(t("no"));
     let index = await alert.presentAlert();

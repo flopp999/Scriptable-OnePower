@@ -233,7 +233,7 @@ let allValues = [];
 
 for (let i = 0; i < prices.length; i++) {
   const value = prices[i]["entryPerArea"][`${area}`];
-  allValues.push(String(value/10* (1 + "." + (includevat*vat)) * extras));
+  allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
 }
 
 let pricesJSON = JSON.parse(JSON.stringify(allValues));

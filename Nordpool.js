@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.684
+let version = 0.685
 let area
 let resolution
 let currency
@@ -553,7 +553,7 @@ if (config.runsInWidget) {
     alert.addCancelAction(t("ofcourse"));
     alert.addAction(t("noway"));
     let response = await alert.present();
-    if (response === 0) {
+    if (response === -1) {
       Safari.open("https://buymeacoffee.com/flopp999");
     }
   }

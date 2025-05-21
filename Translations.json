@@ -1,0 +1,27 @@
+{
+  "image_load_error": {
+    "en": "Could not load image",
+    "sv": "Kunde inte ladda bilden",
+    "de": "Bild konnte nicht geladen werden"
+  },
+  "network_error": {
+    "en": "Network error",
+    "sv": "Nätverksfel",
+    "de": "Netzwerkfehler"
+  },
+  "hello": {
+    "en": "Hello",
+    "sv": "Hej",
+    "de": "Hallo"
+  },
+  "goodbye": {
+    "en": "Goodbye",
+    "sv": "Hej då",
+    "de": "Auf Wiedersehen"
+  },
+  "updated": {
+    "en": "Updated",
+    "sv": "Uppdaterad",
+    "de": "Aktualisiert"
+  }
+}

@@ -319,10 +319,10 @@ async function createWidget(){
   momstext.textColor = new Color("#ffffff");
   moms.addSpacer();
   if (includevat == 1) {
-    momstext = moms.addText("Incl. VAT");
+    momstext = moms.addText(t("inclvat"));
   }
   else {
-    momstext = moms.addText("Excl. VAT");
+    momstext = moms.addText(t("exclvat"));
   }
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
@@ -411,7 +411,7 @@ for (let s = 0; s < stackNames.length; s++) {
 }
   let bottom = listwidget.addStack();
   // lowest
-  let lowest = bottom.addText("lowest");
+  let lowest = bottom.addText(t("lowest"));
   lowest.font = Font.lightSystemFont(11);
   lowest.textColor = new Color("#00cf00");
   bottom.addSpacer(4);
@@ -421,7 +421,7 @@ for (let s = 0; s < stackNames.length; s++) {
   lowesttext.textColor = new Color("#00cf00");
   bottom.addSpacer();
   // average
-  let avg = bottom.addText("average");
+  let avg = bottom.addText(t("average"));
   avg.font = Font.lightSystemFont(11);
   avg.textColor = new Color("#f38");
   bottom.addSpacer(4);
@@ -431,7 +431,7 @@ for (let s = 0; s < stackNames.length; s++) {
   avgtext.textColor = new Color("#f38");
   bottom.addSpacer();
   // highest
-  let highest = bottom.addText("highest");
+  let highest = bottom.addText(t("highest"));
   highest.font = Font.lightSystemFont(11);
   highest.textColor = new Color("#fa60ff");
   bottom.addSpacer(4);

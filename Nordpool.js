@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.642;
+let version = 0.643;
 
 // Update the code.
 try {
@@ -11,10 +11,10 @@ try {
   const codeString = await req.loadString();
   const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
   if (version < serverVersion[1]){
-    let files = FileManager.iCloud();
+    let files = FileManager.iCloud(); // Or .local() if preferred
     files.writeString(module.filename, codeString);
   }
-} catch (error){
+} catch (error) {
   console.error(error);
 }
 
@@ -22,7 +22,6 @@ let fileName = Script.name() + "_Settings.json";
 let fm = FileManager.iCloud(); // Or .local() if preferred
 let dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
-
 let settings = {};
 
 try {
@@ -45,8 +44,8 @@ try {
     }
     throw new Error("Settings file not found");
   }
-} catch (err) {
-  console.warn("Settings not found or error reading file: " + err.message);
+} catch (error) {
+  console.warn("Settings file not found or error reading file: " + error.message);
   await ask();
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
@@ -58,8 +57,8 @@ if (!config.runsInWidget){
     let alert = new Alert();
     //alert.title = "";
     alert.message = "Do you want to change the setup?";
-    alert.addAction("Y");
-    alert.addAction("N");
+    alert.addAction("Yes");
+    alert.addAction("No");
     let index = await alert.presentAlert();
     if (index ===0) {
       ask();
@@ -87,7 +86,7 @@ async function ask() {
 // Select area
 async function askForArea() {
   let alert = new Alert();
-  alert.title = "Select Area";
+  // alert.title = "Select Area";
   alert.message = "Choose your electricity area:";
   let areas = [
     "AT","BE","BG","DK1","DK2","EE","FI","FR","GER",
@@ -99,7 +98,10 @@ async function askForArea() {
   }
 
   let index = await alert.presentAlert();
-  let area = ["AT","BE","BG","DK1","DK2","EE","FI","FR","GER","LT","LV","NL","NO1","NO2","NO3","NO4","NO5","PL","SE1","SE2","SE3","SE4","TEL","SYS"][index];
+  let area = [
+    "AT","BE","BG","DK1","DK2","EE","FI","FR","GER",
+    "LT","LV","NL","NO1","NO2","NO3","NO4","NO5",
+    "PL","SE1","SE2","SE3","SE4","TEL","SYS"][index];
   let vat = [
     20,  // AT - Austria
     6,   // BE - Belgium
@@ -123,8 +125,8 @@ async function askForArea() {
     25,  // SE2 - Sweden
     25,  // SE3 - Sweden
     25,  // SE4 - Sweden
-    19,   // TEL - Unknown (set to 0)
-    0    // SYS - System price or not applicable (set to 0)
+    19,   // TEL - Romania
+    0    // SYS - System price or not applicable
     ][index];
     return [area, vat];
 }
@@ -132,7 +134,7 @@ async function askForArea() {
 // Select resolution
 async function askForResolution() {
   let alert = new Alert();
-  alert.title = "Select Resolution";
+  //alert.title = "Select Resolution";
   alert.message = "Choose data resolution:";
   alert.addAction("15 min");
   alert.addAction("60 min");
@@ -169,7 +171,7 @@ async function askForCurrency() {
     SYS: ["EUR", "DKK", "NOK", "SEK"],
   };
   let alert = new Alert();
-  alert.title = "Select Currency";
+  //alert.title = "Select Currency";
   alert.message = "Choose your currency:";
   let currencies = allowedCurrencies[settings.area] || [];
   for (let currency of currencies) {
@@ -182,13 +184,12 @@ async function askForCurrency() {
   }
   let index = await alert.presentAlert();
   return currencies[index];
-
 }
 
 // Include VAT?
 async function askForIncludeVAT() {
   let alert = new Alert();
-  alert.title = "Include VAT?";
+  //alert.title = "Include VAT?";
   alert.message = "Do you want the electricity price shown with or without VAT?";
   alert.addAction("With VAT");
   alert.addAction("Without VAT");
@@ -232,7 +233,7 @@ let allValues = [];
 
 for (let i = 0; i < prices.length; i++) {
   const value = prices[i]["entryPerArea"][`${area}`];
-  allValues.push(String(value/10* (1+"."+(includevat*vat))));
+  allValues.push(String(value/10* (1 + "." + (includevat*vat)) * extras));
 }
 
 let pricesJSON = JSON.parse(JSON.stringify(allValues));

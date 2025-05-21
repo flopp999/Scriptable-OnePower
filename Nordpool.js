@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.68
+let version = 0.681
 
 // Update the code.
 try {
@@ -16,48 +16,6 @@ try {
   }
 } catch (error) {
   console.error(error);
-}
-if (!config.runsInWidget){
-  await askForLanguage();
-}
-const langId = 3; // T.ex. 1 = ENG, 2 = SV, 3 = DE
-
-const langMap = {
-  1: "en",
-  2: "de",
-  3: "sv"
-};
-const currentLang = langMap[langId] || "en"; // fallback till engelska
-let url = "https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Translations.json";
-let filename = "Translations.json"; // Namnet du vill spara som
-
-// Initiera hämtning
-let req = new Request(url);
-let content = await req.loadString();
-
-// Välj iCloud FileManager
-let fm = FileManager.iCloud();
-
-// Sökväg till Scriptable-mapp i iCloud
-let dir = fm.documentsDirectory();
-let path = fm.joinPath(dir, filename);
-
-// Spara innehållet
-fm.writeString(path, content);
-
-let translationData;
-try {
-  const fm = FileManager.iCloud()
-  const path = fm.joinPath(fm.documentsDirectory(), "Translations.json");
-  translationData = JSON.parse(fm.readString(path));
-} catch (error) {
-  console.error(error);
-}
-
-function t(key) {
-  const entry = translationData[key];
-  if (!entry) return `[${key}]`; // nyckel saknas
-  return entry[currentLang] || entry["en"] || `[${key}]`;
 }
 
 let fileName = Script.name() + "_Settings.json";
@@ -92,6 +50,58 @@ try {
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
 
+//if (!config.runsInWidget){
+//  await askForLanguage();
+//}
+
+await createVariables();
+
+async function createVariables() {
+  const area = settings.area;
+  const resolution = settings.resolution;
+  const currency = settings.currency;
+  const vat = settings.vat;
+  const includevat = settings.includevat;
+  const extras = settings.extras;
+  const language = settings.language;
+}
+
+const langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
+
+const langMap = {
+  1: "en",
+  2: "de",
+  3: "sv"
+};
+
+async function readTranslations() {
+  const currentLang = langMap[langId] || "en"; // fallback to english
+  let url = "https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Translations.json";
+  let filename = "Translations.json";
+  let req = new Request(url);
+  let content = await req.loadString();
+  let fm = FileManager.iCloud();
+  let dir = fm.documentsDirectory();
+  let path = fm.joinPath(dir, filename);
+  fm.writeString(path, content);
+  let translationData;
+  try {
+    const fm = FileManager.iCloud()
+    const path = fm.joinPath(fm.documentsDirectory(), "Translations.json");
+    translationData = JSON.parse(fm.readString(path));
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+await readTranslations();
+
+function t(key) {
+  const entry = translationData[key];
+  if (!entry) return `[${key}]`; // nyckel saknas
+  return entry[currentLang] || entry["en"] || `[${key}]`;
+}
+
 if (!config.runsInWidget){
   await start();
   
@@ -110,13 +120,6 @@ if (!config.runsInWidget){
   }
 }
 
-const area = settings.area;
-const resolution = settings.resolution;
-const currency = settings.currency;
-const vat = settings.vat;
-const includevat = settings.includevat;
-const extras = settings.extras;
-const language = settings.language;
 
 async function ask() {
   settings.language = await askForLanguage();

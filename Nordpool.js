@@ -4,7 +4,7 @@
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
 let version = 0.671;
-const currentLang = langMap[langId] || "en"; // fallback till engelska
+
 const langId = 2; // T.ex. 1 = ENG, 2 = SV, 3 = DE
 
 const langMap = {
@@ -12,7 +12,7 @@ const langMap = {
   2: "sv",
   3: "de"
 };
-
+const currentLang = langMap[langId] || "en"; // fallback till engelska
 let url = "https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Translations.json";
 let filename = "Translations.json"; // Namnet du vill spara som
 

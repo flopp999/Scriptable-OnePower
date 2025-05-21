@@ -4,6 +4,32 @@
     "sv": "",
     "de": ""
   },
+    "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },
+    "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },
+    "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },
+    "enterextra": {
+    "en": "Enter the total extra cost per kWh (e.g. grid fees, taxes, markup) in currency",
+    "sv": "SKriv in totala extra kostnader per kWh (t.ex. överföringavgift, skatt, moms) i valuta",
+    "de": "Enter the total extra cost per kWh (e.g. grid fees, taxes, markup) in currency"
+  },
+    "extraelectricitycost": {
+    "en": "Extra Electricity Cost",
+    "sv": "Extra elkostnader",
+    "de": "Extra Electricity Cost"
+  },
+  
   "withvat": {
     "en": "With VAT",
     "sv": "Med moms",

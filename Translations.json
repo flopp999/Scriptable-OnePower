@@ -1,4 +1,40 @@
 {
+  "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },
+  "withvat": {
+    "en": "With VAT",
+    "sv": "Med moms",
+    "de": "With VAT"
+  },
+  
+  "withoutvat": {
+    "en": "Without VAT",
+    "sv": "Utan moms",
+    "de": "With VAT"
+  },  
+
+  "doyouwantvat": {
+    "en": "Do you want the electricity price shown with or without VAT",
+    "sv": "",
+    "de": ""
+  },
+  
+  "chooseyourcurrency": {
+    "en": "Choose your currency",
+    "sv": "Välj valuta",
+    "de": "Choose your currency"
+  },
+
+  
+  "choosedataresolution": {
+    "en": "Choose Data Resolution",
+    "sv": "Välj tidsintervall",
+    "de": "Choose Data Resolution"
+  },
+  
   "chooseyourelectricityarea": {
     "en": "Choose your electricity area",
     "sv": "Välj ditt elområde",

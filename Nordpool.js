@@ -3,7 +3,14 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.681
+let version = 0.682
+let area
+let resolution
+let currency
+let vat
+let includevat
+let extras
+let language
 
 // Update the code.
 try {
@@ -57,13 +64,13 @@ try {
 await createVariables();
 
 async function createVariables() {
-  const area = settings.area;
-  const resolution = settings.resolution;
-  const currency = settings.currency;
-  const vat = settings.vat;
-  const includevat = settings.includevat;
-  const extras = settings.extras;
-  const language = settings.language;
+  area = settings.area;
+  resolution = settings.resolution;
+  currency = settings.currency;
+  vat = settings.vat;
+  includevat = settings.includevat;
+  extras = settings.extras;
+  language = settings.language;
 }
 
 const langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
@@ -73,9 +80,9 @@ const langMap = {
   2: "de",
   3: "sv"
 };
-
+let translationData;
+const currentLang = langMap[langId] || "en"; // fallback to english
 async function readTranslations() {
-  const currentLang = langMap[langId] || "en"; // fallback to english
   let url = "https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Translations.json";
   let filename = "Translations.json";
   let req = new Request(url);
@@ -84,7 +91,6 @@ async function readTranslations() {
   let dir = fm.documentsDirectory();
   let path = fm.joinPath(dir, filename);
   fm.writeString(path, content);
-  let translationData;
   try {
     const fm = FileManager.iCloud()
     const path = fm.joinPath(fm.documentsDirectory(), "Translations.json");

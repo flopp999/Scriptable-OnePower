@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.64;
+let version = 0.641;
 
 // Update the code.
 try {
@@ -50,9 +50,21 @@ try {
   await ask();
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
-
+if (!config.runsInWidget){
 await start();
 
+// Start
+async function start() {
+  let alert = new Alert();
+  alert.title = "C";
+  alert.message = "Dpo you";
+  alert.addAction("Y");
+  alert.addAction("N");
+  let index = await alert.presentAlert();
+  if (index ===0){ask();}
+}
+}
+}
 const area = settings.area;
 const resolution = settings.resolution;
 const currency = settings.currency;
@@ -60,10 +72,7 @@ const vat = settings.vat;
 const includevat = settings.includevat;
 const extras = settings.extras;
 
-// Start
-async function start() {
-  log("start")
-}
+
 
 async function ask() {
   [settings.area, settings.vat] = await askForArea();

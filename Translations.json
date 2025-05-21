@@ -4,21 +4,61 @@
     "sv": "",
     "de": ""
   },
+  "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },
+  "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },
+  "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },
+  "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },
+  "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },
+  "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },
+  
+  "buymeacoffee": {
+    "en": "Do you want to buy me a coffee",
+    "sv": "Vill köpa en kaffe åt mig",
+    "de": "Do you want to buy me a coffee"
+  },
+  
   "changesetup": {
     "en": "Do you want to change the setup",
     "sv": "Vill du ändra uppsättningen",
     "de": "Do you want to change the setup"
   },
+  
   "ofcourse": {
     "en": "Of course",
     "sv": "Självklart",
     "de": "Of course"
   },
+  
     "noway": {
     "en": "No way :)",
     "sv": "Glömt det :)",
     "de": "No way :)"
   },
+  
     "no": {
     "en": "No",
     "sv": "Nej",

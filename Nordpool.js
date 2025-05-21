@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.685
+let version = 0.686
 let area
 let resolution
 let currency
@@ -14,7 +14,7 @@ let language
 
 // Update the code.
 try {
-  const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Nordpool.js");
+  const req = new Request("https://github.com/flopp999/Scriptable-NordPool/releases/latest/download/Nordpool.js");
   const codeString = await req.loadString();
   const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
   if (version < serverVersion[1]){
@@ -85,7 +85,7 @@ let translationData;
 const currentLang = langMap[langId] || "en"; // fallback to english
 
 async function readTranslations() {
-  let url = "https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Translations.json";
+  let url = "https://github.com/flopp999/Scriptable-NordPool/releases/latest/download/Translations.json";
   let filename = "Translations.json";
   let req = new Request(url);
   let content = await req.loadString();

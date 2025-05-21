@@ -39,7 +39,7 @@ try {
 } catch (error) {
   console.error(error);
 }
-
+let translationData;
 function t(key) {
   const entry = translationData[key];
   if (!entry) return `[${key}]`; // nyckel saknas

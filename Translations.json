@@ -4,10 +4,20 @@
     "sv": "",
     "de": ""
   },
-    "": {
+  "": {
     "en": "",
     "sv": "",
     "de": ""
+  },
+  "ofcourse": {
+    "en": "Of course",
+    "sv": "Självklart",
+    "de": "Of course"
+  },
+    "noway": {
+    "en": "No way :)",
+    "sv": "Glömt det :)",
+    "de": "No way :)"
   },
     "no": {
     "en": "No",

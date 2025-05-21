@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.65
+let version = 0.66;
 
 const langId = 2; // T.ex. 1 = ENG, 2 = SV, 3 = DE
 
@@ -12,6 +12,25 @@ const langMap = {
   2: "sv",
   3: "de"
 };
+
+let url = "https://raw.githubusercontent.com/USERNAME/REPO/BRANCH/PATH/TO/FILE.js";
+let filename = "filnamn.js"; // Namnet du vill spara som
+
+// Initiera hämtning
+let req = new Request(url);
+let content = await req.load();
+
+// Välj iCloud FileManager
+let fm = FileManager.iCloud();
+
+// Sökväg till Scriptable-mapp i iCloud
+let dir = fm.documentsDirectory();
+let path = fm.joinPath(dir, filename);
+
+// Spara innehållet
+fm.write(path, content);
+
+console.log(`File saved to: ${path}`);
 
 try {
   const fm = FileManager.iCloud()
@@ -282,7 +301,7 @@ async function createWidget(){
   right.layoutVertically();
   let update = right.addStack();
   update.addSpacer();
-  let updatetext = update.addText(t("updated) " + updated);
+  let updatetext = update.addText(t("updated") + updated);
   updatetext.font = Font.lightSystemFont(10);
   updatetext.textColor = new Color("#ffffff");
   let moms = right.addStack();

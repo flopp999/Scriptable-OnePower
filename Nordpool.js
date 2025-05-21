@@ -4,7 +4,7 @@
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
 let version = 0.671;
-
+const currentLang = langMap[langId] || "en"; // fallback till engelska
 const langId = 2; // T.ex. 1 = ENG, 2 = SV, 3 = DE
 
 const langMap = {
@@ -35,7 +35,7 @@ let translationData;
 try {
   const fm = FileManager.iCloud()
   const path = fm.joinPath(fm.documentsDirectory(), "Translations.json");
-  const translationData = JSON.parse(fm.readString(path));
+  translationData = JSON.parse(fm.readString(path));
 } catch (error) {
   console.error(error);
 }

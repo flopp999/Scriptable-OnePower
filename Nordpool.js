@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.673
+let version = 0.675
 
 // Update the code.
 try {
@@ -193,7 +193,7 @@ async function askForArea() {
 async function askForResolution() {
   let alert = new Alert();
   //alert.title = "Select Resolution";
-  alert.message = "Choose data resolution:";
+  alert.message = t("choosedataresolution") + ":";
   alert.addAction("15 min");
   alert.addAction("60 min");
   let index = await alert.presentAlert();
@@ -230,7 +230,7 @@ async function askForCurrency() {
   };
   let alert = new Alert();
   //alert.title = "Select Currency";
-  alert.message = "Choose your currency:";
+  alert.message = t("chooseyourcurrency") + ":";
   let currencies = allowedCurrencies[settings.area] || [];
   for (let currency of currencies) {
     alert.addAction(currency);
@@ -248,9 +248,9 @@ async function askForCurrency() {
 async function askForIncludeVAT() {
   let alert = new Alert();
   //alert.title = "Include VAT?";
-  alert.message = "Do you want the electricity price shown with or without VAT?";
-  alert.addAction("With VAT");
-  alert.addAction("Without VAT");
+  alert.message = t("doyouwantvat") + "?";
+  alert.addAction(t("withvat"));
+  alert.addAction(t("withoutvat"));
   let index = await alert.presentAlert();
   return [1,0][index];
 }

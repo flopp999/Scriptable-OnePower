@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.66;
+let version = 0.67;
 
 const langId = 2; // T.ex. 1 = ENG, 2 = SV, 3 = DE
 
@@ -13,12 +13,12 @@ const langMap = {
   3: "de"
 };
 
-let url = "https://raw.githubusercontent.com/USERNAME/REPO/BRANCH/PATH/TO/FILE.js";
-let filename = "filnamn.js"; // Namnet du vill spara som
+let url = "https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Translations.json";
+let filename = "Translations.json"; // Namnet du vill spara som
 
 // Initiera hämtning
 let req = new Request(url);
-let content = await req.load();
+let content = await req.loadString();
 
 // Välj iCloud FileManager
 let fm = FileManager.iCloud();
@@ -28,7 +28,7 @@ let dir = fm.documentsDirectory();
 let path = fm.joinPath(dir, filename);
 
 // Spara innehållet
-fm.write(path, content);
+fm.writeString(path, content);
 
 console.log(`File saved to: ${path}`);
 
@@ -61,8 +61,8 @@ try {
 }
 
 let fileName = Script.name() + "_Settings.json";
-let fm = FileManager.iCloud(); // Or .local() if preferred
-let dir = fm.documentsDirectory();
+fm = FileManager.iCloud(); // Or .local() if preferred
+dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
 let settings = {};
 
@@ -263,7 +263,7 @@ const formattedDate = `${yyyy}-${mm}-${dd}`;
 const hour = date.getHours();
 const minute = date.getMinutes();
 const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
-const url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${formattedDate}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
+url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${formattedDate}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
 const request = new Request(url);
 request.timeoutInterval = 1;
 let response = (await request.loadJSON());

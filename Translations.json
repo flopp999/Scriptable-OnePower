@@ -9,15 +9,15 @@
     "sv": "",
     "de": ""
   },
-    "": {
-    "en": "",
-    "sv": "",
-    "de": ""
+    "no": {
+    "en": "No",
+    "sv": "Nej",
+    "de": "No"
   },
-    "": {
-    "en": "",
-    "sv": "",
-    "de": ""
+    "yes": {
+    "en": "Yes",
+    "sv": "Ja",
+    "de": "Yes"
   },
     "enterextra": {
     "en": "Enter the total extra cost per kWh (e.g. grid fees, taxes, markup) in ",

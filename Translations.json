@@ -4,10 +4,10 @@
     "sv": "",
     "de": ""
   },
-  "": {
-    "en": "",
-    "sv": "",
-    "de": ""
+  "changesetup": {
+    "en": "Do you want to change the setup",
+    "sv": "Vill du ändra uppsättningen",
+    "de": "Do you want to change the setup"
   },
   "ofcourse": {
     "en": "Of course",

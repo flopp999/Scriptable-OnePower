@@ -1,4 +1,9 @@
 {
+  "chooseyourelectricityarea": {
+    "en": "Choose your electricity area",
+    "sv": "Välj ditt elområde",
+    "de": "Choose your electricity area"
+  },
   "image_load_error": {
     "en": "Could not load image",
     "sv": "Kunde inte ladda bilden",

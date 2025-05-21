@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.677
+let version = 0.678;
 
 // Update the code.
 try {
@@ -17,6 +17,8 @@ try {
 } catch (error) {
   console.error(error);
 }
+
+await askForLanguage();
 
 const langId = 3; // T.ex. 1 = ENG, 2 = SV, 3 = DE
 
@@ -76,8 +78,8 @@ try {
     let alert = new Alert();
     alert.title = "Support";
     alert.message = "Do you want to buy me a coffee?";
-    alert.addAction("Of course");
-    alert.addCancelAction("No way :)");
+    alert.addAction(t("ofcourse"));
+    alert.addCancelAction(t("noway");
     let response = await alert.present();
     if (response === 0) {
       Safari.open("https://buymeacoffee.com/flopp999");
@@ -98,8 +100,8 @@ if (!config.runsInWidget){
     let alert = new Alert();
     //alert.title = "";
     alert.message = "Do you want to change the setup?";
-    alert.addAction("Yes");
-    alert.addAction("No");
+    alert.addAction(t("yes"));
+    alert.addAction(t("no");
     let index = await alert.presentAlert();
     if (index ===0) {
       settings = await ask();

@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.641;
+let version = 0.642;
 
 // Update the code.
 try {
@@ -37,7 +37,7 @@ try {
     let alert = new Alert();
     alert.title = "Support";
     alert.message = "Do you want to buy me a coffee?";
-    alert.addAction("Ofcourse");
+    alert.addAction("Of course");
     alert.addCancelAction("No way :)");
     let response = await alert.present();
     if (response === 0) {
@@ -51,18 +51,20 @@ try {
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
 if (!config.runsInWidget){
-await start();
-
-// Start
-async function start() {
-  let alert = new Alert();
-  //alert.title = "";
-  alert.message = "Do you want to change the setup?";
-  alert.addAction("Y");
-  alert.addAction("N");
-  let index = await alert.presentAlert();
-  if (index ===0){ask();}
-}
+  await start();
+  
+  // Start
+  async function start() {
+    let alert = new Alert();
+    //alert.title = "";
+    alert.message = "Do you want to change the setup?";
+    alert.addAction("Y");
+    alert.addAction("N");
+    let index = await alert.presentAlert();
+    if (index ===0) {
+      ask();
+    }
+  }
 }
 
 const area = settings.area;
@@ -71,8 +73,6 @@ const currency = settings.currency;
 const vat = settings.vat;
 const includevat = settings.includevat;
 const extras = settings.extras;
-
-
 
 async function ask() {
   [settings.area, settings.vat] = await askForArea();
@@ -180,18 +180,16 @@ async function askForCurrency() {
     await alert.presentAlert();
     return null;
   }
-
   let index = await alert.presentAlert();
   return currencies[index];
-  //let index = await alert.presentAlert();
-  //return ["BGN","DKK","EUR","NOK","PLN","RON","SEK"][index];
+
 }
 
 // Include VAT?
 async function askForIncludeVAT() {
   let alert = new Alert();
   alert.title = "Include VAT?";
-  alert.message = "Do you want the electricity price with or without VAT?";
+  alert.message = "Do you want the electricity price shown with or without VAT?";
   alert.addAction("With VAT");
   alert.addAction("Without VAT");
   let index = await alert.presentAlert();
@@ -202,7 +200,7 @@ async function askForIncludeVAT() {
 async function askForExtras() {
   let alert = new Alert();
   alert.title = "Extra Electricity Cost";
-  alert.message = `Enter the total extra cost per kWh (e.g. grid fees, taxes, markup). Current: ${settings.currency}`;
+  alert.message = `Enter the total extra cost per kWh (e.g. grid fees, taxes, markup) in currency: ${settings.currency}`;
   alert.addTextField("e.g. 0.30");
   alert.addAction("OK");
   await alert.present();
@@ -260,7 +258,7 @@ async function createWidget(){
   right.layoutVertically();
   let update = right.addStack();
   update.addSpacer();
-  let updatetext = update.addText("🕒 " + updated);
+  let updatetext = update.addText("updated " + updated);
   updatetext.font = Font.lightSystemFont(10);
   updatetext.textColor = new Color("#ffffff");
   let moms = right.addStack();

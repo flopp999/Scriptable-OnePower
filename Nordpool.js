@@ -3,14 +3,27 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.672;
+let version = 0.673
 
-const langId = 2; // T.ex. 1 = ENG, 2 = SV, 3 = DE
+// Update the code.
+try {
+  const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Nordpool.js");
+  const codeString = await req.loadString();
+  const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
+  if (version < serverVersion[1]){
+    let files = FileManager.iCloud(); // Or .local() if preferred
+    files.writeString(module.filename, codeString);
+  }
+} catch (error) {
+  console.error(error);
+}
+
+const langId = 3; // T.ex. 1 = ENG, 2 = SV, 3 = DE
 
 const langMap = {
   1: "en",
-  2: "sv",
-  3: "de"
+  2: "de",
+  3: "sv"
 };
 const currentLang = langMap[langId] || "en"; // fallback till engelska
 let url = "https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Translations.json";
@@ -30,7 +43,6 @@ let path = fm.joinPath(dir, filename);
 // Spara innehållet
 fm.writeString(path, content);
 
-console.log(`File saved to: ${path}`);
 let translationData;
 try {
   const fm = FileManager.iCloud()
@@ -44,20 +56,6 @@ function t(key) {
   const entry = translationData[key];
   if (!entry) return `[${key}]`; // nyckel saknas
   return entry[currentLang] || entry["en"] || `[${key}]`;
-}
-
-
-// Update the code.
-try {
-  const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Nordpool.js");
-  const codeString = await req.loadString();
-  const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
-  if (version < serverVersion[1]){
-    let files = FileManager.iCloud(); // Or .local() if preferred
-    files.writeString(module.filename, codeString);
-  }
-} catch (error) {
-  console.error(error);
 }
 
 let fileName = Script.name() + "_Settings.json";
@@ -91,6 +89,7 @@ try {
   await ask();
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
 }
+
 if (!config.runsInWidget){
   await start();
   
@@ -115,6 +114,7 @@ const currency = settings.currency;
 const vat = settings.vat;
 const includevat = settings.includevat;
 const extras = settings.extras;
+const language = settings.language;
 
 async function ask() {
   settings.language = await askForLanguage();
@@ -130,7 +130,7 @@ async function ask() {
 async function askForLanguage() {
   let alert = new Alert();
   //alert.title = "Select Resolution";
-  alert.message = "Choose data resolution:";
+  alert.message = "Language/Sprache/Språk:";
   alert.addAction("English");
   alert.addAction("Deutsch");
   alert.addAction("Svenska");
@@ -143,7 +143,9 @@ async function askForLanguage() {
 async function askForArea() {
   let alert = new Alert();
   // alert.title = "Select Area";
-  alert.message = "Choose your electricity area:";
+  //alert.message = "Choose your electricity area:";
+  alert.message = t("chooseyourelectricityarea") + ":";
+  
   let areas = [
     "AT","BE","BG","DK1","DK2","EE","FI","FR","GER",
     "LT","LV","NL","NO1","NO2","NO3","NO4","NO5",

@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.694
+let version = 0.695
 let area
 let resolution
 let currency
@@ -521,7 +521,7 @@ for (let s = 0; s < stackNames.length; s++) {
             data:["+dotNow+"],\
             type:'line',\
             fill:false,\
-            borderColor:'white',\
+            borderColor:'rgb(0,255,255)',\
             borderWidth:65,\
             pointRadius:6\
           },\

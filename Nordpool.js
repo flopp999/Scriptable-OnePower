@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.698
+let version = 0.699
 let area
 let resolution
 let currency
@@ -39,7 +39,7 @@ if (config.runsInWidget){
 async function start() {
   let alert = new Alert();
   //alert.title = "";
-  let vatText = includevat == 1 ? "Yes" : "No";
+  let vatText = includevat == 1 ? t("yes") : t("no")
   alert.message = 
     t("changesetup") + "?\n" +
     "Area: " + area + "\n" +

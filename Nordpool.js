@@ -46,7 +46,6 @@ async function start() {
     "Extras: " + extras + "\n" +
     "VAT: " + vat + "\?n" +
     "With VAT: " + vatText + "\n";
-  alert.message = t("changesetup") + "?\nArea: "+area+"\nExtras: "+extras+"\nVAT: "+includevat+"\nCurrency: "+currency;
   alert.addAction(t("yes"));
   alert.addAction(t("no"));
   let index = await alert.presentAlert();

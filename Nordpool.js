@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.693
+let version = 0.694
 let area
 let resolution
 let currency
@@ -522,8 +522,8 @@ for (let s = 0; s < stackNames.length; s++) {
             type:'line',\
             fill:false,\
             borderColor:'white',\
-            borderWidth:25,\
-            pointRadius:10\
+            borderWidth:65,\
+            pointRadius:6\
           },\
           {\
             data:["+avgtoday+"],\

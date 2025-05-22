@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.689
+let version = 0.690
 let area
 let resolution
 let currency
@@ -15,14 +15,13 @@ let settings = {}
 let langId
 let translationData
 let currentLang
-const fm = FileManager.iCloud()
-let fileName = Script.name() + "_Settings.json";
-let fm = FileManager.iCloud(); // Or .local() if preferred
-let dir = fm.documentsDirectory();
+const fileName = Script.name() + "_Settings.json";
+const fm = FileManager.iCloud(); // Or .local() if preferred
+const dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
 
 if (!config.runsInWidget){
-  await askForLanguage();
+  //await askForLanguage();
   await readTranslations();
   await readsettings();
   await start();
@@ -41,7 +40,7 @@ async function start() {
   alert.addAction(t("yes"));
   alert.addAction(t("no"));
   let index = await alert.presentAlert();
-  if (index ===0) {
+  if (index === 0) {
     settings = await ask();
     fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
   }
@@ -63,21 +62,25 @@ async function updatecode() {
 }
 
 async function readsettings() {
-  let fileName = Script.name() + "_Settings.json";
-  let fm = FileManager.iCloud(); // Or .local() if preferred
+  //let fileName = Script.name() + "_Settings.json";
+  //let fm = FileManager.iCloud(); // Or .local() if preferred
   let dir = fm.documentsDirectory();
   let filePath = fm.joinPath(dir, fileName);
-  let settings = {};
+  //let settings = {};
   
   try {
     if (fm.fileExists(filePath)) {
       let raw = fm.readString(filePath);
       settings = JSON.parse(raw);
+      langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
+      await readTranslations();
       let keys = Object.keys(settings);
       if (keys.length < 6) {
         throw new Error("Settings file is incomplete or corrupted");
       }
     } else {
+      await askForLanguage();
+      await readTranslations();
       let alert = new Alert();
       alert.title = "Support";
       alert.message = t("buymeacoffee") + "?";
@@ -126,13 +129,14 @@ async function readTranslations() {
       2: "de",
       3: "sv"
     };
+    
     currentLang = langMap[langId] || "en"; // fallback to english
   } catch (error) {
     console.error(error);
   }
 }
 
-await readTranslations();
+//await readTranslations();
 
 function t(key) {
   const entry = translationData[key];
@@ -144,8 +148,8 @@ function t(key) {
 
 
 async function ask() {
-  langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
-  await readTranslations();
+  
+  //await readTranslations();
   [settings.area, settings.vat] = await askForArea();
   settings.currency = await askForCurrency();
   settings.includevat = await askForIncludeVAT();
@@ -165,6 +169,7 @@ async function askForLanguage() {
   let index = await alert.presentAlert();
   settings.language = [1,2,3][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
   return [1,2,3][index];
 }
 

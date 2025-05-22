@@ -33,11 +33,19 @@ if (!config.runsInWidget){
 if (config.runsInWidget){
   await updatecode();
   await readsettings();
+  await createVariables();
 }
 
 async function start() {
   let alert = new Alert();
   //alert.title = "";
+  let vatText = includevat == 1 ? "Yes" : "No";
+  alert.message = 
+    t("changesetup") + "?\n" +
+    "Area: " + area + "\n" +
+    "Extras: " + extras + "\n" +
+    "VAT: " + vatText + "\n" +
+    "Currency: " + currency;
   alert.message = t("changesetup") + "?\nArea: "+area+"\nExtras: "+extras+"\nVAT: "+includevat+"\nCurrency: "+currency;
   alert.addAction(t("yes"));
   alert.addAction(t("no"));
@@ -54,7 +62,7 @@ async function updatecode() {
     const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
     const codeString = await req.loadString();
     const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
-    if (version < serverVersion[1]){
+    if (version < serverVersion[1]) {
       let files = FileManager.iCloud(); // Or .local() if preferred
       files.writeString(module.filename, codeString);
     }
@@ -101,8 +109,6 @@ async function readsettings() {
   }
 }
 
-await createVariables();
-
 async function createVariables() {
   area = settings.area;
   resolution = settings.resolution;
@@ -131,14 +137,11 @@ async function readTranslations() {
       2: "de",
       3: "sv"
     };
-    
     currentLang = langMap[langId] || "en"; // fallback to english
   } catch (error) {
     console.error(error);
   }
 }
-
-//await readTranslations();
 
 function t(key) {
   const entry = translationData[key];
@@ -147,8 +150,6 @@ function t(key) {
 }
 
 async function ask() {
-  
-  //await readTranslations();
   [settings.area, settings.vat, settings.currency] = await askForArea();
   //settings.currency = await askForCurrency();
   settings.includevat = await askForIncludeVAT();
@@ -161,7 +162,6 @@ async function ask() {
 // Select resolution
 async function askForLanguage() {
   let alert = new Alert();
-  //alert.title = "Select Resolution";
   alert.message = "Language/Sprache/Språk:";
   alert.addAction("English");
   alert.addAction("Deutsch");
@@ -177,10 +177,7 @@ async function askForLanguage() {
 // Select area
 async function askForArea() {
   let alert = new Alert();
-  // alert.title = "Select Area";
-  //alert.message = "Choose your electricity area:";
   alert.message = t("chooseyourelectricityarea") + ":";
-  
   let areas = [
     "AT","BE","BG","DK1","DK2","EE","FI","FR","GER",
     "LT","LV","NL","NO1","NO2","NO3","NO4","NO5",
@@ -189,7 +186,6 @@ async function askForArea() {
   for (let area of areas) {
     alert.addAction(area);
   }
-
   let index = await alert.presentAlert();
   let area = [
     "AT","BE","BG","DK1","DK2","EE","FI","FR","GER",

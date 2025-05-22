@@ -11,3 +11,12 @@ https://apps.apple.com/ca/app/scriptable/id1405459188
 <li>Paste the text you copied, then press Play at bottom right</li>
 <li>Follow instructions/questions</li>
 </ol>
+
+Explaining the widget
+Red = date for the prices
+Green = version of script
+Yellow = Currency
+Purple = Extra cost, prices in the list is including extras
+Blue = datetime for prices
+
+![plot](Scriptable-NordPool.png)

@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.697
+let version = 0.698
 let area
 let resolution
 let currency
@@ -22,7 +22,7 @@ const dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
 
 if (!config.runsInWidget){
-  //await askForLanguage();
+  await updatecode();
   await readTranslations();
   await readsettings();
   await createVariables();

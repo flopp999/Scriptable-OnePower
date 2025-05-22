@@ -12,7 +12,7 @@ https://apps.apple.com/ca/app/scriptable/id1405459188
 <li>Follow instructions/questions</li>
 </ol>
 
-Explaining the widget
+Explaining the widget picture below  
 Red = date for the prices  
 Green = version of script  
 Yellow = Currency  

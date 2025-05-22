@@ -1,3 +1,5 @@
+📄 License: Personal use only. See LICENSE for details.
+
 This only works on iPhone and iPad
 
 Download Scriptable from App Store

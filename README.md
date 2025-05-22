@@ -1,7 +1,7 @@
 # ⚡️ Scriptable NordPool Widget
 
-A simple and customizable Scriptable widget that displays **Nord Pool electricity prices** directly on your iPhone or iPad home screen.
-
+A simple and customizable Scriptable widget that displays **Nord Pool electricity prices** directly on your iPhone or iPad.
+Data is fetched directly from Nord Pool
 ---
 
 ## 📄 License

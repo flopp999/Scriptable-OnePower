@@ -70,9 +70,9 @@
     "de": "Yes"
   },
     "enterextra": {
-    "en": "Enter the total extra cost per kWh (e.g. grid fees, taxes, markup) in ",
-    "sv": "Skriv in totala extra kostnader per kWh (t.ex. överföringavgift, skatt, moms) i ",
-    "de": "Enter the total extra cost per kWh (e.g. grid fees, taxes, markup) in "
+    "en": "Enter the total extra cost per kWh incl. VAT(e.g. grid fees, taxes, markup) in ",
+    "sv": "Skriv in totala extra kostnader per kWh inkl. moms(t.ex. överföringavgift, skatt, moms) i ",
+    "de": "Enter the total extra cost per kWh incl. VAT(e.g. grid fees, taxes, markup) in "
   },
     "extraelectricitycost": {
     "en": "Extra Electricity Cost",

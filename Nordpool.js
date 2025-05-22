@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.687
+let version = 0.688
 let area
 let resolution
 let currency
@@ -11,28 +11,33 @@ let vat
 let includevat
 let extras
 let language
+let settings
+let langId
+let translationData;
+
 
 if (!config.runsInWidget){
+  await readsettings();
   await start();
-  
-  // Start
-  async function start() {
-    let alert = new Alert();
-    //alert.title = "";
-    alert.message = t("changesetup") + "?";
-    alert.addAction(t("yes"));
-    alert.addAction(t("no"));
-    let index = await alert.presentAlert();
-    if (index ===0) {
-      settings = await ask();
-      fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-    }
-  }
+
 }
 
 if (config.runsInWidget){
   await updatecode();
   await readsettings();
+}
+
+async function start() {
+  let alert = new Alert();
+  //alert.title = "";
+  alert.message = t("changesetup") + "?";
+  alert.addAction(t("yes"));
+  alert.addAction(t("no"));
+  let index = await alert.presentAlert();
+  if (index ===0) {
+    settings = await ask();
+    fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  }
 }
 
 async function updatecode() {
@@ -49,10 +54,11 @@ async function updatecode() {
     console.error(error);
   }
 }
+
 async function readsettings() {
   let fileName = Script.name() + "_Settings.json";
-  fm = FileManager.iCloud(); // Or .local() if preferred
-  dir = fm.documentsDirectory();
+  let fm = FileManager.iCloud(); // Or .local() if preferred
+  let dir = fm.documentsDirectory();
   let filePath = fm.joinPath(dir, fileName);
   let settings = {};
   
@@ -78,13 +84,10 @@ async function readsettings() {
     }
   } catch (error) {
     console.warn("Settings file not found or error reading file: " + error.message);
-    await ask();
+    settings = await ask();
     fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
   }
 }
-//if (!config.runsInWidget){
-//  await askForLanguage();
-//}
 
 await createVariables();
 
@@ -97,17 +100,6 @@ async function createVariables() {
   extras = settings.extras;
   language = settings.language;
 }
-
-const langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
-
-const langMap = {
-  1: "en",
-  2: "de",
-  3: "sv"
-};
-
-let translationData;
-const currentLang = langMap[langId] || "en"; // fallback to english
 
 async function readTranslations() {
   let url = "https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Translations.json";
@@ -122,6 +114,12 @@ async function readTranslations() {
     const fm = FileManager.iCloud()
     const path = fm.joinPath(fm.documentsDirectory(), "Translations.json");
     translationData = JSON.parse(fm.readString(path));
+    const langMap = {
+      1: "en",
+      2: "de",
+      3: "sv"
+    };
+    const currentLang = langMap[langId] || "en"; // fallback to english
   } catch (error) {
     console.error(error);
   }
@@ -140,6 +138,9 @@ function t(key) {
 
 async function ask() {
   settings.language = await askForLanguage();
+  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
+  await readTranslations();
   [settings.area, settings.vat] = await askForArea();
   settings.currency = await askForCurrency();
   settings.includevat = await askForIncludeVAT();

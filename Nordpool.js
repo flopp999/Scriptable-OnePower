@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.695
+let version = 0.696
 let area
 let resolution
 let currency
@@ -25,6 +25,7 @@ if (!config.runsInWidget){
   //await askForLanguage();
   await readTranslations();
   await readsettings();
+  await createVariables();
   await start();
 
 }
@@ -37,7 +38,7 @@ if (config.runsInWidget){
 async function start() {
   let alert = new Alert();
   //alert.title = "";
-  alert.message = t("changesetup") + "?";
+  alert.message = t("changesetup") + "?\nArea: "+area+"\nExtras: "+extras+"\nVAT: "+includevat+"\nCurrency: "+currency;
   alert.addAction(t("yes"));
   alert.addAction(t("no"));
   let index = await alert.presentAlert();

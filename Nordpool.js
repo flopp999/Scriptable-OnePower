@@ -44,7 +44,7 @@ async function start() {
     t("changesetup") + "?\n" +
     "Area: " + area + "," + currency + "\n" +
     "Extras: " + extras + "\n" +
-    "VAT: " + vat + "\?n" +
+    "VAT: " + vat + "?\n" +
     "With VAT: " + vatText + "\n";
   alert.addAction(t("yes"));
   alert.addAction(t("no"));

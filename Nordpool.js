@@ -435,7 +435,7 @@ for (let s = 0; s < stackNames.length; s++) {
         timeText.textColor = new Color("#00ffff");
         timeText.font = Font.lightSystemFont(bigFont);
       } else {
-        timeText.textColor = new Color("#fffffff");
+        timeText.textColor = new Color("#ffffff");
         timeText.font = Font.lightSystemFont(mediumFont);
       }
       if (allValues.length == 24) {

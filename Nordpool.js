@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.691
+let version = 0.692
 let area
 let resolution
 let currency
@@ -85,10 +85,10 @@ async function readsettings() {
       let alert = new Alert();
       alert.title = "Support";
       alert.message = t("buymeacoffee") + "?";
-      alert.addAction(t("ofcourse"));
-      alert.addCancelAction(t("noway"));
+      alert.addAction(t("noway"));
+      alert.addCancelAction(t("ofcourse"));
       let response = await alert.present();
-      if (response === 0) {
+      if (response === -1) {
         Safari.open("https://buymeacoffee.com/flopp999");
       }
       throw new Error("Settings file not found");
@@ -537,7 +537,7 @@ for (let s = 0; s < stackNames.length; s++) {
             data:["+pricesJSON+"],\
             type:'bar',\
             fill:false,\
-            borderColor: getGradientFillHelper('vertical',['red','orange','darkgreen']),\
+            borderColor: getGradientFillHelper('vertical',['rgb(255,25,255)','rgb(255,48,8)','orange','rgb(255,255,0)','rgb(0,150,0)']),\
             borderWidth: 20, \
           },\
         ]\

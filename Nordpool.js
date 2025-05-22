@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.696
+let version = 0.697
 let area
 let resolution
 let currency
@@ -146,14 +146,11 @@ function t(key) {
   return entry[currentLang] || entry["en"] || `[${key}]`;
 }
 
-
-
-
 async function ask() {
   
   //await readTranslations();
-  [settings.area, settings.vat] = await askForArea();
-  settings.currency = await askForCurrency();
+  [settings.area, settings.vat, settings.currency] = await askForArea();
+  //settings.currency = await askForCurrency();
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
   settings.resolution = await askForResolution();
@@ -223,7 +220,33 @@ async function askForArea() {
     19,   // TEL - Romania
     0    // SYS - System price or not applicable
     ][index];
-    return [area, vat];
+   let currencies2 = [
+    "EUR",  // AT - Austria
+    "EUR",
+    "BGN",
+    "DKK",
+    "DKK",
+    "EUR",
+    "EUR",
+    "EUR",
+    "EUR",
+    "EUR",
+    "EUR",
+    "EUR",
+    "NOK",
+    "NOK",
+    "NOK",
+    "NOK",
+    "NOK",
+    "PLN",
+    "SEK", // SE1 - Sweden
+    "SEK", // SE2 - Sweden
+    "SEK", // SE3 - Sweden
+    "SEK", // SE4 - Sweden
+    "RON",
+    "EUR"
+    ][index];
+    return [area, vat,currencies2];
 }
 
 // Select resolution

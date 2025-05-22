@@ -243,7 +243,7 @@ async function askForArea() {
     "RON",
     "EUR"
     ][index];
-    return [area, vat,currencies2];
+    return [area, vat, currencies2];
 }
 
 // Select resolution
@@ -383,7 +383,7 @@ async function createWidget(){
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   moms.addSpacer();
-  momstext = moms.addText(currency);
+  momstext = moms.addText(area);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   moms.addSpacer();

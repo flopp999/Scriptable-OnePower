@@ -44,7 +44,7 @@ async function start() {
     t("changesetup") + "?\n" +
     "Area: " + area + "," + currency + "\n" +
     "Extras: " + extras + "\n" +
-    "VAT: " + vat + "?\n" +
+    "VAT: " + vat + "%\n" +
     "With VAT: " + vatText + "\n";
   alert.addAction(t("yes"));
   alert.addAction(t("no"));
@@ -435,7 +435,7 @@ for (let s = 0; s < stackNames.length; s++) {
         timeText.textColor = new Color("#00ffff");
         timeText.font = Font.lightSystemFont(bigFont);
       } else {
-        timeText.textColor = new Color("#ffffff");
+        timeText.textColor = new Color("#fffffff");
         timeText.font = Font.lightSystemFont(mediumFont);
       }
       if (allValues.length == 24) {

@@ -13,10 +13,10 @@ https://apps.apple.com/ca/app/scriptable/id1405459188
 </ol>
 
 Explaining the widget picture below  
-Red = date for the prices  
-Green = version of script  
-Yellow = Currency  
-Purple = Extra cost, prices in the list is including extras  
-Blue = datetime for prices  
+Red box = date for the prices  
+Green box = version of script  
+Yellow box = Currency  
+Purple box = Extra cost, prices in the list is including extras  
+Blue box = datetime for prices  
 
 ![plot](Scriptable-NordPool.png)

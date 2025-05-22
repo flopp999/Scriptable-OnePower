@@ -3,7 +3,7 @@
 // icon-color: green; icon-glyph: magic;
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.688
+let version = 0.689
 let area
 let resolution
 let currency
@@ -11,12 +11,19 @@ let vat
 let includevat
 let extras
 let language
-let settings
+let settings = {}
 let langId
-let translationData;
-
+let translationData
+let currentLang
+const fm = FileManager.iCloud()
+let fileName = Script.name() + "_Settings.json";
+let fm = FileManager.iCloud(); // Or .local() if preferred
+let dir = fm.documentsDirectory();
+let filePath = fm.joinPath(dir, fileName);
 
 if (!config.runsInWidget){
+  await askForLanguage();
+  await readTranslations();
   await readsettings();
   await start();
 
@@ -119,7 +126,7 @@ async function readTranslations() {
       2: "de",
       3: "sv"
     };
-    const currentLang = langMap[langId] || "en"; // fallback to english
+    currentLang = langMap[langId] || "en"; // fallback to english
   } catch (error) {
     console.error(error);
   }
@@ -137,8 +144,6 @@ function t(key) {
 
 
 async function ask() {
-  settings.language = await askForLanguage();
-  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
   langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
   await readTranslations();
   [settings.area, settings.vat] = await askForArea();
@@ -158,6 +163,8 @@ async function askForLanguage() {
   alert.addAction("Deutsch");
   alert.addAction("Svenska");
   let index = await alert.presentAlert();
+  settings.language = [1,2,3][index];
+  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
   return [1,2,3][index];
 }
 

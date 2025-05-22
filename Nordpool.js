@@ -153,7 +153,8 @@ async function ask() {
   //settings.currency = await askForCurrency();
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
-  settings.resolution = await askForResolution();
+  //settings.resolution = await askForResolution(); // activate this when 15 min is available
+  settings.resolution = 60;
   return settings
 }
 
@@ -320,7 +321,7 @@ async function askForExtras() {
   let alert = new Alert();
   alert.title = t("extraelectricitycost");
   alert.message = (t("enterextra") + `${settings.currency}`);
-  alert.addTextField("e.g. 0.30");
+  alert.addTextField("e.g. 0.30","0");
   alert.addAction("OK");
   await alert.present();
   let input = alert.textFieldValue(0);

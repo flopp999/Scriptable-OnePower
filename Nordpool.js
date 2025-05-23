@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.705
+let version = 0.706
 let area
 let resolution
 let currency
@@ -158,9 +158,23 @@ async function ask() {
   //settings.currency = await askForCurrency();
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
+  settings.showgraph = await askForShowGraph();
   //settings.resolution = await askForResolution(); // activate this when 15 min is available
   settings.resolution = 60;
   return settings
+}
+
+// Show graph
+async function askForShowGraph() {
+  let alert = new Alert();
+  alert.message = "Do you want to have a graph:";
+  alert.addAction(t("yes"));
+  alert.addAction(t("no"));
+  let index = await alert.presentAlert();
+  settings.showgraph = ["Yes","No"][index];
+  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  langId = settings.showgraph; // 1 = Yes, 2 = No
+  return ["Yes","No"][index];
 }
 
 // Select resolution
@@ -516,8 +530,9 @@ for (let s = 0; s < stackNames.length; s++) {
   let highesttext = bottom.addText(`${priceHighestRound}`);
   highesttext.font = Font.lightSystemFont(11);
   highesttext.textColor = new Color("#fa60ff");
+  
   //chart
-  if (resolution == 60) {
+  if (resolution == 60 && settings.showgraph == "Yes") {
     let avgtoday = []
     let dotNow = ""
     let countertoday = 0

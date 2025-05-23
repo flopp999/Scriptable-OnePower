@@ -57,7 +57,7 @@ async function start() {
 
 async function updatecode() {
 try {
-    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/version.txt")
+    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Version.txt")
     const serverVersion = await req.loadString()
     if (version < serverVersion) {
       // Update the code.

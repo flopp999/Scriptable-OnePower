@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.708
+let version = 0.709
 let area
 let resolution
 let currency
@@ -66,8 +66,8 @@ try {
       try {
         const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
         const codeString = await req.loadString();
-        let files = FileManager.local(); // Or .local() if preferred
-        files.writeString(module.filename, codeString);
+        //let files = FileManager.local(); // Or .local() if preferred
+        fm.writeString(module.filename, codeString);
       } catch (error) {
         console.error(error);
       }
@@ -130,7 +130,7 @@ async function readTranslations() {
   let filename = "Translations.json";
   let req = new Request(url);
   let content = await req.loadString();
-  let fm = FileManager.local();
+  //let fm = FileManager.local();
   let dir = fm.documentsDirectory();
   let path = fm.joinPath(dir, filename);
   fm.writeString(path, content);

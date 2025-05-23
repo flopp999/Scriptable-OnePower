@@ -19,10 +19,10 @@
     "sv": "",
     "de": ""
   },
-  "": {
-    "en": "",
-    "sv": "",
-    "de": ""
+  "showgraph": {
+    "en": "Would you like to see a graph as well",
+    "sv": "Vill du även ha en graf över elpriserna",
+    "de": "Would you like to see a graph as well"
   },
   "area": {
     "en": "Area",

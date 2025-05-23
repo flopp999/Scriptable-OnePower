@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.703
+let version = 0.704
 let area
 let resolution
 let currency
@@ -69,10 +69,6 @@ try {
       } catch (error) {
         console.error(error);
       }
-    }
-    else {
-      let widget = await createWidget();
-      widget.presentLarge()
     }
   } catch (error){
     console.error("The update failed. Please try again later." + error);

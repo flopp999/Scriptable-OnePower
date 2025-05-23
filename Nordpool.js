@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.707
+let version = 0.708
 let area
 let resolution
 let currency
@@ -20,7 +20,7 @@ const fileName = Script.name() + "_Settings.json";
 const fm = FileManager.iCloud(); // Or .local() if preferred
 const dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
-
+let width = 1150;
 if (!config.runsInWidget){
   await updatecode();
   await readTranslations();
@@ -435,6 +435,7 @@ async function createWidget(){
   momstext.textColor = new Color("#ffffff");
   
   if (settings.showtable == "Yes"){
+  width = 770;
   let head = listwidget.addStack()
   let stackNames = ["first", "second", "third", "fourth", "fifth"];
   let timeStacks = {};
@@ -570,7 +571,7 @@ for (let s = 0; s < stackNames.length; s++) {
       counterdot += 1
     }
     while (counterdot < 24)
-    let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h=770&c="
+    let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+width+"&c="
     graphtoday += encodeURI("{\
       data: { \
         labels: ["+hours+"],\

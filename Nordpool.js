@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.709
+let version = 0.710
 let area
 let resolution
 let currency
@@ -80,7 +80,7 @@ try {
 async function readsettings() {
   //let fileName = Script.name() + "_Settings.json";
   //let fm = FileManager.iCloud(); // Or .local() if preferred
-  let dir = fm.documentsDirectory();
+  //let dir = fm.documentsDirectory();
   let filePath = fm.joinPath(dir, fileName);
   //let settings = {};
   
@@ -127,16 +127,17 @@ async function createVariables() {
 
 async function readTranslations() {
   let url = "https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Translations.json";
-  let filename = "Translations.json";
+  let filename = Script.name() + "_Translations.json";
+  //let filename = "Translations.json";
   let req = new Request(url);
   let content = await req.loadString();
   //let fm = FileManager.local();
-  let dir = fm.documentsDirectory();
+  //let dir = fm.documentsDirectory();
   let path = fm.joinPath(dir, filename);
   fm.writeString(path, content);
   try {
     const fm = FileManager.local()
-    const path = fm.joinPath(fm.documentsDirectory(), "Translations.json");
+    const path = fm.joinPath(fm.documentsDirectory(), filename);
     translationData = JSON.parse(fm.readString(path));
     const langMap = {
       1: "en",

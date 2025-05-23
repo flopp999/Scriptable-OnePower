@@ -1,6 +1,6 @@
 # ⚡️ Scriptable NordPool Widget
 
-A simple and customizable Scriptable widget that displays **Nord Pool electricity prices** directly on your iPhone or iPad.
+A simple and customizable Scriptable widget that displays **Nord Pool electricity prices** directly on your iPhone or iPad.  
 Data is fetched directly from Nord Pool
 
 ---
@@ -55,11 +55,12 @@ Found a bug or have a feature request?
 
 Explanation of the elements in the widget:
 
-- 🟥 **Red box** – Date of the prices  
-- 🟩 **Green box** – Script version  
-- 🟨 **Yellow box** – Currency  
-- 🟪 **Purple box** – Extra cost (prices in the list include these)  
-- 🟦 **Blue box** – Datetime of the prices
+🟥 Red box – Date for the prices  
+🟩 Green box – Script version  
+🟨 Yellow box – Currency  
+🟪 Purple box – Extra cost (included in the prices shown in the list)  
+🟦 Blue box – Last price update by NordPool  
+
 ![plot](Scriptable-NordPool.png)
 
 ---

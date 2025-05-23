@@ -42,7 +42,7 @@ async function start() {
   let vatText = includevat == 1 ? t("yes") : t("no")
   alert.message = 
     t("changesetup") + "?\n" +
-    "Area: " + area + "," + currency + "\n" +
+    "Area: " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
     "VAT: " + vat + "%\n" +
     "With VAT: " + vatText + "\n";

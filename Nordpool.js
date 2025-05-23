@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.700
+let version = 0.701
 let area
 let resolution
 let currency
@@ -56,17 +56,26 @@ async function start() {
 }
 
 async function updatecode() {
-  // Update the code.
-  try {
-    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
-    const codeString = await req.loadString();
-    const serverVersion = codeString.match(/version\s*=\s*([0-9.]+)/);
+try {
+    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/version.txt")
+    const serverVersion = await req.loadString()
     if (version < serverVersion[1]) {
-      let files = FileManager.iCloud(); // Or .local() if preferred
-      files.writeString(module.filename, codeString);
+      // Update the code.
+      try {
+        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
+        const codeString = await req.loadString();
+        let files = FileManager.iCloud(); // Or .local() if preferred
+        files.writeString(module.filename, codeString);
+      } catch (error) {
+        console.error(error);
+      }
     }
-  } catch (error) {
-    console.error(error);
+    else {
+      let widget = await createWidget();
+      widget.presentLarge()
+    }
+  } catch (error){
+    console.error("The update failed. Please try again later." + error);
   }
 }
 

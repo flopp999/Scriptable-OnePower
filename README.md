@@ -55,7 +55,7 @@ Found a bug or have a feature request?
 
 Explanation of the elements in the widget:
 
-🟥 Red box – Date for the prices  
+🟥 Red box – Date the prices applies to  
 🟩 Green box – Script version  
 🟨 Yellow box – Area  
 🟪 Purple box – Extra cost (included in the displayed prices)  

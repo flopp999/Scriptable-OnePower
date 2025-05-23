@@ -24,15 +24,15 @@
     "sv": "",
     "de": ""
   },
-  "": {
-    "en": "",
-    "sv": "",
-    "de": ""
+  "area": {
+    "en": "Area",
+    "sv": "Område",
+    "de": "Area"
   },
-  "": {
-    "en": "",
-    "sv": "",
-    "de": ""
+  "vat": {
+    "en": "VAT",
+    "sv": "Moms",
+    "de": "VAT"
   },
   
   "buymeacoffee": {

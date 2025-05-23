@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.704
+let version = 0.705
 let area
 let resolution
 let currency
@@ -42,10 +42,10 @@ async function start() {
   let vatText = includevat == 1 ? t("yes") : t("no")
   alert.message = 
     t("changesetup") + "?\n" +
-    "Area: " + area + ", " + currency + "\n" +
+    t("area") + ":" + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
-    "VAT: " + vat + "%\n" +
-    "With VAT: " + vatText + "\n";
+    t("vat") + ":" + vat + "%\n" +
+    t("withvat") + ":" + vatText + "\n";
   alert.addAction(t("yes"));
   alert.addAction(t("no"));
   let index = await alert.presentAlert();

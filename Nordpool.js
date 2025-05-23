@@ -17,7 +17,7 @@ let langId
 let translationData
 let currentLang
 const fileName = Script.name() + "_Settings.json";
-const fm = FileManager.iCloud(); // Or .local() if preferred
+const fm = FileManager.local();
 const dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
 let width = 1150;
@@ -66,7 +66,7 @@ try {
       try {
         const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
         const codeString = await req.loadString();
-        let files = FileManager.iCloud(); // Or .local() if preferred
+        let files = FileManager.local(); // Or .local() if preferred
         files.writeString(module.filename, codeString);
       } catch (error) {
         console.error(error);
@@ -130,12 +130,12 @@ async function readTranslations() {
   let filename = "Translations.json";
   let req = new Request(url);
   let content = await req.loadString();
-  let fm = FileManager.iCloud();
+  let fm = FileManager.local();
   let dir = fm.documentsDirectory();
   let path = fm.joinPath(dir, filename);
   fm.writeString(path, content);
   try {
-    const fm = FileManager.iCloud()
+    const fm = FileManager.local()
     const path = fm.joinPath(fm.documentsDirectory(), "Translations.json");
     translationData = JSON.parse(fm.readString(path));
     const langMap = {

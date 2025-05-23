@@ -167,7 +167,7 @@ async function ask() {
 // Show graph
 async function askForShowGraph() {
   let alert = new Alert();
-  alert.message = "Do you want to have a graph:";
+  alert.message = t("showgraph") + ":";
   alert.addAction(t("yes"));
   alert.addAction(t("no"));
   let index = await alert.presentAlert();

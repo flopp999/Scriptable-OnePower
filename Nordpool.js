@@ -42,10 +42,12 @@ async function start() {
   let vatText = includevat == 1 ? t("yes") : t("no")
   alert.message = 
     t("changesetup") + "?\n" +
-    t("area") + ":" + area + ", " + currency + "\n" +
+    t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
-    t("vat") + ":" + vat + "%\n" +
-    t("withvat") + ":" + vatText + "\n";
+    t("withvat") + ": " + vatText + "\n";
+  if (includevat == 1) {
+    alert.message += t("vat") + ": " + vat;
+  }
   alert.addAction(t("yes"));
   alert.addAction(t("no"));
   let index = await alert.presentAlert();

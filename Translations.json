@@ -14,15 +14,15 @@
     "sv": "",
     "de": ""
   },
-  "": {
-    "en": "",
-    "sv": "",
-    "de": ""
+  "showtable": {
+    "en": "Do you want the electricity prices in a table",
+    "sv": "Vill du ha elpriserna i en tabell",
+    "de": "Do you want the electricity prices in a table"
   },
   "showgraph": {
-    "en": "Would you like to see a graph as well",
-    "sv": "Vill du även ha en graf över elpriserna",
-    "de": "Would you like to see a graph as well"
+    "en": "Do you want the electricity prices in a graph",
+    "sv": "Vill du ha elpriserna i en graf",
+    "de": "Do you want the electricity prices in a graph"
   },
   "area": {
     "en": "Area",

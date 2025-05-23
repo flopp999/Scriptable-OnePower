@@ -4,30 +4,30 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.710
-let area
-let resolution
-let currency
-let vat
-let includevat
-let extras
-let language
+let version = 0.711;
+let area;
+let resolution;
+let currency;
+let vat;
+let includevat;
+let extras;
+let language;
 let settings = {}
-let langId
-let translationData
-let currentLang
+let langId;
+let translationData;
+let currentLang;
 const fileName = Script.name() + "_Settings.json";
 const fm = FileManager.local();
 const dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
 let width = 1150;
+
 if (!config.runsInWidget){
   await updatecode();
   await readTranslations();
   await readsettings();
   await createVariables();
   await start();
-
 }
 
 if (config.runsInWidget){
@@ -38,7 +38,6 @@ if (config.runsInWidget){
 
 async function start() {
   let alert = new Alert();
-  //alert.title = "";
   let vatText = includevat == 1 ? t("yes") : t("no")
   alert.message = 
     t("changesetup") + "?\n" +
@@ -62,28 +61,21 @@ try {
     const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Version.txt")
     const serverVersion = await req.loadString()
     if (version < serverVersion) {
-      // Update the code.
       try {
         const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
         const codeString = await req.loadString();
-        //let files = FileManager.local(); // Or .local() if preferred
         fm.writeString(module.filename, codeString);
       } catch (error) {
         console.error(error);
       }
     }
-  } catch (error){
+  } catch (error) {
     console.error("The update failed. Please try again later." + error);
   }
 }
 
 async function readsettings() {
-  //let fileName = Script.name() + "_Settings.json";
-  //let fm = FileManager.iCloud(); // Or .local() if preferred
-  //let dir = fm.documentsDirectory();
   let filePath = fm.joinPath(dir, fileName);
-  //let settings = {};
-  
   try {
     if (fm.fileExists(filePath)) {
       let raw = fm.readString(filePath);
@@ -128,11 +120,8 @@ async function createVariables() {
 async function readTranslations() {
   let url = "https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Translations.json";
   let filename = Script.name() + "_Translations.json";
-  //let filename = "Translations.json";
   let req = new Request(url);
   let content = await req.loadString();
-  //let fm = FileManager.local();
-  //let dir = fm.documentsDirectory();
   let path = fm.joinPath(dir, filename);
   fm.writeString(path, content);
   try {
@@ -158,12 +147,10 @@ function t(key) {
 
 async function ask() {
   [settings.area, settings.vat, settings.currency] = await askForArea();
-  //settings.currency = await askForCurrency();
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
   settings.showgraph = await askForShowGraph();
   settings.showtable = await askForShowTable();
-  //settings.resolution = await askForResolution(); // activate this when 15 min is available
   settings.resolution = 60;
   return settings
 }
@@ -207,7 +194,6 @@ async function askForLanguage() {
   langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
   return [1,2,3][index];
 }
-
 
 // Select area
 async function askForArea() {
@@ -284,7 +270,6 @@ async function askForArea() {
 // Select resolution
 async function askForResolution() {
   let alert = new Alert();
-  //alert.title = "Select Resolution";
   alert.message = t("choosedataresolution") + ":";
   alert.addAction("15 min");
   alert.addAction("60 min");
@@ -321,7 +306,6 @@ async function askForCurrency() {
     SYS: ["EUR", "DKK", "NOK", "SEK"],
   };
   let alert = new Alert();
-  //alert.title = "Select Currency";
   alert.message = t("chooseyourcurrency") + ":";
   let currencies = allowedCurrencies[settings.area] || [];
   for (let currency of currencies) {
@@ -339,7 +323,6 @@ async function askForCurrency() {
 // Include VAT?
 async function askForIncludeVAT() {
   let alert = new Alert();
-  //alert.title = "Include VAT?";
   alert.message = t("doyouwantvat") + "?";
   alert.addAction(t("withvat"));
   alert.addAction(t("withoutvat"));

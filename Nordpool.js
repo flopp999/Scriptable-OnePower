@@ -164,6 +164,19 @@ async function ask() {
   return settings
 }
 
+// Show table
+async function askForShowTable() {
+  let alert = new Alert();
+  alert.message = t("showtable") + ":";
+  alert.addAction(t("yes"));
+  alert.addAction(t("no"));
+  let index = await alert.presentAlert();
+  settings.showtable = ["Yes","No"][index];
+  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  langId = settings.showtable; // 1 = Yes, 2 = No
+  return ["Yes","No"][index];
+}
+
 // Show graph
 async function askForShowGraph() {
   let alert = new Alert();

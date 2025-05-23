@@ -58,7 +58,7 @@ Explanation of the elements in the widget:
 🟥 Red box – Date for the prices  
 🟩 Green box – Script version  
 🟨 Yellow box – Area  
-🟪 Purple box – Extra cost (included in the prices shown in the list)  
+🟪 Purple box – Extra cost (included in the displayed prices)  
 🟦 Blue box – Last price update by NordPool  
 
 ![plot](Scriptable-NordPool.png)

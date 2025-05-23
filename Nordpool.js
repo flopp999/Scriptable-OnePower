@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.706
+let version = 0.707
 let area
 let resolution
 let currency
@@ -159,6 +159,7 @@ async function ask() {
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
   settings.showgraph = await askForShowGraph();
+  settings.showtable = await askForShowTable();
   //settings.resolution = await askForResolution(); // activate this when 15 min is available
   settings.resolution = 60;
   return settings
@@ -430,7 +431,7 @@ async function createWidget(){
   }
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
-  
+  if (settings.showtable == 1 ){
   let head = listwidget.addStack()
   let stackNames = ["first", "second", "third", "fourth", "fifth"];
   let timeStacks = {};
@@ -513,6 +514,7 @@ for (let s = 0; s < stackNames.length; s++) {
     }
   }
 }
+  }
   let bottom = listwidget.addStack();
   // lowest
   let lowest = bottom.addText(t("lowest"));

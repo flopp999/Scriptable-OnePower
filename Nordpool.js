@@ -168,7 +168,7 @@ async function ask() {
 // Show table
 async function askForShowTable() {
   let alert = new Alert();
-  alert.message = t("showtable") + ":";
+  alert.message = t("showtable") + "?";
   alert.addAction(t("yes"));
   alert.addAction(t("no"));
   let index = await alert.presentAlert();
@@ -181,7 +181,7 @@ async function askForShowTable() {
 // Show graph
 async function askForShowGraph() {
   let alert = new Alert();
-  alert.message = t("showgraph") + ":";
+  alert.message = t("showgraph") + "?";
   alert.addAction(t("yes"));
   alert.addAction(t("no"));
   let index = await alert.presentAlert();
@@ -431,7 +431,8 @@ async function createWidget(){
   }
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
-  if (settings.showtable == 1 ){
+  
+  if (settings.showtable == "Yes"){
   let head = listwidget.addStack()
   let stackNames = ["first", "second", "third", "fourth", "fifth"];
   let timeStacks = {};

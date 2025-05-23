@@ -4,7 +4,7 @@
 // 📄 License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.701
+let version = 0.702
 let area
 let resolution
 let currency
@@ -59,7 +59,7 @@ async function updatecode() {
 try {
     const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/version.txt")
     const serverVersion = await req.loadString()
-    if (version < serverVersion[1]) {
+    if (version < serverVersion) {
       // Update the code.
       try {
         const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");

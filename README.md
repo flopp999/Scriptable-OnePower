@@ -39,7 +39,7 @@ Want support for another language? [Open an issue](https://github.com/flopp999/S
 
 ## 💡 Tips
 
-- Add the widget to your home screen by long-pressing, tapping **Edit Home Screen** or **Today-View**, then tapping **Edit** to add a new widget.
+- Add the widget to your home screen or today-view by long-pressing, tapping **Edit** to add a new widget.
 - Select **Scriptable**, choose large size, and link it to your saved script.
 
 ---

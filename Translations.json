@@ -9,10 +9,10 @@
     "sv": "",
     "de": ""
   },
-  "": {
-    "en": "",
-    "sv": "",
-    "de": ""
+  "empty": {
+    "en": "Empty",
+    "sv": "Tom",
+    "de": "Empty"
   },
   "pricestats": {
     "en": "Price Stats",

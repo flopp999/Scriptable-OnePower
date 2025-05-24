@@ -28,6 +28,7 @@ if (!config.runsInWidget){
   await readsettings();
   await createVariables();
   await start();
+  await createVariables();
 }
 
 if (config.runsInWidget){
@@ -161,7 +162,7 @@ async function ask() {
 // Ask Top
 async function askForShowAtTop() {
   let alert = new Alert();
-  alert.message = t("showwhat") + "?";
+  alert.message = t("showwhat") + "at top?";
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));
@@ -176,7 +177,7 @@ async function askForShowAtTop() {
 // Ask Top
 async function askForShowAtMiddle() {
   let alert = new Alert();
-  alert.message = t("showwhat") + "?";
+  alert.message = t("showwhat") + "in the middle?";
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));
@@ -190,7 +191,7 @@ async function askForShowAtMiddle() {
 // Ask Top
 async function askForShowAtBottom() {
   let alert = new Alert();
-  alert.message = t("showwhat") + "?";
+  alert.message = t("showwhat") + "at the bottom?";
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));

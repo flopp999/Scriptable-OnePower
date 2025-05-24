@@ -151,6 +151,9 @@ async function ask() {
   settings.extras = await askForExtras();
   settings.showgraph = await askForShowGraph();
   settings.showtable = await askForShowTable();
+  settings.showattop = await askForShowAtTop();
+  settings.showatmiddle = await askForShowAtMiddle();
+  settings.showatbottom = await askForShowAtBottom();
   settings.resolution = 60;
   return settings
 }

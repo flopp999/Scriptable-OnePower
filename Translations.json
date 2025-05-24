@@ -4,15 +4,20 @@
     "sv": "",
     "de": ""
   },
-  "": {
-    "en": "",
-    "sv": "",
-    "de": ""
+  "graph": {
+    "en": "Graph",
+    "sv": "Graf",
+    "de": "Graph"
   },
-  "": {
-    "en": "",
-    "sv": "",
-    "de": ""
+  "table": {
+    "en": "Table",
+    "sv": "Tabell",
+    "de": "Table"
+  },
+  "showtop": {
+    "en": "What should the top section of the widget show ",
+    "sv": "Vad ska den övre delen av widgeten visa ",
+    "de": "What should the top section of the widget show "
   },
   "showtable": {
     "en": "Do you want the electricity prices in a table",

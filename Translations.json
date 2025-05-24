@@ -57,7 +57,7 @@
   
   "buymeacoffee": {
     "en": "Do you want to buy me a coffee",
-    "sv": "Vill köpa en kaffe åt mig",
+    "sv": "Vill du köpa en kaffe åt mig",
     "de": "Do you want to buy me a coffee"
   },
   
@@ -91,7 +91,7 @@
   },
     "enterextra": {
     "en": "Enter the total extra cost per kWh incl. VAT(e.g. grid fees, taxes, markup) in ",
-    "sv": "Skriv in totala extra kostnader per kWh inkl. moms(t.ex. överföringavgift, skatt, moms) i ",
+    "sv": "Skriv in totala extra kostnader per kWh inkl. moms(t.ex. överföringsavgift, skatt) i ",
     "de": "Enter the total extra cost per kWh incl. VAT(e.g. grid fees, taxes, markup) in "
   },
     "extraelectricitycost": {
@@ -109,13 +109,13 @@
   "withoutvat": {
     "en": "Without VAT",
     "sv": "Utan moms",
-    "de": "With VAT"
+    "de": "Ohne MwSt."
   },  
 
   "doyouwantvat": {
     "en": "Do you want the prices shown with or without VAT",
     "sv": "Vill du att priserna ska visas med eller utan moms",
-    "de": ""
+    "de": "Möchten Sie die Preise mit oder ohne Mehrwertsteuer angezeigt bekommen"
   },
   
   "chooseyourcurrency": {
@@ -144,17 +144,17 @@
   "lowest": {
     "en": "lowest",
     "sv": "lägsta",
-    "de": "Netzwerkfehler"
+    "de": "niedrigste"
   },
   "average": {
     "en": "average",
     "sv": "medel",
-    "de": "average"
+    "de": "durchschnittlich"
   },
   "highest": {
     "en": "highest",
     "sv": "högsta",
-    "de": "highest"
+    "de": "höchste"
   },
   "inclvat": {
     "en": "Incl. VAT",

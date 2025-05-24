@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.717
+let version = 0.718;
 let area;
 let resolution;
 let currency;
@@ -66,6 +66,10 @@ try {
         const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
         const codeString = await req.loadString();
         fm.writeString(module.filename, codeString);
+        let updateNotify = new Notification();
+        updateNotify.title = "New update installed";
+        updateNotify.sound = "default";
+        await updateNotify.schedule();
       } catch (error) {
         console.error(error);
       }

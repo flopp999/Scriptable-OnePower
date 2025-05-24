@@ -4,6 +4,21 @@
     "sv": "",
     "de": ""
   },
+  "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },
+  "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },
+  "pricestats": {
+    "en": "Price Stats",
+    "sv": "Prisstatistik",
+    "de": "Price Stats"
+  },
   "graph": {
     "en": "Graph",
     "sv": "Graf",
@@ -14,7 +29,7 @@
     "sv": "Tabell",
     "de": "Table"
   },
-  "showtop": {
+  "showwhat": {
     "en": "What should the top section of the widget show ",
     "sv": "Vad ska den övre delen av widgeten visa ",
     "de": "What should the top section of the widget show "

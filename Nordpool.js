@@ -383,10 +383,11 @@ async function askForExtras() {
   let alert = new Alert();
   alert.title = t("extraelectricitycost");
   alert.message = (t("enterextra") + `${settings.currency}`);
-  alert.addTextField("e.g. 0.30","0");
+  alert.addTextField("e.g. 0.30","0").setDecimalPadKeyboard();
   alert.addAction("OK");
   await alert.present();
   let input = alert.textFieldValue(0);
+  input = input.replace(",", ".")
   let newCost = parseFloat(input);
   return newCost;
 }

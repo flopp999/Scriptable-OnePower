@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.714;
+let version = 0.715
 let area;
 let resolution;
 let currency;
@@ -662,31 +662,31 @@ async function createWidget(){
   momstext.textColor = new Color("#ffffff");
   
 
-  if (settings.top == "Table") {
+  if (settings.showattop == "Table") {
     await Table();
   }
-   else if (settings.top == "PriceStats") {
+   else if (settings.showattop == "PriceStats") {
     await PriceStats();
   }
-   else if (settings.top == "Graph") {
+   else if (settings.showattop == "Graph") {
     await Graph();
   }
-  if (settings.middle == "Table") {
+  if (settings.showatmiddle == "Table") {
     await Table();
   }
-   else if (settings.middle == "PriceStats") {
+   else if (settings.showatmiddle == "PriceStats") {
     await PriceStats();
   }
-   else if (settings.middle == "Graph") {
+   else if (settings.showatmiddle == "Graph") {
     await Graph();
   }
-  if (settings.bottom == "Table") {
+  if (settings.showatbottom == "Table") {
     await Table();
   }
-   else if (settings.bottom == "PriceStats") {
+   else if (settings.showatbottom == "PriceStats") {
     await PriceStats();
   }
-   else if (settings.bottom == "Graph") {
+   else if (settings.showatbottom == "Graph") {
     await Graph();
   }
   

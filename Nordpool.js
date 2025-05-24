@@ -180,6 +180,7 @@ async function askForShowAtMiddle() {
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));
+  alert.addAction(t("empty"));
   let index = await alert.presentAlert();
   settings.showatmiddle = ["Graph","Table","PriceStats","Empty"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
@@ -193,6 +194,7 @@ async function askForShowAtBottom() {
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));
+  alert.addAction(t("empty"));
   let index = await alert.presentAlert();
   settings.showatbottom = ["Graph","Table","PriceStats","Empty"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print

@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.712;
+let version = 0.713;
 let area;
 let resolution;
 let currency;
@@ -158,14 +158,42 @@ async function ask() {
 // Ask Top
 async function askForShowAtTop() {
   let alert = new Alert();
-  alert.message = t("showattop") + "?";
+  alert.message = t("showwhat") + "?";
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
+  alert.addAction(t("pricestats"));
   let index = await alert.presentAlert();
-  settings.showattop = ["Graph","Table"][index];
+  settings.showattop = ["Graph","Table","PriceStats"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
   langId = settings.showattop; // 1 = Yes, 2 = No
-  return ["Graph","Table"][index];
+  return ["Graph","Table","PriceStats"][index];
+}
+
+// Ask Top
+async function askForShowAtMiddle() {
+  let alert = new Alert();
+  alert.message = t("showwhat") + "?";
+  alert.addAction(t("graph"));
+  alert.addAction(t("table"));
+  alert.addAction(t("pricestats"));
+  let index = await alert.presentAlert();
+  settings.showatmiddle = ["Graph","Table","PriceStats"][index];
+  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  langId = settings.showatmiddle; // 1 = Yes, 2 = No
+  return ["Graph","Table","PriceStats"][index];
+}
+// Ask Top
+async function askForShowAtBottom() {
+  let alert = new Alert();
+  alert.message = t("showwhat") + "?";
+  alert.addAction(t("graph"));
+  alert.addAction(t("table"));
+  alert.addAction(t("pricestats"));
+  let index = await alert.presentAlert();
+  settings.showatbottom = ["Graph","Table","PriceStats"][index];
+  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  langId = settings.showatbottom; // 1 = Yes, 2 = No
+  return ["Graph","Table","PriceStats"][index];
 }
 
 
@@ -631,9 +659,36 @@ async function createWidget(){
   momstext.textColor = new Color("#ffffff");
   
 
-  await Table();
-  await PriceStats();
-  await Graph();
+  if (settings.top == "Table") {
+    await Table();
+  }
+   else if (settings.top == "PriceStats") {
+    await PriceStats();
+  }
+   else if (settings.top == "Graph") {
+    await Graph();
+  }
+  if (settings.middle == "Table") {
+    await Table();
+  }
+   else if (settings.middle == "PriceStats") {
+    await PriceStats();
+  }
+   else if (settings.middle == "Graph") {
+    await Graph();
+  }
+  if (settings.bottom == "Table") {
+    await Table();
+  }
+   else if (settings.bottom == "PriceStats") {
+    await PriceStats();
+  }
+   else if (settings.bottom == "Graph") {
+    await Graph();
+  }
+  
+  
+  
 return listwidget
 }
 

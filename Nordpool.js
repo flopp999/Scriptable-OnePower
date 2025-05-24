@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.715
+let version = 0.716
 let area;
 let resolution;
 let currency;
@@ -20,7 +20,7 @@ const fileName = Script.name() + "_Settings.json";
 const fm = FileManager.local();
 const dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
-let width = 1150;
+let height = 1150;
 
 if (!config.runsInWidget){
   await updatecode();
@@ -481,6 +481,9 @@ for (let s = 0; s < stackNames.length; s++) {
 async function Graph() {
 //chart
   if (resolution == 60 && settings.showgraph == "Yes") {
+    if ( settings.showattop = "Table" || settings.showatmiddle = "Table" || settings.showatbottom = "Table" ) {
+      height = 770
+    }
     let avgtoday = []
     let dotNow = ""
     let countertoday = 0
@@ -500,7 +503,7 @@ async function Graph() {
       counterdot += 1
     }
     while (counterdot < 24)
-    let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+width+"&c="
+    let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+height+"&c="
     graphtoday += encodeURI("{\
       data: { \
         labels: ["+hours+"],\

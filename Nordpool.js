@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.711;
+let version = 0.712;
 let area;
 let resolution;
 let currency;
@@ -154,6 +154,20 @@ async function ask() {
   settings.resolution = 60;
   return settings
 }
+
+// Ask Top
+async function askForShowAtTop() {
+  let alert = new Alert();
+  alert.message = t("showattop") + "?";
+  alert.addAction(t("graph"));
+  alert.addAction(t("table"));
+  let index = await alert.presentAlert();
+  settings.showattop = ["Graph","Table"][index];
+  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  langId = settings.showattop; // 1 = Yes, 2 = No
+  return ["Graph","Table"][index];
+}
+
 
 // Show table
 async function askForShowTable() {
@@ -343,6 +357,40 @@ async function askForExtras() {
   return newCost;
 }
 
+ async function PriceStats() {
+  let bottom = listwidget.addStack();
+  // lowest
+  let lowest = bottom.addText(t("lowest"));
+  lowest.font = Font.lightSystemFont(11);
+  lowest.textColor = new Color("#00cf00");
+  bottom.addSpacer(4);
+  let priceLowestRound = Math.round(priceLowest);
+  let lowesttext = bottom.addText(`${priceLowestRound}`);
+  lowesttext.font = Font.lightSystemFont(11);
+  lowesttext.textColor = new Color("#00cf00");
+  bottom.addSpacer();
+  // average
+  let avg = bottom.addText(t("average"));
+  avg.font = Font.lightSystemFont(11);
+  avg.textColor = new Color("#f38");
+  bottom.addSpacer(4);
+  let priceAvgRound = Math.round(priceAvg);
+  let avgtext = bottom.addText(`${priceAvgRound}`);
+  avgtext.font = Font.lightSystemFont(11);
+  avgtext.textColor = new Color("#f38");
+  bottom.addSpacer();
+  // highest
+  let highest = bottom.addText(t("highest"));
+  highest.font = Font.lightSystemFont(11);
+  highest.textColor = new Color("#fa60ff");
+  bottom.addSpacer(4);
+  let priceHighestRound = Math.round(priceHighest);
+  let highesttext = bottom.addText(`${priceHighestRound}`);
+  highesttext.font = Font.lightSystemFont(11);
+  highesttext.textColor = new Color("#fa60ff");
+  }
+
+
 const smallFont = 10;
 const mediumFont = 12;
 const bigFont = 13.5;
@@ -503,36 +551,7 @@ for (let s = 0; s < stackNames.length; s++) {
   }
 }
   }
-  let bottom = listwidget.addStack();
-  // lowest
-  let lowest = bottom.addText(t("lowest"));
-  lowest.font = Font.lightSystemFont(11);
-  lowest.textColor = new Color("#00cf00");
-  bottom.addSpacer(4);
-  let priceLowestRound = Math.round(priceLowest);
-  let lowesttext = bottom.addText(`${priceLowestRound}`);
-  lowesttext.font = Font.lightSystemFont(11);
-  lowesttext.textColor = new Color("#00cf00");
-  bottom.addSpacer();
-  // average
-  let avg = bottom.addText(t("average"));
-  avg.font = Font.lightSystemFont(11);
-  avg.textColor = new Color("#f38");
-  bottom.addSpacer(4);
-  let priceAvgRound = Math.round(priceAvg);
-  let avgtext = bottom.addText(`${priceAvgRound}`);
-  avgtext.font = Font.lightSystemFont(11);
-  avgtext.textColor = new Color("#f38");
-  bottom.addSpacer();
-  // highest
-  let highest = bottom.addText(t("highest"));
-  highest.font = Font.lightSystemFont(11);
-  highest.textColor = new Color("#fa60ff");
-  bottom.addSpacer(4);
-  let priceHighestRound = Math.round(priceHighest);
-  let highesttext = bottom.addText(`${priceHighestRound}`);
-  highesttext.font = Font.lightSystemFont(11);
-  highesttext.textColor = new Color("#fa60ff");
+  
   
   //chart
   if (resolution == 60 && settings.showgraph == "Yes") {
@@ -604,11 +623,15 @@ for (let s = 0; s < stackNames.length; s++) {
     let chart = listwidget.addStack()
     chart.addImage(GRAPH) 
   }
-  
+ 
+  await PriceStats();
 return listwidget
 }
 
+
+
 let widget = await createWidget();
+
 if (config.runsInWidget) {
   Script.setWidget(widget);
 } else {

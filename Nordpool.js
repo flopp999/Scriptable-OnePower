@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.716
+let version = 0.717
 let area;
 let resolution;
 let currency;
@@ -149,8 +149,8 @@ async function ask() {
   [settings.area, settings.vat, settings.currency] = await askForArea();
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
-  settings.showgraph = await askForShowGraph();
-  settings.showtable = await askForShowTable();
+  //settings.showgraph = await askForShowGraph();
+  //settings.showtable = await askForShowTable();
   settings.showattop = await askForShowAtTop();
   settings.showatmiddle = await askForShowAtMiddle();
   settings.showatbottom = await askForShowAtBottom();
@@ -165,11 +165,12 @@ async function askForShowAtTop() {
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));
+  alert.addAction(t("empty"));
   let index = await alert.presentAlert();
-  settings.showattop = ["Graph","Table","PriceStats"][index];
+  settings.showattop = ["Graph","Table","PriceStats","Empty"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
   langId = settings.showattop; // 1 = Yes, 2 = No
-  return ["Graph","Table","PriceStats"][index];
+  return ["Graph","Table","PriceStats","Empty"][index];
 }
 
 // Ask Top
@@ -180,10 +181,10 @@ async function askForShowAtMiddle() {
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));
   let index = await alert.presentAlert();
-  settings.showatmiddle = ["Graph","Table","PriceStats"][index];
+  settings.showatmiddle = ["Graph","Table","PriceStats","Empty"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
   langId = settings.showatmiddle; // 1 = Yes, 2 = No
-  return ["Graph","Table","PriceStats"][index];
+  return ["Graph","Table","PriceStats","Empty"][index];
 }
 // Ask Top
 async function askForShowAtBottom() {
@@ -193,10 +194,10 @@ async function askForShowAtBottom() {
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));
   let index = await alert.presentAlert();
-  settings.showatbottom = ["Graph","Table","PriceStats"][index];
+  settings.showatbottom = ["Graph","Table","PriceStats","Empty"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
   langId = settings.showatbottom; // 1 = Yes, 2 = No
-  return ["Graph","Table","PriceStats"][index];
+  return ["Graph","Table","PriceStats","Empty"][index];
 }
 
 
@@ -481,7 +482,7 @@ for (let s = 0; s < stackNames.length; s++) {
 async function Graph() {
 //chart
   if (resolution == 60 && settings.showgraph == "Yes") {
-    if ( settings.showattop = "Table" || settings.showatmiddle = "Table" || settings.showatbottom = "Table" ) {
+    if ( settings.showattop == "Table" || settings.showatmiddle == "Table" || settings.showatbottom == "Table" ) {
       height = 770
     }
     let avgtoday = []

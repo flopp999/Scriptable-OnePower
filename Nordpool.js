@@ -67,7 +67,7 @@ try {
         const codeString = await req.loadString();
         fm.writeString(module.filename, codeString);
         let updateNotify = new Notification();
-        updateNotify.title = "New update installed";
+        updateNotify.title = "New version installed";
         updateNotify.sound = "default";
         await updateNotify.schedule();
       } catch (error) {

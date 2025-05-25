@@ -464,7 +464,7 @@ for (let s = 0; s < stackNames.length; s++) {
         timeText.font = Font.lightSystemFont(mediumFont);
       }
       if (allValues.length == 24) {
-        if (i === hour) {
+        if (i === hour && showday == "Today") {
           timeText.textColor = new Color("#00ffff");
           timeText.font = Font.lightSystemFont(bigFont);
         }
@@ -489,7 +489,7 @@ for (let s = 0; s < stackNames.length; s++) {
         priceText.font = Font.lightSystemFont(mediumFont);
       }
     if (allValues.length == 24) {
-      if (i === hour) {
+      if (i === hour && showday == "Today") {
         priceText.font = Font.lightSystemFont(bigFont);
       }
     }
@@ -526,8 +526,9 @@ async function Graph() {
       countertoday += 1
     }
     while (countertoday < 24)
+    
     do{
-      if (hour == counterdot) {
+      if (hour == counterdot && showday == "Today") {
         dotNow += pricesJSON[counterdot] + ","
       }
       else {
@@ -535,8 +536,10 @@ async function Graph() {
       }
       counterdot += 1
     }
+      
     while (counterdot < 24)
-    let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+height+"&c="
+    
+      let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+height+"&c="
     graphtoday += encodeURI("{\
       data: { \
         labels: ["+hours+"],\
@@ -688,14 +691,13 @@ let tomorrowUpdated = responseTomorrow.updatedAt;
 updated = tomorrowUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
 date = responseTomorrow.deliveryDateCET;
 let pricesTomorrow = responseTomorrow.multiIndexEntries;
-let allValues = [];
 
 for (let i = 0; i < pricesTomorrow.length; i++) {
   const value = pricesTomorrow[i]["entryPerArea"][`${area}`];
   allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
 }
 
-let pricesJSON = JSON.parse(JSON.stringify(allValues));
+pricesJSON = JSON.parse(JSON.stringify(allValues));
   
 priceLowest = (Math.min(...pricesJSON.map(Number)));
 priceHighest = (Math.max(...pricesJSON.map(Number)));

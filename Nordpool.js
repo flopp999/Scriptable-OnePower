@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.720
+let version = 0.721
 let area;
 let resolution;
 let currency;
@@ -159,8 +159,21 @@ async function ask() {
   settings.showattop = await askForShowAtTop();
   settings.showatmiddle = await askForShowAtMiddle();
   settings.showatbottom = await askForShowAtBottom();
+  settings.showday = await askForShowDay();
   settings.resolution = 60;
   return settings
+}
+
+// Show graph
+async function askForShowDay() {
+  let alert = new Alert();
+  alert.message = t("showday") + "?";
+  alert.addAction(t("today"));
+  alert.addAction(t("tomorrow"));
+  let index = await alert.presentAlert();
+  settings.showday = ["Today","Tomorrow"][index];
+  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  return ["Today","Tomorrow"][index];
 }
 
 // Ask Top
@@ -600,14 +613,19 @@ async function Graph() {
 const smallFont = 10;
 const mediumFont = 12;
 const bigFont = 13.5;
-// Dagens datum
+const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
+
+// Today date
 const todayDateObj = new Date();
 const yyyyToday = todayDateObj.getFullYear();
 const mmToday = String(todayDateObj.getMonth() + 1).padStart(2, '0');
 const ddToday = String(todayDateObj.getDate()).padStart(2, '0');
 const todayStr = `${yyyyToday}-${mmToday}-${ddToday}`;
 
-// Morgondagens datum
+const hour = todayDateObj.getHours();
+const minute = todayDateObj.getMinutes();
+
+// Tomorrow date
 const tomorrowDateObj = new Date(todayDateObj);
 tomorrowDateObj.setDate(tomorrowDateObj.getDate() + 1);
 const yyyyTomorrow = tomorrowDateObj.getFullYear();
@@ -615,24 +633,33 @@ const mmTomorrow = String(tomorrowDateObj.getMonth() + 1).padStart(2, '0');
 const ddTomorrow = String(tomorrowDateObj.getDate()).padStart(2, '0');
 const tomorrowStr = `${yyyyTomorrow}-${mmTomorrow}-${ddTomorrow}`;
 
-// Exempel-URL för idag och imorgon
 const todayUrl = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${todayStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
 const tomorrowUrl = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${tomorrowStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
 
-console.log('Today URL:', todayUrl);
-console.log('Tomorrow URL:', tomorrowUrl);
-const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
-const request = new Request(url);
-request.timeoutInterval = 1;
-let response = (await request.loadJSON());
-let updated = response.updatedAt;
-updated = updated.replace(/\.\d+Z$/, '').replace('T', ' ');
-const day = response.deliveryDateCET;
-let prices = response.multiIndexEntries;
+const requestToday = new Request(todayUrl);
+requestToday.timeoutInterval = 1;
+let responseToday = (await requestToday.loadJSON());
+const todayJSON = JSON.stringify(responseToday, null ,2);
+const todayPath = fm.joinPath(dir, "todayprices.json");
+fm.writeString(todayPath, todayJSON);
+
+const requestTomorrow = new Request(tomorrowUrl);
+requestTomorrow.timeoutInterval = 1;
+let responseTomorrow = (await requestTomorrow.loadJSON());
+const tomorrowJSON = JSON.stringify(responseTomorrow, null ,2);
+const tomorrowPath = fm.joinPath(dir, "tomorrowprices.json");
+fm.writeString(tomorrowPath, tomorrowJSON);
+
+if (settings.showday == "Today") {
+
+let todayUpdated = responseToday.updatedAt;
+todayUpdated = todayUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
+const day = responseToday.deliveryDateCET;
+let pricesToday = responseToday.multiIndexEntries;
 let allValues = [];
 
-for (let i = 0; i < prices.length; i++) {
-  const value = prices[i]["entryPerArea"][`${area}`];
+for (let i = 0; i < pricesToday.length; i++) {
+  const value = pricesToday[i]["entryPerArea"][`${area}`];
   allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
 }
 
@@ -642,6 +669,28 @@ const priceLowest = (Math.min(...pricesJSON.map(Number)));
 const priceHighest = (Math.max(...pricesJSON.map(Number)));
 const priceDiff = (priceHighest - priceLowest)/3;
 const priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
+}
+
+if (settings.showday == "Tomorrow") {
+
+let tomorrowUpdated = responseTomorrow.updatedAt;
+tomorrowUpdated = tomorrowUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
+const day = responseTomorrow.deliveryDateCET;
+let pricesTomorrow = responseTomorrow.multiIndexEntries;
+let allValues = [];
+
+for (let i = 0; i < pricesTomorrow.length; i++) {
+  const value = pricesTomorrow[i]["entryPerArea"][`${area}`];
+  allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
+}
+
+let pricesJSON = JSON.parse(JSON.stringify(allValues));
+  
+const priceLowest = (Math.min(...pricesJSON.map(Number)));
+const priceHighest = (Math.max(...pricesJSON.map(Number)));
+const priceDiff = (priceHighest - priceLowest)/3;
+const priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
+}
 
 let listwidget = new ListWidget();
 

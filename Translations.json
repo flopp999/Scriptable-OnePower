@@ -4,6 +4,16 @@
     "sv": "",
     "de": ""
   },
+  "tomorrow": {
+    "en": "Tomorrow",
+    "sv": "Imorgon",
+    "de": "Tomorrow"
+  },
+  "today": {
+    "en": "Today",
+    "sv": "Idag",
+    "de": "Today"
+  },
   "showday": {
     "en": "What day to show",
     "sv": "Vilken dag ska visas",

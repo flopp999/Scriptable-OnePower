@@ -130,7 +130,7 @@ async function createVariables() {
   includevat = settings.includevat;
   extras = settings.extras;
   language = settings.language;
-  day = settings.showday;
+  showday = settings.showday;
 }
 
 async function readTranslations() {

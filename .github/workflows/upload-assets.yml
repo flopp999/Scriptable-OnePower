@@ -20,6 +20,7 @@ jobs:
       - name: Replace hardcoded URL in Nordpool.js
         run: |
           sed -i 's#https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/#https://github.com/flopp999/Scriptable-NordPool/releases/latest/download/#g' Nordpool.js
+          sed -i 's#FileManager\.iCloud()#FileManager.local()#g' Nordpool.js
 
       - name: Upload assets to release
         uses: softprops/action-gh-release@v1

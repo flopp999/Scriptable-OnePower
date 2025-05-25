@@ -4,10 +4,10 @@
     "sv": "",
     "de": ""
   },
-  "": {
-    "en": "",
-    "sv": "",
-    "de": ""
+  "showday": {
+    "en": "What day to show",
+    "sv": "Vilken dag ska visas",
+    "de": "What day to show"
   },
   "empty": {
     "en": "Empty",

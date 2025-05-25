@@ -51,7 +51,7 @@ async function start() {
   let showdayText = showday == "Today" ? t("today") : t("tomorrow")
   alert.message = 
     t("changesetup") + "?\n" +
-    "Priser för " + showdayText + "\n" +
+    "Priser för: " + showdayText + "\n" +
     t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
     t("withvat") + ": " + vatText + "\n";
@@ -711,7 +711,7 @@ async function createWidget(){
   row.layoutVertically();
   let left = row.addStack();
   left.layoutHorizontally();
-  let whatday = left.addText(day);
+  let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
   whatday.font = Font.lightSystemFont(20);
   let right = left.addStack();

@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.718;
+let version = 0.719
 let area;
 let resolution;
 let currency;
@@ -398,7 +398,7 @@ async function askForExtras() {
 }
 
 async function Table() {
-  if (settings.showtable == "Yes"){
+  
   width = 770;
   let head = listwidget.addStack()
   let stackNames = ["first", "second", "third", "fourth", "fifth"];
@@ -485,11 +485,11 @@ for (let s = 0; s < stackNames.length; s++) {
   }
 
 
-}
+
 
 async function Graph() {
 //chart
-  if (resolution == 60 && settings.showgraph == "Yes") {
+  if (resolution == 60) {
     if ( settings.showattop == "Table" || settings.showatmiddle == "Table" || settings.showatbottom == "Table" ) {
       height = 770
     }

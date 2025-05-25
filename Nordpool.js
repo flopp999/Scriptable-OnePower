@@ -17,7 +17,7 @@ let langId;
 let translationData;
 let currentLang;
 const fileName = Script.name() + "_Settings.json";
-const fm = FileManager.local();
+const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
 let height = 1150;
@@ -130,7 +130,7 @@ async function readTranslations() {
   let path = fm.joinPath(dir, filename);
   fm.writeString(path, content);
   try {
-    const fm = FileManager.local()
+    const fm = FileManager.iCloud()
     const path = fm.joinPath(fm.documentsDirectory(), filename);
     translationData = JSON.parse(fm.readString(path));
     const langMap = {

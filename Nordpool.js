@@ -7,6 +7,7 @@
 let version = 0.721
 let allValues = [];
 let day;
+let date;
 let pricesJSON;
 let priceAvg;
 let priceLowest;
@@ -47,8 +48,10 @@ if (config.runsInWidget){
 async function start() {
   let alert = new Alert();
   let vatText = includevat == 1 ? t("yes") : t("no")
+  let showdayText = showday == "Today" ? t("today") : t("tomorrow")
   alert.message = 
     t("changesetup") + "?\n" +
+    "Priser för " + showdayText + "\n" +
     t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
     t("withvat") + ": " + vatText + "\n";
@@ -127,6 +130,7 @@ async function createVariables() {
   includevat = settings.includevat;
   extras = settings.extras;
   language = settings.language;
+  day = settings.showday;
 }
 
 async function readTranslations() {
@@ -661,7 +665,7 @@ if (settings.showday == "Today") {
 
 let todayUpdated = responseToday.updatedAt;
 updated = todayUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
-day = responseToday.deliveryDateCET;
+date = responseToday.deliveryDateCET;
 let pricesToday = responseToday.multiIndexEntries;
 
 
@@ -682,7 +686,7 @@ if (settings.showday == "Tomorrow") {
 
 let tomorrowUpdated = responseTomorrow.updatedAt;
 updated = tomorrowUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
-day = responseTomorrow.deliveryDateCET;
+date = responseTomorrow.deliveryDateCET;
 let pricesTomorrow = responseTomorrow.multiIndexEntries;
 let allValues = [];
 

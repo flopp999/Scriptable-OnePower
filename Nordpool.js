@@ -5,6 +5,13 @@
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
 let version = 0.721
+let allValues = [];
+let day;
+let pricesJSON;
+let priceAvg;
+let priceLowest;
+let priceHighest;
+let priceDiff;
 let area;
 let resolution;
 let currency;
@@ -653,29 +660,29 @@ fm.writeString(tomorrowPath, tomorrowJSON);
 if (settings.showday == "Today") {
 
 let todayUpdated = responseToday.updatedAt;
-todayUpdated = todayUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
-const day = responseToday.deliveryDateCET;
+updated = todayUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
+day = responseToday.deliveryDateCET;
 let pricesToday = responseToday.multiIndexEntries;
-let allValues = [];
+
 
 for (let i = 0; i < pricesToday.length; i++) {
   const value = pricesToday[i]["entryPerArea"][`${area}`];
   allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
 }
 
-let pricesJSON = JSON.parse(JSON.stringify(allValues));
+pricesJSON = JSON.parse(JSON.stringify(allValues));
   
-const priceLowest = (Math.min(...pricesJSON.map(Number)));
-const priceHighest = (Math.max(...pricesJSON.map(Number)));
-const priceDiff = (priceHighest - priceLowest)/3;
-const priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
+priceLowest = (Math.min(...pricesJSON.map(Number)));
+priceHighest = (Math.max(...pricesJSON.map(Number)));
+priceDiff = (priceHighest - priceLowest)/3;
+priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
 }
 
 if (settings.showday == "Tomorrow") {
 
 let tomorrowUpdated = responseTomorrow.updatedAt;
-tomorrowUpdated = tomorrowUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
-const day = responseTomorrow.deliveryDateCET;
+updated = tomorrowUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
+day = responseTomorrow.deliveryDateCET;
 let pricesTomorrow = responseTomorrow.multiIndexEntries;
 let allValues = [];
 
@@ -686,10 +693,10 @@ for (let i = 0; i < pricesTomorrow.length; i++) {
 
 let pricesJSON = JSON.parse(JSON.stringify(allValues));
   
-const priceLowest = (Math.min(...pricesJSON.map(Number)));
-const priceHighest = (Math.max(...pricesJSON.map(Number)));
-const priceDiff = (priceHighest - priceLowest)/3;
-const priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
+priceLowest = (Math.min(...pricesJSON.map(Number)));
+priceHighest = (Math.max(...pricesJSON.map(Number)));
+priceDiff = (priceHighest - priceLowest)/3;
+priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
 }
 
 let listwidget = new ListWidget();

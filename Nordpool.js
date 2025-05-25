@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.719
+let version = 0.720
 let area;
 let resolution;
 let currency;
@@ -432,7 +432,7 @@ for (let s = 0; s < stackNames.length; s++) {
     for (let a = 0; a < 4; a++) {
       let timeText = timeStack.addText(`${i}:${a === 0 ? "00" : a * 15}`);
       timeText.leftAlignText();
-      if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) { // actual hour and identifies which 15-minute interval (quarter-hour segment) the current time falls into. e.g., 00–14, 15–29, 30–44, or 45–59
+      if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) { // actual hour and identifies which 15-minute interval
         timeText.textColor = new Color("#00ffff");
         timeText.font = Font.lightSystemFont(bigFont);
       } else {
@@ -600,15 +600,28 @@ async function Graph() {
 const smallFont = 10;
 const mediumFont = 12;
 const bigFont = 13.5;
-const date = new Date();
-const yyyy = date.getFullYear();
-const mm = String(date.getMonth() + 1).padStart(2, '0'); // month are indexed from 0
-const dd = String(date.getDate()).padStart(2, '0');
-const formattedDate = `${yyyy}-${mm}-${dd}`;
-const hour = date.getHours();
-const minute = date.getMinutes();
+// Dagens datum
+const todayDateObj = new Date();
+const yyyyToday = todayDateObj.getFullYear();
+const mmToday = String(todayDateObj.getMonth() + 1).padStart(2, '0');
+const ddToday = String(todayDateObj.getDate()).padStart(2, '0');
+const todayStr = `${yyyyToday}-${mmToday}-${ddToday}`;
+
+// Morgondagens datum
+const tomorrowDateObj = new Date(todayDateObj);
+tomorrowDateObj.setDate(tomorrowDateObj.getDate() + 1);
+const yyyyTomorrow = tomorrowDateObj.getFullYear();
+const mmTomorrow = String(tomorrowDateObj.getMonth() + 1).padStart(2, '0');
+const ddTomorrow = String(tomorrowDateObj.getDate()).padStart(2, '0');
+const tomorrowStr = `${yyyyTomorrow}-${mmTomorrow}-${ddTomorrow}`;
+
+// Exempel-URL för idag och imorgon
+const todayUrl = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${todayStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
+const tomorrowUrl = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${tomorrowStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
+
+console.log('Today URL:', todayUrl);
+console.log('Tomorrow URL:', tomorrowUrl);
 const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
-url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${formattedDate}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
 const request = new Request(url);
 request.timeoutInterval = 1;
 let response = (await request.loadJSON());

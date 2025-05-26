@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.738
+let version = 0.739
 let allValues = [];
 let widget;
 let day;
@@ -57,7 +57,8 @@ async function start() {
     t("changesetup") + "?\n" +
     "Top: " + t(settings.showattop) + ", " + t(settings.showattopday) + "\n" +
     "Middle: " + t(settings.showatmiddle) + ", " + t(settings.showatmiddleday) + "\n" +
-    "Bottom: " + t(settings.showatbottom) + ", " + t(settings.showatbottomday) + "\n" +
+//    "Bottom: " + t(settings.showatbottom) + ", " + t(settings.showatbottomday) + "\n" +
+    "Bottom: " + t(settings.showatbottom) + (settings.showatbottomday ? ", " + t(settings.showatbottomday) : "") + "\n";
     t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
     t("withvat") + ": " + vatText + "\n";

@@ -5,19 +5,19 @@
     "de": ""
   },
   "top": {
-    "en": "Top",
-    "sv": "Överst",
-    "de": "Top"
+    "en": "at the top",
+    "sv": "högst upp",
+    "de": "at the top"
   },
   "middle": {
-    "en": "Middle",
-    "sv": "Mitten",
-    "de": "Middle"
+    "en": "in the middle",
+    "sv": "i mitten",
+    "de": "in the middle"
   },
   "bottom": {
-    "en": "Bottom",
-    "sv": "Nederst",
-    "de": "ottom"
+    "en": "at the bottom",
+    "sv": "längst ner",
+    "de": "at the bottom"
   },
   "tomorrow": {
     "en": "Tomorrow",

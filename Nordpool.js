@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.736
+let version = 0.737
 let allValues = [];
 let widget;
 let day;
@@ -55,9 +55,9 @@ async function start() {
   //let showdayText = showday == "Today" ? t("today") : t("tomorrow")
   alert.message = 
     t("changesetup") + "?\n" +
-    "Top: " + t(settings.showattop) + t(settings.showattopday) + "\n" +
-    "Middle: " + t(settings.showatmiddle) + t(settings.showatmiddleday) + "\n" +
-    "Bottom: " + t(settings.showatbottom) + t(settings.showatbottomday) + "\n" +
+    "Top: " + t(settings.showattop) + ", " + t(settings.showattopday) + "\n" +
+    "Middle: " + t(settings.showatmiddle) + ", " + t(settings.showatmiddleday) + "\n" +
+    "Bottom: " + t(settings.showatbottom) + ", " + t(settings.showatbottomday) + "\n" +
     t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
     t("withvat") + ": " + vatText + "\n";
@@ -209,9 +209,9 @@ async function askForShowAtTopDay() {
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));
   let index = await alert.presentAlert();
-  settings.showattopday = ["Today","Tomorrow"][index];
+  settings.showattopday = ["today","tomorrow"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["Today","Tomorrow"][index];
+  return ["today","tomorrow"][index];
 }
 // Show graph
 async function askForShowAtMiddleDay() {
@@ -220,9 +220,9 @@ async function askForShowAtMiddleDay() {
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));
   let index = await alert.presentAlert();
-  settings.showatmiddleday = ["Today","Tomorrow"][index];
+  settings.showatmiddleday = ["today","tomorrow"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["Today","Tomorrow"][index];
+  return ["today","tomorrow"][index];
 }
 
 // Show graph
@@ -232,9 +232,9 @@ async function askForShowAtBottomDay() {
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));
   let index = await alert.presentAlert();
-  settings.showatbottomday = ["Today","Tomorrow"][index];
+  settings.showatbottomday = ["today","tomorrow"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["Today","Tomorrow"][index];
+  return ["today","tomorrow"][index];
 }
 
 // Ask Top
@@ -442,10 +442,10 @@ async function askForExtras() {
 }
 
 async function Table(day) {
-  if (day == "Today") {
+  if (day == "today") {
    await DateToday();
   }
-   if (day == "Tomorrow") {
+   if (day == "tomorrow") {
    await DateTomorrow();
   }
   
@@ -502,7 +502,7 @@ for (let s = 0; s < stackNames.length; s++) {
         timeText.font = Font.lightSystemFont(mediumFont);
       }
       if (allValues.length == 24) {
-        if (i === hour && day == "Today") {
+        if (i === hour && day == "today") {
           timeText.textColor = new Color("#00ffff");
           timeText.font = Font.lightSystemFont(bigFont);
         }
@@ -527,7 +527,7 @@ for (let s = 0; s < stackNames.length; s++) {
         priceText.font = Font.lightSystemFont(mediumFont);
       }
     if (allValues.length == 24) {
-      if (i === hour && day == "Today") {
+      if (i === hour && day == "today") {
         priceText.font = Font.lightSystemFont(bigFont);
       }
     }
@@ -552,10 +552,10 @@ for (let s = 0; s < stackNames.length; s++) {
 
 async function Graph(day) {
 //chart
-    if (day == "Today") {
+    if (day == "today") {
    await DateToday();
   }
-   if (day == "Tomorrow") {
+   if (day == "tomorrow") {
    await DateTomorrow();
   }
   let left = listwidget.addStack();
@@ -585,7 +585,7 @@ async function Graph(day) {
     while (countertoday < 24)
     
     do{
-      if (hour == counterdot && day == "Today") {
+      if (hour == counterdot && day == "today") {
         dotNow += pricesJSON[counterdot] + ","
       }
       else {
@@ -649,10 +649,10 @@ async function Graph(day) {
 }
 
  async function PriceStats(day) {
-  if (day == "Today") {
+  if (day == "today") {
     await DateToday();
   }
-  if (day == "Tomorrow") {
+  if (day == "tomorrow") {
     await DateTomorrow();
   }
   let left = listwidget.addStack();

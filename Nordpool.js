@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.732
+let version = 0.733
 let allValues = [];
 let widget;
 let day;
@@ -52,10 +52,12 @@ if (config.runsInWidget){
 async function start() {
   let alert = new Alert();
   let vatText = includevat == 1 ? t("yes") : t("no")
-  let showdayText = showday == "Today" ? t("today") : t("tomorrow")
+  //let showdayText = showday == "Today" ? t("today") : t("tomorrow")
   alert.message = 
     t("changesetup") + "?\n" +
-    "Priser för: " + showdayText + "\n" +
+    "Top: " + settings.showattop + settings.showattopday + "\n" +
+    "Middle: " + settings.showatmiddle + settings.showatmiddleday + "\n" +
+    "Bottom: " + settings.showatbottom + settings.showatbottomday + "\n" +
     t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
     t("withvat") + ": " + vatText + "\n";
@@ -148,7 +150,7 @@ async function createVariables() {
   includevat = settings.includevat;
   extras = settings.extras;
   language = settings.language;
-  showday = settings.showday;
+  //showday = settings.showday;
 }
 
 async function readTranslations() {
@@ -500,7 +502,7 @@ for (let s = 0; s < stackNames.length; s++) {
         timeText.font = Font.lightSystemFont(mediumFont);
       }
       if (allValues.length == 24) {
-        if (i === hour && showday == "Today") {
+        if (i === hour && day == "Today") {
           timeText.textColor = new Color("#00ffff");
           timeText.font = Font.lightSystemFont(bigFont);
         }
@@ -525,7 +527,7 @@ for (let s = 0; s < stackNames.length; s++) {
         priceText.font = Font.lightSystemFont(mediumFont);
       }
     if (allValues.length == 24) {
-      if (i === hour && showday == "Today") {
+      if (i === hour && day == "Today") {
         priceText.font = Font.lightSystemFont(bigFont);
       }
     }
@@ -542,6 +544,7 @@ for (let s = 0; s < stackNames.length; s++) {
     }
   }
 }
+  listwidget.addSpacer(5);
   }
 
 
@@ -555,15 +558,15 @@ async function Graph(day) {
    if (day == "Tomorrow") {
    await DateTomorrow();
   }
-  let left = row.addStack();
-  left.layoutHorizontally();
+  let left = listwidget.addStack();
+  //left.layoutHorizontally();
   let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
   whatday.font = Font.lightSystemFont(13);
-  let right = left.addStack();
-  right.layoutVertically();
-  let update = right.addStack();
-  update.addSpacer();
+  //let right = left.addStack();
+  //right.layoutVertically();
+  //let update = right.addStack();
+  left.addSpacer();
   let updatetext = update.addText(t("updated") + updated);
   updatetext.font = Font.lightSystemFont(13);
   updatetext.textColor = new Color("#ffffff");
@@ -582,7 +585,7 @@ async function Graph(day) {
     while (countertoday < 24)
     
     do{
-      if (hour == counterdot && showday == "Today") {
+      if (hour == counterdot && day == "Today") {
         dotNow += pricesJSON[counterdot] + ","
       }
       else {
@@ -638,20 +641,21 @@ async function Graph(day) {
     }")
     const GRAPH = await new Request(graphtoday).loadImage()
     let emptyrow = listwidget.addStack()
-    listwidget.addSpacer(10)
+    listwidget.addSpacer(5)
     let chart = listwidget.addStack()
     chart.addImage(GRAPH) 
   }
+  listwidget.addSpacer(5);
 }
 
  async function PriceStats(day) {
-     if (day == "Today") {
-   await DateToday();
+  if (day == "Today") {
+    await DateToday();
   }
-   if (day == "Tomorrow") {
-   await DateTomorrow();
+  if (day == "Tomorrow") {
+    await DateTomorrow();
   }
-   let left = row.addStack();
+  let left = listwidget.addStack();
   left.layoutHorizontally();
   let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
@@ -693,6 +697,7 @@ async function Graph(day) {
   let highesttext = bottom.addText(`${priceHighestRound}`);
   highesttext.font = Font.lightSystemFont(11);
   highesttext.textColor = new Color("#fa60ff");
+  listwidget.addSpacer(5);
   }
 
 
@@ -835,13 +840,12 @@ async function createWidget(){
     await Graph(settings.showatbottomday);
   }
   
-  
   let moms = listwidget.addStack();
-  moms.addSpacer();
+  //moms.addSpacer();
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
-  moms.addSpacer();
+  moms.addSpacer(120);
   momstext = moms.addText(area);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
@@ -860,8 +864,6 @@ async function createWidget(){
   momstext.textColor = new Color("#ffffff");
 return listwidget
 }
-
-
 
 widget = await createWidget();
 

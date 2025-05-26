@@ -727,6 +727,7 @@ async function createWidgetNodata(){
   return listwidget
 }
 async function createWidget(){
+  await DateToday();
   listwidget.backgroundColor = new Color("#000000");
   let row = listwidget.addStack();
   row.layoutVertically();

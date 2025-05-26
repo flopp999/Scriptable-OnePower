@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.725
+let version = 0.726
 let allValues = [];
 let widget;
 let day;
@@ -12,9 +12,13 @@ let date;
 let pricesJSON;
 let pricesJSONToday;
 let pricesJSONTomorrow;
-let priceAvg;
-let priceLowest;
-let priceHighest;
+let priceAvgToday;
+let priceLowestToday;
+let priceHighestToday;
+let priceDiffToday;
+let priceAvgTomorrow;
+let priceLowestTomorrow;
+let priceHighestTomorrow;
 let priceDiff;
 let area;
 let resolution;
@@ -436,6 +440,12 @@ async function askForExtras() {
 }
 
 async function Table(day) {
+  pricesJSON = pricesJSON+day
+  priceAvgToday = priceAvg+day;
+  priceLowestToday = priceLowest+day;
+  priceHighestToday = priceHighest+day;
+  priceDiffToday = priceDiff+day;
+
   
   width = 770;
   let head = listwidget.addStack()
@@ -692,10 +702,10 @@ if (settings.showday == "Today") {
   
   pricesJSONToday = JSON.parse(JSON.stringify(allValues));
     
-  priceLowest = (Math.min(...pricesJSONToday.map(Number)));
-  priceHighest = (Math.max(...pricesJSONToday.map(Number)));
-  priceDiff = (priceHighest - priceLowest)/3;
-  priceAvg = pricesJSONToday.map(Number).reduce((a, b) => a + b, 0) / pricesJSONToday.length;
+  priceLowestToday = (Math.min(...pricesJSONToday.map(Number)));
+  priceHighestToday = (Math.max(...pricesJSONToday.map(Number)));
+  priceDiffToday = (priceHighest - priceLowest)/3;
+  priceAvgToday = pricesJSONToday.map(Number).reduce((a, b) => a + b, 0) / pricesJSONToday.length;
 }
 
 if (settings.showday == "Tomorrow") {
@@ -712,10 +722,10 @@ if (settings.showday == "Tomorrow") {
   
   pricesJSONTomorrow = JSON.parse(JSON.stringify(allValues));
     
-  priceLowest = (Math.min(...pricesJSONTomorrow.map(Number)));
-  priceHighest = (Math.max(...pricesJSONTomorrow.map(Number)));
-  priceDiff = (priceHighest - priceLowest)/3;
-  priceAvg = pricesJSONTomorrow.map(Number).reduce((a, b) => a + b, 0) / pricesJSONTomorrow.length;
+  priceLowestTomorrow = (Math.min(...pricesJSONTomorrow.map(Number)));
+  priceHighestTomorrow = (Math.max(...pricesJSONTomorrow.map(Number)));
+  priceDiffTomorrow = (priceHighest - priceLowest)/3;
+  priceAvgv = pricesJSONTomorrow.map(Number).reduce((a, b) => a + b, 0) / pricesJSONTomorrow.length;
 }
 
 let listwidget = new ListWidget();
@@ -772,27 +782,27 @@ async function createWidget(){
   momstext.textColor = new Color("#ffffff");
 
 
-  const functionMap = {
-  Table: Table,
-  PriceStats: PriceStats,
-  Graph: Graph
-};
+  //const functionMap = {
+  //Table: Table,
+  //PriceStats: PriceStats,
+  //Graph: Graph
+//};
 
 // Lista på inställningar och deras nuvarande värden
-const positions = [
-  settings.showattop,
-  settings.showatmiddle,
-  settings.showatbottom
-];
+//const positions = [
+  //settings.showattop,
+  //settings.showatmiddle,
+  //settings.showatbottom
+//];
 
 // Loopa igenom och kör rätt funktion om den finns i functionMap
-for (let value of positions) {
-  const func = functionMap[value];
-  if (func) {
-    log("a");
+//for (let value of positions) {
+  //const func = functionMap[value];
+  //if (func) {
+    //log("a");
     //await func(); // Anropa funktionen asynkront
-  }
-}
+  //}
+//}
   //return listwidget
 
   if (settings.showattop == "Table") {
@@ -825,7 +835,7 @@ for (let value of positions) {
   
   
   
-//return listwidget
+return listwidget
 }
 
 

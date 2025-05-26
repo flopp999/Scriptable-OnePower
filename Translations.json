@@ -19,10 +19,10 @@
     "sv": "Vilken dag ska visas",
     "de": "What day to show"
   },
-  "empty": {
-    "en": "Empty",
-    "sv": "Tom",
-    "de": "Empty"
+  "nothing": {
+    "en": "Nothing",
+    "sv": "Inget",
+    "de": "Nothing"
   },
   "pricestats": {
     "en": "Price Stats",

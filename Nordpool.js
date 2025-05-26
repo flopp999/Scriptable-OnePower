@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.731
+let version = 0.732
 let allValues = [];
 let widget;
 let day;
@@ -447,17 +447,17 @@ async function Table(day) {
    await DateTomorrow();
   }
   
-  let left = row.addStack();
+  let left = listwidget.addStack();
   left.layoutHorizontally();
   let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
-  whatday.font = Font.lightSystemFont(20);
+  whatday.font = Font.lightSystemFont(13);
   let right = left.addStack();
   right.layoutVertically();
   let update = right.addStack();
   update.addSpacer();
   let updatetext = update.addText(t("updated") + updated);
-  updatetext.font = Font.lightSystemFont(10);
+  updatetext.font = Font.lightSystemFont(13);
   updatetext.textColor = new Color("#ffffff");
   
   let head = listwidget.addStack()
@@ -559,13 +559,13 @@ async function Graph(day) {
   left.layoutHorizontally();
   let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
-  whatday.font = Font.lightSystemFont(20);
+  whatday.font = Font.lightSystemFont(13);
   let right = left.addStack();
   right.layoutVertically();
   let update = right.addStack();
   update.addSpacer();
   let updatetext = update.addText(t("updated") + updated);
-  updatetext.font = Font.lightSystemFont(10);
+  updatetext.font = Font.lightSystemFont(13);
   updatetext.textColor = new Color("#ffffff");
   if (resolution == 60) {
     //if ( settings.showattop == "Table" || settings.showatmiddle == "Table" || settings.showatbottom == "Table" ) {
@@ -655,13 +655,13 @@ async function Graph(day) {
   left.layoutHorizontally();
   let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
-  whatday.font = Font.lightSystemFont(20);
+  whatday.font = Font.lightSystemFont(13);
   let right = left.addStack();
   right.layoutVertically();
   let update = right.addStack();
   update.addSpacer();
   let updatetext = update.addText(t("updated") + updated);
-  updatetext.font = Font.lightSystemFont(10);
+  updatetext.font = Font.lightSystemFont(13);
   updatetext.textColor = new Color("#ffffff");
   let bottom = listwidget.addStack();
   // lowest
@@ -836,7 +836,7 @@ async function createWidget(){
   }
   
   
-  let moms = right.addStack();
+  let moms = listwidget.addStack();
   moms.addSpacer();
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);

@@ -758,7 +758,29 @@ async function createWidget(){
   }
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
-  
+
+
+  const functionMap = {
+  Table: Table,
+  PriceStats: PriceStats,
+  Graph: Graph
+};
+
+// Lista på inställningar och deras nuvarande värden
+const positions = [
+  settings.showattop,
+  settings.showatmiddle,
+  settings.showatbottom
+];
+
+// Loopa igenom och kör rätt funktion om den finns i functionMap
+for (let value of positions) {
+  const func = functionMap[value];
+  if (func) {
+    await func(); // Anropa funktionen asynkront
+  }
+}
+  return listwidget
 
   if (settings.showattop == "Table") {
     await Table();
@@ -790,7 +812,7 @@ async function createWidget(){
   
   
   
-return listwidget
+//return listwidget
 }
 
 

@@ -211,7 +211,7 @@ async function ask() {
 // Show graph
 async function askForShowAtTopDay() {
   let alert = new Alert();
-  alert.message = ("What day on top?");
+  alert.message = t("showday") + "?";
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));
   let index = await alert.presentAlert();

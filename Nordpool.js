@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.735
+let version = 0.736
 let allValues = [];
 let widget;
 let day;
@@ -432,7 +432,7 @@ async function askForExtras() {
   let alert = new Alert();
   alert.title = t("extraelectricitycost");
   alert.message = (t("enterextra") + `${settings.currency}`);
-  alert.addTextField("e.g. 0.30","0").setDecimalPadKeyboard();
+  alert.addTextField("e.g. 0.30",settings.extras).setDecimalPadKeyboard();
   alert.addAction("OK");
   await alert.present();
   let input = alert.textFieldValue(0);

@@ -794,9 +794,9 @@ return listwidget
 
 
 if (pricesJSON.length == 0); {
-  let widget = await createWidgetNodata();
+  widget = await createWidgetNodata();
 } else {
-let widget = await createWidget();
+widget = await createWidget();
 }
 if (config.runsInWidget) {
   Script.setWidget(widget);

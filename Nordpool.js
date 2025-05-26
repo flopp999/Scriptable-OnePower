@@ -688,45 +688,6 @@ const tomorrowJSON = JSON.stringify(responseTomorrow, null ,2);
 const tomorrowPath = fm.joinPath(dir, "tomorrowprices.json");
 fm.writeString(tomorrowPath, tomorrowJSON);
 
-if (settings.showday == "Today") {
-  
-  let todayUpdated = responseToday.updatedAt;
-  updated = todayUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
-  date = responseToday.deliveryDateCET;
-  let pricesToday = responseToday.multiIndexEntries;
-  
-  for (let i = 0; i < pricesToday.length; i++) {
-    const value = pricesToday[i]["entryPerArea"][`${area}`];
-    allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
-  }
-  
-  pricesJSONToday = JSON.parse(JSON.stringify(allValues));
-    
-  priceLowestToday = (Math.min(...pricesJSONToday.map(Number)));
-  priceHighestToday = (Math.max(...pricesJSONToday.map(Number)));
-  priceDiffToday = (priceHighest - priceLowest)/3;
-  priceAvgToday = pricesJSONToday.map(Number).reduce((a, b) => a + b, 0) / pricesJSONToday.length;
-}
-
-if (settings.showday == "Tomorrow") {
-  
-  let tomorrowUpdated = responseTomorrow.updatedAt;
-  updated = tomorrowUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
-  date = responseTomorrow.deliveryDateCET;
-  let pricesTomorrow = responseTomorrow.multiIndexEntries;
-  
-  for (let i = 0; i < pricesTomorrow.length; i++) {
-    const value = pricesTomorrow[i]["entryPerArea"][`${area}`];
-    allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
-  }
-  
-  pricesJSONTomorrow = JSON.parse(JSON.stringify(allValues));
-    
-  priceLowestTomorrow = (Math.min(...pricesJSONTomorrow.map(Number)));
-  priceHighestTomorrow = (Math.max(...pricesJSONTomorrow.map(Number)));
-  priceDiffTomorrow = (priceHighest - priceLowest)/3;
-  priceAvgv = pricesJSONTomorrow.map(Number).reduce((a, b) => a + b, 0) / pricesJSONTomorrow.length;
-}
 
 let listwidget = new ListWidget();
 

@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.740
+let version = 0.741
 let allValues = [];
 let widget;
 let day;
@@ -503,6 +503,14 @@ for (let s = 0; s < stackNames.length; s++) {
     for (let a = 0; a < 4; a++) {
       let timeText = timeStack.addText(`${i}:${a === 0 ? "00" : a * 15}`);
       timeText.leftAlignText();
+      if (allValues.length == 24) {
+        if (i === hour && day == "today") {
+          timeText.textColor = new Color("#00ffff");
+          timeText.font = Font.lightSystemFont(bigFont);
+        }
+        timeText.font = Font.lightSystemFont(mediumFont);
+        break
+      }
       if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) { // actual hour and identifies which 15-minute interval
         timeText.textColor = new Color("#00ffff");
         timeText.font = Font.lightSystemFont(bigFont);
@@ -510,13 +518,7 @@ for (let s = 0; s < stackNames.length; s++) {
         timeText.textColor = new Color("#ffffff");
         timeText.font = Font.lightSystemFont(mediumFont);
       }
-      if (allValues.length == 24) {
-        if (i === hour && day == "today") {
-          timeText.textColor = new Color("#00ffff");
-          timeText.font = Font.lightSystemFont(bigFont);
-        }
-      break
-      }
+
     }
   }
 
@@ -555,9 +557,6 @@ for (let s = 0; s < stackNames.length; s++) {
 }
   listwidget.addSpacer(5);
   }
-
-
-
 
 async function Graph(day) {
 //chart

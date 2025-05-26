@@ -438,10 +438,10 @@ async function askForExtras() {
 
 async function Table(day) {
   if (day == "Today") {
-   DateToday;
+   await DateToday();
   }
    if (day == "Tomorrow") {
-   DateTomorrow;
+   await DateTomorrow();
   }
   
   
@@ -533,8 +533,14 @@ for (let s = 0; s < stackNames.length; s++) {
 
 
 
-async function Graph() {
+async function Graph(day) {
 //chart
+    if (day == "Today") {
+   await DateToday();
+  }
+   if (day == "Tomorrow") {
+   await DateTomorrow();
+  }
   if (resolution == 60) {
     if ( settings.showattop == "Table" || settings.showatmiddle == "Table" || settings.showatbottom == "Table" ) {
       height = 770
@@ -612,7 +618,13 @@ async function Graph() {
   }
 }
 
- async function PriceStats() {
+ async function PriceStats(day) {
+     if (day == "Today") {
+   await DateToday();
+  }
+   if (day == "Tomorrow") {
+   await DateTomorrow();
+  }
   let bottom = listwidget.addStack();
   // lowest
   let lowest = bottom.addText(t("lowest"));
@@ -653,6 +665,7 @@ const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 
 // Today date
 async function DateToday() {
+  allValues = [];
   const todayDateObj = new Date();
   const yyyyToday = todayDateObj.getFullYear();
   const mmToday = String(todayDateObj.getMonth() + 1).padStart(2, '0');
@@ -683,8 +696,8 @@ async function DateToday() {
 }
 // Tomorrow date
 async function DateTomorrow() { 
-  
-  const tomorrowDateObj = new Date(todayDateObj);
+  allValues = [];
+  const tomorrowDateObj = new Date();
   tomorrowDateObj.setDate(tomorrowDateObj.getDate() + 1);
   const yyyyTomorrow = tomorrowDateObj.getFullYear();
   const mmTomorrow = String(tomorrowDateObj.getMonth() + 1).padStart(2, '0');
@@ -697,10 +710,10 @@ async function DateTomorrow() {
   const tomorrowJSON = JSON.stringify(responseTomorrow, null ,2);
   const tomorrowPath = fm.joinPath(dir, "tomorrowprices.json");
   fm.writeString(tomorrowPath, tomorrowJSON);
-  date = responseToday.deliveryDateCET;  
-  prices = responseToday.multiIndexEntries;
-  let todayUpdated = responseToday.updatedAt;
-  updated = todayUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
+  date = responseTomorrow.deliveryDateCET;  
+  prices = responseTomorrow.multiIndexEntries;
+  let tomorrowUpdated = responseTomorrow.updatedAt;
+  updated = tomorrowUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
   for (let i = 0; i < prices.length; i++) {
     const value = prices[i]["entryPerArea"][`${area}`];
     allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));

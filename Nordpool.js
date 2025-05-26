@@ -707,6 +707,18 @@ priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length
 
 let listwidget = new ListWidget();
 
+async function createWidgetNodata(){
+  listwidget.backgroundColor = new Color("#000000");
+  let row = listwidget.addStack();
+  row.layoutVertically();
+  let Nodata = row.addText("Could not get data.");
+  Nodata.textColor = new Color("#ffffff");
+  Nodata.font = Font.lightSystemFont(20);
+  let Nodata2 = row.addText("Tomorrow prices is available from 13:00");
+  Nodata2.font = Font.lightSystemFont(10);
+  Nodata2.textColor = new Color("#ffffff");
+  return listwidget
+}
 async function createWidget(){
   listwidget.backgroundColor = new Color("#000000");
   let row = listwidget.addStack();
@@ -781,9 +793,11 @@ return listwidget
 }
 
 
-
+if (pricesJSON.length == 0); {
+  let widget = await createWidgetNodata();
+} else {
 let widget = await createWidget();
-
+}
 if (config.runsInWidget) {
   Script.setWidget(widget);
 } else {

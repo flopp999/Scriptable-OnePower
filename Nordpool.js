@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.733
+let version = 0.735
 let allValues = [];
 let widget;
 let day;
@@ -55,9 +55,9 @@ async function start() {
   //let showdayText = showday == "Today" ? t("today") : t("tomorrow")
   alert.message = 
     t("changesetup") + "?\n" +
-    "Top: " + settings.showattop + settings.showattopday + "\n" +
-    "Middle: " + settings.showatmiddle + settings.showatmiddleday + "\n" +
-    "Bottom: " + settings.showatbottom + settings.showatbottomday + "\n" +
+    "Top: " + t(settings.showattop) + t(settings.showattopday) + "\n" +
+    "Middle: " + t(settings.showatmiddle) + t(settings.showatmiddleday) + "\n" +
+    "Bottom: " + t(settings.showatbottom) + t(settings.showatbottomday) + "\n" +
     t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
     t("withvat") + ": " + vatText + "\n";
@@ -246,9 +246,9 @@ async function askForShowAtTop() {
   alert.addAction(t("pricestats"));
   alert.addAction(t("empty"));
   let index = await alert.presentAlert();
-  settings.showattop = ["Graph","Table","PriceStats","Empty"][index];
+  settings.showattop = ["graph","table","pricestats","empty"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["Graph","Table","PriceStats","Empty"][index];
+  return ["graph","table","pricestats","empty"][index];
 }
 
 // Ask Top
@@ -260,9 +260,9 @@ async function askForShowAtMiddle() {
   alert.addAction(t("pricestats"));
   alert.addAction(t("empty"));
   let index = await alert.presentAlert();
-  settings.showatmiddle = ["Graph","Table","PriceStats","Empty"][index];
+  settings.showatmiddle = ["graph","table","pricestats","empty"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["Graph","Table","PriceStats","Empty"][index];
+  return ["graph","table","pricestats","empty"][index];
 }
 // Ask Top
 async function askForShowAtBottom() {
@@ -273,9 +273,9 @@ async function askForShowAtBottom() {
   alert.addAction(t("pricestats"));
   alert.addAction(t("empty"));
   let index = await alert.presentAlert();
-  settings.showatbottom = ["Graph","Table","PriceStats","Empty"][index];
+  settings.showatbottom = ["graph","table","pricestats","empty"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["Graph","Table","PriceStats","Empty"][index];
+  return ["graph","table","pricestats","empty"][index];
 }
 
 // Select resolution
@@ -567,7 +567,7 @@ async function Graph(day) {
   //right.layoutVertically();
   //let update = right.addStack();
   left.addSpacer();
-  let updatetext = update.addText(t("updated") + updated);
+  let updatetext = left.addText(t("updated") + updated);
   updatetext.font = Font.lightSystemFont(13);
   updatetext.textColor = new Color("#ffffff");
   if (resolution == 60) {
@@ -812,31 +812,31 @@ async function createWidget(){
 //}
   //return listwidget
 
-  if (settings.showattop == "Table") {
+  if (settings.showattop == "table") {
     await Table(settings.showattopday);
   }
-   else if (settings.showattop == "PriceStats") {
+   else if (settings.showattop == "pricestats") {
     await PriceStats(settings.showattopday);
   }
-   else if (settings.showattop == "Graph") {
+   else if (settings.showattop == "graph") {
     await Graph(settings.showattopday);
   }
-  if (settings.showatmiddle == "Table") {
+  if (settings.showatmiddle == "table") {
     await Table(settings.showatmiddleday);
   }
-   else if (settings.showatmiddle == "PriceStats") {
+   else if (settings.showatmiddle == "pricestats") {
     await PriceStats(settings.showatmiddleday);
   }
-   else if (settings.showatmiddle == "Graph") {
+   else if (settings.showatmiddle == "graph") {
     await Graph(settings.showatmiddleday);
   }
-  if (settings.showatbottom == "Table") {
+  if (settings.showatbottom == "table") {
     await Table(settings.showatbottomday);
   }
-   else if (settings.showatbottom == "PriceStats") {
+   else if (settings.showatbottom == "pricestats") {
     await PriceStats(settings.showatbottomday);
   }
-   else if (settings.showatbottom == "Graph") {
+   else if (settings.showatbottom == "graph") {
     await Graph(settings.showatbottomday);
   }
   

@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.724
+let version = 0.725
 let allValues = [];
 let widget;
 let day;
@@ -76,9 +76,22 @@ try {
     const serverVersion = await req.loadString()
     if (version < serverVersion) {
       try {
+
         const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
-        const codeString = await req.loadString();
+        const response = await req.load(); // laddar utan att direkt kasta fel
+        const status = req.response.statusCode;
+
+        if (status !== 200) {
+          throw new Error(`Fel: HTTP ${status}`);
+        }
+
+        const codeString = response.toRawString(); // eller response.toString()
         fm.writeString(module.filename, codeString);
+
+        
+        //const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
+        //const codeString = await req.loadString();
+        //fm.writeString(module.filename, codeString);
         let updateNotify = new Notification();
         updateNotify.title = Script.name();
         updateNotify.body = "New version installed";

@@ -57,8 +57,7 @@ async function start() {
     t("changesetup") + "?\n" +
     "Top: " + t(settings.showattop) + ", " + t(settings.showattopday) + "\n" +
     "Middle: " + t(settings.showatmiddle) + ", " + t(settings.showatmiddleday) + "\n" +
-//    "Bottom: " + t(settings.showatbottom) + ", " + t(settings.showatbottomday) + "\n" +
-    "Bottom: " + t(settings.showatbottom) + (settings.showatbottomday ? ", " + t(settings.showatbottomday) : "") + "\n";
+    "Bottom: " + t(settings.showatbottom) + (settings.showatbottomday ? ", " + t(settings.showatbottomday) : "") + "\n" +
     t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
     t("withvat") + ": " + vatText + "\n";

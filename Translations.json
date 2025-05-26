@@ -4,6 +4,21 @@
     "sv": "",
     "de": ""
   },
+  "top": {
+    "en": "Top",
+    "sv": "Överst",
+    "de": "Top"
+  },
+  "middle": {
+    "en": "Middle",
+    "sv": "Mitten",
+    "de": "Middle"
+  },
+  "bottom": {
+    "en": "Bottom",
+    "sv": "Nederst",
+    "de": "ottom"
+  },
   "tomorrow": {
     "en": "Tomorrow",
     "sv": "Imorgon",

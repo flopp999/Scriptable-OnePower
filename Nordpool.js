@@ -668,7 +668,7 @@ async function DateToday() {
   const todayPath = fm.joinPath(dir, "todayprices.json");
   fm.writeString(todayPath, todayJSON);
   date = responseToday.deliveryDateCET;  
-  prices = response.multiIndexEntries;
+  prices = responseToday.multiIndexEntries;
   let todayUpdated = responseToday.updatedAt;
   updated = todayUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
   for (let i = 0; i < prices.length; i++) {
@@ -698,7 +698,7 @@ async function DateTomorrow() {
   const tomorrowPath = fm.joinPath(dir, "tomorrowprices.json");
   fm.writeString(tomorrowPath, tomorrowJSON);
   date = responseToday.deliveryDateCET;  
-  prices = response.multiIndexEntries;
+  prices = responseToday.multiIndexEntries;
   let todayUpdated = responseToday.updatedAt;
   updated = todayUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
   for (let i = 0; i < prices.length; i++) {

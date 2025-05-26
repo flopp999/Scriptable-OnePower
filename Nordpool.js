@@ -4,8 +4,9 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.721
+let version = 0.722
 let allValues = [];
+let widget;
 let day;
 let date;
 let pricesJSON;
@@ -793,7 +794,7 @@ return listwidget
 }
 
 
-if (pricesJSON.length == 0); {
+if (pricesJSON.length == 0) {
   widget = await createWidgetNodata();
 } else {
 widget = await createWidget();

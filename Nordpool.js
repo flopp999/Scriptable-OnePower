@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.737
+let version = 0.738
 let allValues = [];
 let widget;
 let day;
@@ -186,17 +186,23 @@ async function ask() {
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
   settings.showattop = await askForShowAtTop();
-  if (settings.showattop != "Empty") {
+  if (settings.showattop != "nothing") {
     settings.showattopday = await askForShowAtTopDay();
+  } else {
+    settings.showattopday = ""
   }
   settings.showatmiddle = await askForShowAtMiddle();
-  if (settings.showatmiddle != "Empty") {
-  settings.showatmiddleday = await askForShowAtMiddleDay();
+  if (settings.showatmiddle != "nothing") {
+    settings.showatmiddleday = await askForShowAtMiddleDay();
+  } else {
+    settings.showatmiddleday = ""
   }
   settings.showatbottom = await askForShowAtBottom();
-    if (settings.showatbottom != "Empty") {
-  settings.showatbottomday = await askForShowAtBottomDay();
-    }//settings.showday = await askForShowDay();
+  if (settings.showatbottom != "nothing") {
+    settings.showatbottomday = await askForShowAtBottomDay();
+  } else {
+    settings.showatbottomday = ""
+  }
   settings.resolution = 60;
   return settings
 }
@@ -244,11 +250,11 @@ async function askForShowAtTop() {
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));
-  alert.addAction(t("empty"));
+  alert.addAction(t("nothing"));
   let index = await alert.presentAlert();
-  settings.showattop = ["graph","table","pricestats","empty"][index];
+  settings.showattop = ["graph","table","pricestats","nothing"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["graph","table","pricestats","empty"][index];
+  return ["graph","table","pricestats","nothing"][index];
 }
 
 // Ask Top
@@ -258,11 +264,11 @@ async function askForShowAtMiddle() {
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));
-  alert.addAction(t("empty"));
+  alert.addAction(t("nothing"));
   let index = await alert.presentAlert();
-  settings.showatmiddle = ["graph","table","pricestats","empty"][index];
+  settings.showatmiddle = ["graph","table","pricestats","nothing"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["graph","table","pricestats","empty"][index];
+  return ["graph","table","pricestats","nothing"][index];
 }
 // Ask Top
 async function askForShowAtBottom() {
@@ -271,11 +277,11 @@ async function askForShowAtBottom() {
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));
-  alert.addAction(t("empty"));
+  alert.addAction(t("nothing"));
   let index = await alert.presentAlert();
-  settings.showatbottom = ["graph","table","pricestats","empty"][index];
+  settings.showatbottom = ["graph","table","pricestats","nothing"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["graph","table","pricestats","empty"][index];
+  return ["graph","table","pricestats","nothing"][index];
 }
 
 // Select resolution
@@ -432,7 +438,7 @@ async function askForExtras() {
   let alert = new Alert();
   alert.title = t("extraelectricitycost");
   alert.message = (t("enterextra") + `${settings.currency}`);
-  alert.addTextField("e.g. 0.30",settings.extras).setDecimalPadKeyboard();
+  alert.addTextField("e.g. 0.30",String(settings.extras ?? "0")).setDecimalPadKeyboard();
   alert.addAction("OK");
   await alert.present();
   let input = alert.textFieldValue(0);

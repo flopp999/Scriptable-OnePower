@@ -211,6 +211,7 @@ async function ask() {
 // Show graph
 async function askForShowAtTopDay() {
   let alert = new Alert();
+  alert.title = t("top")
   alert.message = t("showday") + "?";
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));
@@ -222,7 +223,8 @@ async function askForShowAtTopDay() {
 // Show graph
 async function askForShowAtMiddleDay() {
   let alert = new Alert();
-  alert.message = ("What day on middle?");
+  alert.title = t("middle")
+  alert.message = t("showday") + "?";
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));
   let index = await alert.presentAlert();
@@ -234,7 +236,8 @@ async function askForShowAtMiddleDay() {
 // Show graph
 async function askForShowAtBottomDay() {
   let alert = new Alert();
-  alert.message = ("What day on bottom?");
+  alert.title = t("bottom")
+  alert.message = t("showday") + "?";
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));
   let index = await alert.presentAlert();

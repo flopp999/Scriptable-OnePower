@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.741
+let version = 0.742
 let allValues = [];
 let widget;
 let day;
@@ -55,9 +55,9 @@ async function start() {
   //let showdayText = showday == "Today" ? t("today") : t("tomorrow")
   alert.message = 
     t("changesetup") + "?\n" +
-    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ": " + t(settings.showattop) + ", " + t(settings.showattopday) + "\n" +
-    t("middle") + ": " + t(settings.showatmiddle) + ", " + t(settings.showatmiddleday) + "\n" +
-    t("bottom") + ": " + t(settings.showatbottom) + (settings.showatbottomday ? ", " + t(settings.showatbottomday) : "") + "\n" +
+    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(settings.showattop) + ", " + t(settings.showattopday) + "\n" +
+    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(settings.showatmiddle) + ", " + t(settings.showatmiddleday) + "\n" +
+    t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(settings.showatbottom) + (settings.showatbottomday ? ", " + t(settings.showatbottomday) : "") + "\n" +
     t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
     t("withvat") + ": " + vatText + "\n";
@@ -236,7 +236,7 @@ async function askForShowAtMiddleDay() {
 // Show graph
 async function askForShowAtBottomDay() {
   let alert = new Alert();
-  alert.title = t("bottom")
+  alert.title = t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1)
   alert.message = t("showday") + "?";
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));

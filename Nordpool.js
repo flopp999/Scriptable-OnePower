@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.730
+let version = 0.731
 let allValues = [];
 let widget;
 let day;
@@ -183,15 +183,18 @@ async function ask() {
   [settings.area, settings.vat, settings.currency] = await askForArea();
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
-  //settings.showgraph = await askForShowGraph();
-  //settings.showtable = await askForShowTable();
   settings.showattop = await askForShowAtTop();
-  settings.showattopday = await askForShowAtTopDay();
+  if (!settings.showattop == "Empty") {
+    settings.showattopday = await askForShowAtTopDay();
+  }
   settings.showatmiddle = await askForShowAtMiddle();
+  if (!settings.showatmiddle == "Empty") {
   settings.showatmiddleday = await askForShowAtMiddleDay();
+  }
   settings.showatbottom = await askForShowAtBottom();
+    if (!settings.showatbottom == "Empty") {
   settings.showatbottomday = await askForShowAtBottomDay();
-  //settings.showday = await askForShowDay();
+    }//settings.showday = await askForShowDay();
   settings.resolution = 60;
   return settings
 }

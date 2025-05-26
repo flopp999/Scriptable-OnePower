@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.739
+let version = 0.740
 let allValues = [];
 let widget;
 let day;
@@ -55,9 +55,9 @@ async function start() {
   //let showdayText = showday == "Today" ? t("today") : t("tomorrow")
   alert.message = 
     t("changesetup") + "?\n" +
-    "Top: " + t(settings.showattop) + ", " + t(settings.showattopday) + "\n" +
-    "Middle: " + t(settings.showatmiddle) + ", " + t(settings.showatmiddleday) + "\n" +
-    "Bottom: " + t(settings.showatbottom) + (settings.showatbottomday ? ", " + t(settings.showatbottomday) : "") + "\n" +
+    t("top") + ": " + t(settings.showattop) + ", " + t(settings.showattopday) + "\n" +
+    t("middle") + ": " + t(settings.showatmiddle) + ", " + t(settings.showatmiddleday) + "\n" +
+    t("bottom") + ": " + t(settings.showatbottom) + (settings.showatbottomday ? ", " + t(settings.showatbottomday) : "") + "\n" +
     t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
     t("withvat") + ": " + vatText + "\n";
@@ -246,7 +246,7 @@ async function askForShowAtBottomDay() {
 // Ask Top
 async function askForShowAtTop() {
   let alert = new Alert();
-  alert.message = t("showwhat") + "at top?";
+  alert.message = t("showwhat") + t("top") + "?";
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));
@@ -260,7 +260,7 @@ async function askForShowAtTop() {
 // Ask Top
 async function askForShowAtMiddle() {
   let alert = new Alert();
-  alert.message = t("showwhat") + "in the middle?";
+  alert.message = t("showwhat") + t("middle") + "?";
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));
@@ -273,7 +273,7 @@ async function askForShowAtMiddle() {
 // Ask Top
 async function askForShowAtBottom() {
   let alert = new Alert();
-  alert.message = t("showwhat") + "at the bottom?";
+  alert.message = t("showwhat") + t("bottom") + "?";
   alert.addAction(t("graph"));
   alert.addAction(t("table"));
   alert.addAction(t("pricestats"));

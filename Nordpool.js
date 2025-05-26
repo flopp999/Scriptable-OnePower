@@ -55,7 +55,7 @@ async function start() {
   //let showdayText = showday == "Today" ? t("today") : t("tomorrow")
   alert.message = 
     t("changesetup") + "?\n" +
-    t("top") + ": " + t(settings.showattop) + ", " + t(settings.showattopday) + "\n" +
+    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ": " + t(settings.showattop) + ", " + t(settings.showattopday) + "\n" +
     t("middle") + ": " + t(settings.showatmiddle) + ", " + t(settings.showatmiddleday) + "\n" +
     t("bottom") + ": " + t(settings.showatbottom) + (settings.showatbottomday ? ", " + t(settings.showatbottomday) : "") + "\n" +
     t("area") + ": " + area + ", " + currency + "\n" +
@@ -211,7 +211,7 @@ async function ask() {
 // Show graph
 async function askForShowAtTopDay() {
   let alert = new Alert();
-  alert.title = t("top")
+  alert.title = t("top").charAt(0).toUpperCase() + t("top").slice(1);
   alert.message = t("showday") + "?";
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));
@@ -223,7 +223,7 @@ async function askForShowAtTopDay() {
 // Show graph
 async function askForShowAtMiddleDay() {
   let alert = new Alert();
-  alert.title = t("middle")
+  alert.title = t("middle").charAt(0).toUpperCase() + t("middle").slice(1);
   alert.message = t("showday") + "?";
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));

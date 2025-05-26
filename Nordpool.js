@@ -177,7 +177,7 @@ async function ask() {
   settings.showatmiddleday = await askForShowAtMiddleDay();
   settings.showatbottom = await askForShowAtBottom();
   settings.showatbottomday = await askForShowAtBottomDay();
-  settings.showday = await askForShowDay();
+  //settings.showday = await askForShowDay();
   settings.resolution = 60;
   return settings
 }
@@ -197,7 +197,7 @@ async function askForShowAtTopDay() {
 // Show graph
 async function askForShowAtMiddleDay() {
   let alert = new Alert();
-  alert.message = ("What day on top?");
+  alert.message = ("What day on middle?");
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));
   let index = await alert.presentAlert();
@@ -209,7 +209,7 @@ async function askForShowAtMiddleDay() {
 // Show graph
 async function askForShowAtBottomDay() {
   let alert = new Alert();
-  alert.message = ("What day on top?");
+  alert.message = ("What day on bottom?");
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));
   let index = await alert.presentAlert();
@@ -422,7 +422,7 @@ async function askForExtras() {
   return newCost;
 }
 
-async function Table() {
+async function Table(day) {
   
   width = 770;
   let head = listwidget.addStack()
@@ -776,37 +776,38 @@ const positions = [
 for (let value of positions) {
   const func = functionMap[value];
   if (func) {
-    await func(); // Anropa funktionen asynkront
+    log("a");
+    //await func(); // Anropa funktionen asynkront
   }
 }
-  return listwidget
+  //return listwidget
 
   if (settings.showattop == "Table") {
-    await Table();
+    await Table(settings.showattopday);
   }
    else if (settings.showattop == "PriceStats") {
-    await PriceStats();
+    await PriceStats(settings.showattopday);
   }
    else if (settings.showattop == "Graph") {
-    await Graph();
+    await Graph(settings.showattopday);
   }
   if (settings.showatmiddle == "Table") {
-    await Table();
+    await Table(settings.showatmiddleday);
   }
    else if (settings.showatmiddle == "PriceStats") {
-    await PriceStats();
+    await PriceStats(settings.showatmiddleday);
   }
    else if (settings.showatmiddle == "Graph") {
-    await Graph();
+    await Graph(settings.showatmiddleday);
   }
   if (settings.showatbottom == "Table") {
-    await Table();
+    await Table(settings.showatbottomday);
   }
    else if (settings.showatbottom == "PriceStats") {
-    await PriceStats();
+    await PriceStats(settings.showatbottomday);
   }
    else if (settings.showatbottom == "Graph") {
-    await Graph();
+    await Graph(settings.showatbottomday);
   }
   
   

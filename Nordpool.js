@@ -680,7 +680,7 @@ let responseToday = (await requestToday.loadJSON());
 const todayJSON = JSON.stringify(responseToday, null ,2);
 const todayPath = fm.joinPath(dir, "todayprices.json");
 fm.writeString(todayPath, todayJSON);
-
+date = responseToday.deliveryDateCet;
 const requestTomorrow = new Request(tomorrowUrl);
 requestTomorrow.timeoutInterval = 1;
 let responseTomorrow = (await requestTomorrow.loadJSON());

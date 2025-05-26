@@ -32,7 +32,7 @@ const fileName = Script.name() + "_Settings.json";
 const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
-let height = 1150;
+let height = 550;
 
 if (!config.runsInWidget){
   await updatecode();
@@ -184,15 +184,15 @@ async function ask() {
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
   settings.showattop = await askForShowAtTop();
-  if (!settings.showattop == "Empty") {
+  if (settings.showattop != "Empty") {
     settings.showattopday = await askForShowAtTopDay();
   }
   settings.showatmiddle = await askForShowAtMiddle();
-  if (!settings.showatmiddle == "Empty") {
+  if (settings.showatmiddle != "Empty") {
   settings.showatmiddleday = await askForShowAtMiddleDay();
   }
   settings.showatbottom = await askForShowAtBottom();
-    if (!settings.showatbottom == "Empty") {
+    if (settings.showatbottom != "Empty") {
   settings.showatbottomday = await askForShowAtBottomDay();
     }//settings.showday = await askForShowDay();
   settings.resolution = 60;
@@ -447,8 +447,19 @@ async function Table(day) {
    await DateTomorrow();
   }
   
+  let left = row.addStack();
+  left.layoutHorizontally();
+  let whatday = left.addText(date);
+  whatday.textColor = new Color("#ffffff");
+  whatday.font = Font.lightSystemFont(20);
+  let right = left.addStack();
+  right.layoutVertically();
+  let update = right.addStack();
+  update.addSpacer();
+  let updatetext = update.addText(t("updated") + updated);
+  updatetext.font = Font.lightSystemFont(10);
+  updatetext.textColor = new Color("#ffffff");
   
-  width = 770;
   let head = listwidget.addStack()
   let stackNames = ["first", "second", "third", "fourth", "fifth"];
   let timeStacks = {};
@@ -544,10 +555,22 @@ async function Graph(day) {
    if (day == "Tomorrow") {
    await DateTomorrow();
   }
+  let left = row.addStack();
+  left.layoutHorizontally();
+  let whatday = left.addText(date);
+  whatday.textColor = new Color("#ffffff");
+  whatday.font = Font.lightSystemFont(20);
+  let right = left.addStack();
+  right.layoutVertically();
+  let update = right.addStack();
+  update.addSpacer();
+  let updatetext = update.addText(t("updated") + updated);
+  updatetext.font = Font.lightSystemFont(10);
+  updatetext.textColor = new Color("#ffffff");
   if (resolution == 60) {
-    if ( settings.showattop == "Table" || settings.showatmiddle == "Table" || settings.showatbottom == "Table" ) {
-      height = 770
-    }
+    //if ( settings.showattop == "Table" || settings.showatmiddle == "Table" || settings.showatbottom == "Table" ) {
+    //  height = 770
+    //}
     let avgtoday = []
     let dotNow = ""
     let countertoday = 0
@@ -628,6 +651,18 @@ async function Graph(day) {
    if (day == "Tomorrow") {
    await DateTomorrow();
   }
+   let left = row.addStack();
+  left.layoutHorizontally();
+  let whatday = left.addText(date);
+  whatday.textColor = new Color("#ffffff");
+  whatday.font = Font.lightSystemFont(20);
+  let right = left.addStack();
+  right.layoutVertically();
+  let update = right.addStack();
+  update.addSpacer();
+  let updatetext = update.addText(t("updated") + updated);
+  updatetext.font = Font.lightSystemFont(10);
+  updatetext.textColor = new Color("#ffffff");
   let bottom = listwidget.addStack();
   // lowest
   let lowest = bottom.addText(t("lowest"));
@@ -743,44 +778,10 @@ async function createWidgetNodata(){
   return listwidget
 }
 async function createWidget(){
-  await DateToday();
+  //await DateToday();
   listwidget.backgroundColor = new Color("#000000");
-  let row = listwidget.addStack();
-  row.layoutVertically();
-  let left = row.addStack();
-  left.layoutHorizontally();
-  let whatday = left.addText(date);
-  whatday.textColor = new Color("#ffffff");
-  whatday.font = Font.lightSystemFont(20);
-  let right = left.addStack();
-  right.layoutVertically();
-  let update = right.addStack();
-  update.addSpacer();
-  let updatetext = update.addText(t("updated") + updated);
-  updatetext.font = Font.lightSystemFont(10);
-  updatetext.textColor = new Color("#ffffff");
-  let moms = right.addStack();
-  moms.addSpacer();
-  momstext = moms.addText("v. " + version);
-  momstext.font = Font.lightSystemFont(10);
-  momstext.textColor = new Color("#ffffff");
-  moms.addSpacer();
-  momstext = moms.addText(area);
-  momstext.font = Font.lightSystemFont(10);
-  momstext.textColor = new Color("#ffffff");
-  moms.addSpacer();
-  momstext = moms.addText("Extras: " + extras);
-  momstext.font = Font.lightSystemFont(10);
-  momstext.textColor = new Color("#ffffff");
-  moms.addSpacer();
-  if (includevat == 1) {
-    momstext = moms.addText(t("inclvat"));
-  }
-  else {
-    momstext = moms.addText(t("exclvat"));
-  }
-  momstext.font = Font.lightSystemFont(10);
-  momstext.textColor = new Color("#ffffff");
+
+  
 
 
   //const functionMap = {
@@ -835,7 +836,28 @@ async function createWidget(){
   }
   
   
-  
+  let moms = right.addStack();
+  moms.addSpacer();
+  momstext = moms.addText("v. " + version);
+  momstext.font = Font.lightSystemFont(10);
+  momstext.textColor = new Color("#ffffff");
+  moms.addSpacer();
+  momstext = moms.addText(area);
+  momstext.font = Font.lightSystemFont(10);
+  momstext.textColor = new Color("#ffffff");
+  moms.addSpacer();
+  momstext = moms.addText("Extras: " + extras);
+  momstext.font = Font.lightSystemFont(10);
+  momstext.textColor = new Color("#ffffff");
+  moms.addSpacer();
+  if (includevat == 1) {
+    momstext = moms.addText(t("inclvat"));
+  }
+  else {
+    momstext = moms.addText(t("exclvat"));
+  }
+  momstext.font = Font.lightSystemFont(10);
+  momstext.textColor = new Color("#ffffff");
 return listwidget
 }
 

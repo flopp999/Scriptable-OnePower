@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.727
+let version = 0.728
 let allValues = [];
 let widget;
 let day;
@@ -680,7 +680,9 @@ let responseToday = (await requestToday.loadJSON());
 const todayJSON = JSON.stringify(responseToday, null ,2);
 const todayPath = fm.joinPath(dir, "todayprices.json");
 fm.writeString(todayPath, todayJSON);
-date = responseToday.deliveryDateCet;
+date = responseToday.deliveryDateCET;
+let todayUpdated = responseToday.updatedAt;
+updated = todayUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
 const requestTomorrow = new Request(tomorrowUrl);
 requestTomorrow.timeoutInterval = 1;
 let responseTomorrow = (await requestTomorrow.loadJSON());

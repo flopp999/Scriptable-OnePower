@@ -10,6 +10,8 @@ let widget;
 let day;
 let date;
 let pricesJSON;
+let pricesJSONToday;
+let pricesJSONTomorrow;
 let priceAvg;
 let priceLowest;
 let priceHighest;
@@ -170,21 +172,48 @@ async function ask() {
   //settings.showgraph = await askForShowGraph();
   //settings.showtable = await askForShowTable();
   settings.showattop = await askForShowAtTop();
+  settings.showattopday = await askForShowAtTopDay();
   settings.showatmiddle = await askForShowAtMiddle();
+  settings.showatmiddleday = await askForShowAtMiddleDay();
   settings.showatbottom = await askForShowAtBottom();
+  settings.showatbottomday = await askForShowAtBottomDay();
   settings.showday = await askForShowDay();
   settings.resolution = 60;
   return settings
 }
 
+
 // Show graph
-async function askForShowDay() {
+async function askForShowAtTopDay() {
   let alert = new Alert();
-  alert.message = t("showday") + "?";
+  alert.message = ("What day on top?");
   alert.addAction(t("today"));
   alert.addAction(t("tomorrow"));
   let index = await alert.presentAlert();
-  settings.showday = ["Today","Tomorrow"][index];
+  settings.showattopday = ["Today","Tomorrow"][index];
+  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  return ["Today","Tomorrow"][index];
+}
+// Show graph
+async function askForShowAtMiddleDay() {
+  let alert = new Alert();
+  alert.message = ("What day on top?");
+  alert.addAction(t("today"));
+  alert.addAction(t("tomorrow"));
+  let index = await alert.presentAlert();
+  settings.showatmiddleday = ["Today","Tomorrow"][index];
+  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  return ["Today","Tomorrow"][index];
+}
+
+// Show graph
+async function askForShowAtBottomDay() {
+  let alert = new Alert();
+  alert.message = ("What day on top?");
+  alert.addAction(t("today"));
+  alert.addAction(t("tomorrow"));
+  let index = await alert.presentAlert();
+  settings.showatbottomday = ["Today","Tomorrow"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
   return ["Today","Tomorrow"][index];
 }
@@ -200,7 +229,6 @@ async function askForShowAtTop() {
   let index = await alert.presentAlert();
   settings.showattop = ["Graph","Table","PriceStats","Empty"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  langId = settings.showattop; // 1 = Yes, 2 = No
   return ["Graph","Table","PriceStats","Empty"][index];
 }
 
@@ -215,7 +243,6 @@ async function askForShowAtMiddle() {
   let index = await alert.presentAlert();
   settings.showatmiddle = ["Graph","Table","PriceStats","Empty"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  langId = settings.showatmiddle; // 1 = Yes, 2 = No
   return ["Graph","Table","PriceStats","Empty"][index];
 }
 // Ask Top
@@ -229,35 +256,7 @@ async function askForShowAtBottom() {
   let index = await alert.presentAlert();
   settings.showatbottom = ["Graph","Table","PriceStats","Empty"][index];
   fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  langId = settings.showatbottom; // 1 = Yes, 2 = No
   return ["Graph","Table","PriceStats","Empty"][index];
-}
-
-
-// Show table
-async function askForShowTable() {
-  let alert = new Alert();
-  alert.message = t("showtable") + "?";
-  alert.addAction(t("yes"));
-  alert.addAction(t("no"));
-  let index = await alert.presentAlert();
-  settings.showtable = ["Yes","No"][index];
-  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  langId = settings.showtable; // 1 = Yes, 2 = No
-  return ["Yes","No"][index];
-}
-
-// Show graph
-async function askForShowGraph() {
-  let alert = new Alert();
-  alert.message = t("showgraph") + "?";
-  alert.addAction(t("yes"));
-  alert.addAction(t("no"));
-  let index = await alert.presentAlert();
-  settings.showgraph = ["Yes","No"][index];
-  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  langId = settings.showgraph; // 1 = Yes, 2 = No
-  return ["Yes","No"][index];
 }
 
 // Select resolution
@@ -667,44 +666,43 @@ const tomorrowPath = fm.joinPath(dir, "tomorrowprices.json");
 fm.writeString(tomorrowPath, tomorrowJSON);
 
 if (settings.showday == "Today") {
-
-let todayUpdated = responseToday.updatedAt;
-updated = todayUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
-date = responseToday.deliveryDateCET;
-let pricesToday = responseToday.multiIndexEntries;
-
-
-for (let i = 0; i < pricesToday.length; i++) {
-  const value = pricesToday[i]["entryPerArea"][`${area}`];
-  allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
-}
-
-pricesJSON = JSON.parse(JSON.stringify(allValues));
   
-priceLowest = (Math.min(...pricesJSON.map(Number)));
-priceHighest = (Math.max(...pricesJSON.map(Number)));
-priceDiff = (priceHighest - priceLowest)/3;
-priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
+  let todayUpdated = responseToday.updatedAt;
+  updated = todayUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
+  date = responseToday.deliveryDateCET;
+  let pricesToday = responseToday.multiIndexEntries;
+  
+  for (let i = 0; i < pricesToday.length; i++) {
+    const value = pricesToday[i]["entryPerArea"][`${area}`];
+    allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
+  }
+  
+  pricesJSONToday = JSON.parse(JSON.stringify(allValues));
+    
+  priceLowest = (Math.min(...pricesJSONToday.map(Number)));
+  priceHighest = (Math.max(...pricesJSONToday.map(Number)));
+  priceDiff = (priceHighest - priceLowest)/3;
+  priceAvg = pricesJSONToday.map(Number).reduce((a, b) => a + b, 0) / pricesJSONToday.length;
 }
 
 if (settings.showday == "Tomorrow") {
-
-let tomorrowUpdated = responseTomorrow.updatedAt;
-updated = tomorrowUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
-date = responseTomorrow.deliveryDateCET;
-let pricesTomorrow = responseTomorrow.multiIndexEntries;
-
-for (let i = 0; i < pricesTomorrow.length; i++) {
-  const value = pricesTomorrow[i]["entryPerArea"][`${area}`];
-  allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
-}
-
-pricesJSON = JSON.parse(JSON.stringify(allValues));
   
-priceLowest = (Math.min(...pricesJSON.map(Number)));
-priceHighest = (Math.max(...pricesJSON.map(Number)));
-priceDiff = (priceHighest - priceLowest)/3;
-priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
+  let tomorrowUpdated = responseTomorrow.updatedAt;
+  updated = tomorrowUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
+  date = responseTomorrow.deliveryDateCET;
+  let pricesTomorrow = responseTomorrow.multiIndexEntries;
+  
+  for (let i = 0; i < pricesTomorrow.length; i++) {
+    const value = pricesTomorrow[i]["entryPerArea"][`${area}`];
+    allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
+  }
+  
+  pricesJSONTomorrow = JSON.parse(JSON.stringify(allValues));
+    
+  priceLowest = (Math.min(...pricesJSONTomorrow.map(Number)));
+  priceHighest = (Math.max(...pricesJSONTomorrow.map(Number)));
+  priceDiff = (priceHighest - priceLowest)/3;
+  priceAvg = pricesJSONTomorrow.map(Number).reduce((a, b) => a + b, 0) / pricesJSONTomorrow.length;
 }
 
 let listwidget = new ListWidget();
@@ -817,11 +815,9 @@ for (let value of positions) {
 }
 
 
-if (pricesJSON.length == 0) {
-  widget = await createWidgetNodata();
-} else {
+
 widget = await createWidget();
-}
+
 if (config.runsInWidget) {
   Script.setWidget(widget);
 } else {

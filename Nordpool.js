@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.748
+let version = 0.749
 let allValues = [];
 let widget;
 let day;
@@ -75,7 +75,7 @@ async function start() {
 
 async function updatecode() {
   try {
-    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Version.txt")
+    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Version.txt")
     const serverVersion = await req.loadString()
     if (version < serverVersion) {
       try {

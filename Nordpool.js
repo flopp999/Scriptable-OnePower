@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.746
+let version = 0.747
 let allValues = [];
 let widget;
 let day;
@@ -55,8 +55,8 @@ async function start() {
   //let showdayText = showday == "Today" ? t("today") : t("tomorrow")
   alert.message = 
     t("changesetup") + "?\n" +
-    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(settings.showattop) + ", " + t(settings.showattopday) + "\n" +
-    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(settings.showatmiddle) + ", " + t(settings.showatmiddleday) + "\n" +
+    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(settings.showattop) + (settings.showattopday ? ", " + t(settings.showattopday) : "") + "\n" +
+    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(settings.showatmiddle) + (settings.showatmiddleday ? ", " + t(settings.showatmiddleday) : "") + "\n" +
     t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(settings.showatbottom) + (settings.showatbottomday ? ", " + t(settings.showatbottomday) : "") + "\n" +
     t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
@@ -679,14 +679,9 @@ async function Graph(day) {
   updatetext.textColor = new Color("#ffffff");
   let bottom = listwidget.addStack();
   // now
-  let now = bottom.addText(t("now") + Math.round(PricesJson[hour]));
+  let now = bottom.addText(t("now") + Math.round(pricesJSON[hour]));
   now.font = Font.lightSystemFont(11);
-  now.textColor = new Color("#00cf00");
-  bottom.addSpacer(4);
-  let priceNowRound = Math.round(PricesJson[hour]);
-  let nowtext = bottom.addText(`${priceLowestRound}`);
-  nowtext.font = Font.lightSystemFont(11);
-  nowtext.textColor = new Color("#00cf00");
+  now.textColor = new Color("#00ffff");
   bottom.addSpacer();
   // lowest
   let lowest = bottom.addText(t("lowest"));

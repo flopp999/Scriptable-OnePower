@@ -666,15 +666,15 @@ async function Graph(day) {
     await DateTomorrow();
   }
   let left = listwidget.addStack();
-  left.layoutHorizontally();
+  //left.layoutHorizontally();
   let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
   whatday.font = Font.lightSystemFont(13);
-  let right = left.addStack();
-  right.layoutVertically();
-  let update = right.addStack();
-  update.addSpacer();
-  let updatetext = update.addText(t("updated") + updated);
+  //let right = left.addStack();
+  //right.layoutVertically();
+  //let update = right.addStack();
+  left.addSpacer();
+  let updatetext = left.addText(t("updated") + updated);
   updatetext.font = Font.lightSystemFont(13);
   updatetext.textColor = new Color("#ffffff");
   let bottom = listwidget.addStack();
@@ -697,7 +697,7 @@ async function Graph(day) {
   let highest = bottom.addText(t("highest") + " " + Math.round(priceHighest));
   highest.font = Font.lightSystemFont(11);
   highest.textColor = new Color("#fa60ff");
-  //listwidget.addSpacer(5);
+  listwidget.addSpacer(5);
   }
 
 

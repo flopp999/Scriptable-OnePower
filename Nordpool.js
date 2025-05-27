@@ -74,27 +74,23 @@ async function start() {
 }
 
 async function updatecode() {
-try {
+  try {
     const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Nordpool/main/Version.txt")
     const serverVersion = await req.loadString()
     if (version < serverVersion) {
       try {
-
         const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
         const response = await req.load(); // laddar utan att direkt kasta fel
         const status = req.response.statusCode;
-
         if (status !== 200) {
           throw new Error(`Fel: HTTP ${status}`);
         }
-
         const codeString = response.toRawString(); // eller response.toString()
         fm.writeString(module.filename, codeString);
-
         
-        //const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
-        //const codeString = await req.loadString();
-        //fm.writeString(module.filename, codeString);
+          //const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
+          //const codeString = await req.loadString();
+          //fm.writeString(module.filename, codeString);
         let updateNotify = new Notification();
         updateNotify.title = Script.name();
         updateNotify.body = "New version installed";
@@ -344,7 +340,7 @@ async function askForArea() {
     19,   // TEL - Romania
     0    // SYS - System price or not applicable
     ][index];
-   let currencies2 = [
+  let currencies2 = [
     "EUR",  // AT - Austria
     "EUR",
     "BGN",
@@ -370,7 +366,7 @@ async function askForArea() {
     "RON",
     "EUR"
     ][index];
-    return [area, vat, currencies2];
+  return [area, vat, currencies2];
 }
 
 // Select resolution
@@ -489,84 +485,82 @@ async function Table(day) {
     priceStacks[name] = priceStack;
   }
 
-// Loop to add time and prices
-for (let s = 0; s < stackNames.length; s++) {
-  let name = stackNames[s];
-  let timeStack = timeStacks[name];
-  let priceStack = priceStacks[name];
-  let hourOffset = 0 + s * 5; // how many hours per column
-  // Add time
-  for (let i = hourOffset; i < hourOffset + 5; i++) {
-    if (i == 24) {
-      continue
-    }
-    for (let a = 0; a < 4; a++) {
-      let timeText = timeStack.addText(`${i}:${a === 0 ? "00" : a * 15}`);
-      timeText.leftAlignText();
-      if (allValues.length == 24) {
-        if (i === hour && day == "today") {
+  // Loop to add time and prices
+  for (let s = 0; s < stackNames.length; s++) {
+    let name = stackNames[s];
+    let timeStack = timeStacks[name];
+    let priceStack = priceStacks[name];
+    let hourOffset = 0 + s * 5; // how many hours per column
+    // Add time
+    for (let i = hourOffset; i < hourOffset + 5; i++) {
+      if (i == 24) {
+        continue
+      }
+      for (let a = 0; a < 4; a++) {
+        let timeText = timeStack.addText(`${i}:${a === 0 ? "00" : a * 15}`);
+        timeText.leftAlignText();
+        if (allValues.length == 24) {
+          if (i === hour && day == "today") {
+            timeText.textColor = new Color("#00ffff");
+            timeText.font = Font.lightSystemFont(bigFont);
+          } else {
+            timeText.textColor = new Color("#ffffff");
+            timeText.font = Font.lightSystemFont(mediumFont);
+          }
+          break
+        }
+        if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) { // actual hour and identifies which 15-minute interval
           timeText.textColor = new Color("#00ffff");
           timeText.font = Font.lightSystemFont(bigFont);
         } else {
           timeText.textColor = new Color("#ffffff");
           timeText.font = Font.lightSystemFont(mediumFont);
         }
+      }
+    }
+
+    // Add prices
+    let priceStart = 0 + s * Math.ceil(allValues.length*0.2083); // 0.2083 is the factor between 24 and 96
+    for (let i = priceStart; i < priceStart + Math.ceil(allValues.length*0.2083); i++) {
+      if (i == allValues.length){
         break
       }
-      if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) { // actual hour and identifies which 15-minute interval
-        timeText.textColor = new Color("#00ffff");
-        timeText.font = Font.lightSystemFont(bigFont);
-      } else {
-        timeText.textColor = new Color("#ffffff");
-        timeText.font = Font.lightSystemFont(mediumFont);
-      }
-
-    }
-  }
-
-  // Add prices
-  let priceStart = 0 + s * Math.ceil(allValues.length*0.2083); // 0.2083 is the factor between 24 and 96
-  for (let i = priceStart; i < priceStart + Math.ceil(allValues.length*0.2083); i++) {
-
-    if (i == allValues.length){
-      break
-    }
-    let priceVal = Math.round(pricesJSON[i]);
-    let priceText = priceStack.addText(String(priceVal));
-    priceText.leftAlignText();
-    if (i === (hour * 4) + Math.floor(minute / 15)) {
-        priceText.font = Font.lightSystemFont(bigFont);
+      let priceVal = Math.round(pricesJSON[i]);
+      let priceText = priceStack.addText(String(priceVal));
+      priceText.leftAlignText();
+      if (i === (hour * 4) + Math.floor(minute / 15)) {
+         priceText.font = Font.lightSystemFont(bigFont);
       } else {
         priceText.font = Font.lightSystemFont(mediumFont);
       }
-    if (allValues.length == 24) {
-      if (i === hour && day == "today") {
-        priceText.font = Font.lightSystemFont(bigFont);
+      if (allValues.length == 24) {
+        if (i === hour && day == "today") {
+          priceText.font = Font.lightSystemFont(bigFont);
+        }
+      }
+      if (pricesJSON[i] == priceLowest){
+        priceText.textColor = new Color("#00cf00"); // green
+      } else if (pricesJSON[i] < priceDiff + priceLowest) {
+        priceText.textColor = new Color("#ffff00"); // yellow
+      } else if (pricesJSON[i] == priceHighest){
+        priceText.textColor = new Color("#fa60ff"); // purple
+      } else if (pricesJSON[i] > priceHighest - priceDiff) {
+        priceText.textColor =  new Color("#ff3000"); // red
+      } else {
+        priceText.textColor = new Color("#f38"); // orange
       }
     }
-    if (pricesJSON[i] == priceLowest){
-      priceText.textColor = new Color("#00cf00"); // green
-    } else if (pricesJSON[i] < priceDiff + priceLowest) {
-      priceText.textColor = new Color("#ffff00"); // yellow
-    } else if (pricesJSON[i] == priceHighest){
-      priceText.textColor = new Color("#fa60ff"); // purple
-    } else if (pricesJSON[i] > priceHighest - priceDiff) {
-      priceText.textColor =  new Color("#ff3000"); // red
-    } else {
-      priceText.textColor = new Color("#f38"); // orange
-    }
   }
-}
   listwidget.addSpacer(5);
-  }
+}
 
 async function Graph(day) {
 //chart
-    if (day == "today") {
-   await DateToday();
+  if (day == "today") {
+    await DateToday();
   }
-   if (day == "tomorrow") {
-   await DateTomorrow();
+  if (day == "tomorrow") {
+    await DateTomorrow();
   }
   let left = listwidget.addStack();
   //left.layoutHorizontally();
@@ -588,6 +582,7 @@ async function Graph(day) {
     let dotNow = ""
     let countertoday = 0
     let counterdot = 0
+    
     do{
       avgtoday += priceAvg + ","
       countertoday += 1
@@ -603,10 +598,9 @@ async function Graph(day) {
       }
       counterdot += 1
     }
-      
     while (counterdot < 24)
     
-      let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+height+"&c="
+    let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+height+"&c="
     graphtoday += encodeURI("{\
       data: { \
         labels: ["+hours+"],\
@@ -658,7 +652,7 @@ async function Graph(day) {
   listwidget.addSpacer(5);
 }
 
- async function PriceStats(day) {
+async function PriceStats(day) {
   if (day == "today") {
     await DateToday();
   }
@@ -698,7 +692,7 @@ async function Graph(day) {
   highest.font = Font.lightSystemFont(11);
   highest.textColor = new Color("#fa60ff");
   listwidget.addSpacer(5);
-  }
+}
 
 
 const smallFont = 10;
@@ -785,10 +779,6 @@ async function createWidgetNodata(){
 async function createWidget(){
   //await DateToday();
   listwidget.backgroundColor = new Color("#000000");
-
-  
-
-
   //const functionMap = {
   //Table: Table,
   //PriceStats: PriceStats,
@@ -862,7 +852,7 @@ async function createWidget(){
   }
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
-return listwidget
+  return listwidget
 }
 
 widget = await createWidget();

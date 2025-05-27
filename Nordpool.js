@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.747
+let version = 0.748
 let allValues = [];
 let widget;
 let day;
@@ -679,40 +679,25 @@ async function Graph(day) {
   updatetext.textColor = new Color("#ffffff");
   let bottom = listwidget.addStack();
   // now
-  let now = bottom.addText(t("now") + Math.round(pricesJSON[hour]));
+  let now = bottom.addText(t("now") + " " + Math.round(pricesJSON[hour]));
   now.font = Font.lightSystemFont(11);
   now.textColor = new Color("#00ffff");
   bottom.addSpacer();
   // lowest
-  let lowest = bottom.addText(t("lowest"));
+  let lowest = bottom.addText(t("lowest") + " " + Math.round(priceLowest));
   lowest.font = Font.lightSystemFont(11);
   lowest.textColor = new Color("#00cf00");
-  bottom.addSpacer(4);
-  let priceLowestRound = Math.round(priceLowest);
-  let lowesttext = bottom.addText(`${priceLowestRound}`);
-  lowesttext.font = Font.lightSystemFont(11);
-  lowesttext.textColor = new Color("#00cf00");
   bottom.addSpacer();
   // average
-  let avg = bottom.addText(t("average"));
+  let avg = bottom.addText(t("average") + " " + Math.round(priceAvg));
   avg.font = Font.lightSystemFont(11);
   avg.textColor = new Color("#f38");
-  bottom.addSpacer(4);
-  let priceAvgRound = Math.round(priceAvg);
-  let avgtext = bottom.addText(`${priceAvgRound}`);
-  avgtext.font = Font.lightSystemFont(11);
-  avgtext.textColor = new Color("#f38");
   bottom.addSpacer();
   // highest
-  let highest = bottom.addText(t("highest"));
+  let highest = bottom.addText(t("highest") + " " + Math.round(priceHighest));
   highest.font = Font.lightSystemFont(11);
   highest.textColor = new Color("#fa60ff");
-  bottom.addSpacer(4);
-  let priceHighestRound = Math.round(priceHighest);
-  let highesttext = bottom.addText(`${priceHighestRound}`);
-  highesttext.font = Font.lightSystemFont(11);
-  highesttext.textColor = new Color("#fa60ff");
-  listwidget.addSpacer(5);
+  //listwidget.addSpacer(5);
   }
 
 

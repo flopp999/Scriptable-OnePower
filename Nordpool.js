@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.745
+let version = 0.746
 let allValues = [];
 let widget;
 let day;
@@ -679,14 +679,14 @@ async function Graph(day) {
   updatetext.textColor = new Color("#ffffff");
   let bottom = listwidget.addStack();
   // now
-  let lowest = bottom.addText(t("now") + Math.round(PricesJson[hour]));
-  lowest.font = Font.lightSystemFont(11);
-  lowest.textColor = new Color("#00cf00");
+  let now = bottom.addText(t("now") + Math.round(PricesJson[hour]));
+  now.font = Font.lightSystemFont(11);
+  now.textColor = new Color("#00cf00");
   bottom.addSpacer(4);
   let priceNowRound = Math.round(PricesJson[hour]);
-  let lowesttext = bottom.addText(`${priceLowestRound}`);
-  lowesttext.font = Font.lightSystemFont(11);
-  lowesttext.textColor = new Color("#00cf00");
+  let nowtext = bottom.addText(`${priceLowestRound}`);
+  nowtext.font = Font.lightSystemFont(11);
+  nowtext.textColor = new Color("#00cf00");
   bottom.addSpacer();
   // lowest
   let lowest = bottom.addText(t("lowest"));

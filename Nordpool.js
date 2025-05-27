@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.742
+let version = 0.743
 let allValues = [];
 let widget;
 let day;
@@ -508,6 +508,7 @@ for (let s = 0; s < stackNames.length; s++) {
           timeText.textColor = new Color("#00ffff");
           timeText.font = Font.lightSystemFont(bigFont);
         }
+        timeText.textColor = new Color("#000000");
         timeText.font = Font.lightSystemFont(mediumFont);
         break
       }

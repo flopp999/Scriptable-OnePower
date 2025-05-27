@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.743
+let version = 0.744
 let allValues = [];
 let widget;
 let day;
@@ -507,9 +507,10 @@ for (let s = 0; s < stackNames.length; s++) {
         if (i === hour && day == "today") {
           timeText.textColor = new Color("#00ffff");
           timeText.font = Font.lightSystemFont(bigFont);
+        } else {
+          timeText.textColor = new Color("#000000");
+          timeText.font = Font.lightSystemFont(mediumFont);
         }
-        timeText.textColor = new Color("#000000");
-        timeText.font = Font.lightSystemFont(mediumFont);
         break
       }
       if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) { // actual hour and identifies which 15-minute interval

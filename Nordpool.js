@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.749
+let version = 0.750
 let allValues = [];
 let widget;
 let day;
@@ -75,7 +75,7 @@ async function start() {
 
 async function updatecode() {
   try {
-    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Version.txt")
+    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Version.txt");
     const serverVersion = await req.loadString()
     if (version < serverVersion) {
       try {
@@ -114,8 +114,15 @@ async function readsettings() {
       langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
       await readTranslations();
       let keys = Object.keys(settings);
-      if (keys.length < 6) {
+      if (keys.length < 13) {
+        if (config.runsInWidget) {
+          let widget = new ListWidget();
+          widget.addText("You need to run this script in the app");
+          Script.setWidget(widget);
+          Script.complete();
+        } else {
         throw new Error("Settings file is incomplete or corrupted");
+        }
       }
     } else {
       await askForLanguage();

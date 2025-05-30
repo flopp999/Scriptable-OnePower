@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.753
+let version = 0.754
 let allValues = [];
 let widget;
 let day;
@@ -33,6 +33,8 @@ const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
 let height = 550;
+let width = 1300;
+let keys = [];
 
 if (!config.runsInWidget){
   await updatecode();
@@ -44,8 +46,18 @@ if (!config.runsInWidget){
 }
 
 if (config.runsInWidget){
+ await readsettings();
+  if (keys.length < 10 || keys == undefined) {
+    let widget = new ListWidget();
+    widget.addText("You need to run \"" + Script.name() + "\" in the app");
+    Script.setWidget(widget)M
+    Script.complete();
+    return;
+  
+  }
+}
+if (config.runsInWidget){
   await updatecode();
-  await readsettings();
   await createVariables();
 }
 
@@ -118,13 +130,8 @@ async function readsettings() {
       await readTranslations();
       let keys = Object.keys(settings);
       if (keys.length < 10) {
-        if (config.runsInWidget) {
-          let widget = new ListWidget();
-          widget.addText("You need to run this script in the app");
-          Script.setWidget(widget);
-          Script.complete();
-        } else {
         throw new Error("Settings file is incomplete or corrupted");
+        return;
         }
       }
     } else {
@@ -142,6 +149,9 @@ async function readsettings() {
       throw new Error("Settings file not found");
     }
   } catch (error) {
+    if (config.runsInWidget) {
+  return;
+}
     console.warn("Settings file not found or error reading file: " + error.message);
     settings = await ask();
     fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print

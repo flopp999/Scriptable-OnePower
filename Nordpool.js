@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.752
+let version = 0.753
 let allValues = [];
 let widget;
 let day;
@@ -50,14 +50,17 @@ if (config.runsInWidget){
 }
 
 async function start() {
+  const [topType, topDay] = settings.showattop.split(",").map(s => s.trim());
+  const [middleType, middleDay] = settings.showatmiddle.split(",").map(s => s.trim());
+  const [bottomType, bottomDay] = settings.showatbottom.split(",").map(s => s.trim());
   let alert = new Alert();
   let vatText = includevat == 1 ? t("yes") : t("no")
   //let showdayText = showday == "Today" ? t("today") : t("tomorrow")
   alert.message = 
     t("changesetup") + "?\n" +
-    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(settings.showattop) + (settings.showattopday ? ", " + t(settings.showattopday) : "") + "\n" +
-    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(settings.showatmiddle) + (settings.showatmiddleday ? ", " + t(settings.showatmiddleday) : "") + "\n" +
-    t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(settings.showatbottom) + (settings.showatbottomday ? ", " + t(settings.showatbottomday) : "") + "\n" +
+    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ": " + t(topType) + ", " + t(topDay) + "\n" +
+    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ": " + t(middleType) + ", " + t(middleDay) + "\n" +
+    t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ": " + t(bottomType) + ", " + t(bottomDay) + "\n" +
     t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
     t("withvat") + ": " + vatText + "\n";

@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.763
+let version = 0.764
 let allValues = [];
 let widget;
 let day;
@@ -254,11 +254,14 @@ async function askForAllShowPositions() {
   fm.writeString(filePath, JSON.stringify(settings, null, 2));
   const totalGraph = chosenCombinations.filter(c => c.type === "graph").length;
   const totalTable = chosenCombinations.filter(c => c.type === "table").length;
+  const totalPriceStats = chosenCombinations.filter(c => c.type === "pricestats").length;
   settings.height = 1150
   if (totalGraph === 2) {
     settings.height = 550;
   } else if (totalGraph === 1 && totalTable === 1) {
     settings.height = 750;
+  } else if (totalGraph === 1 && totalPriceStats === 1) {
+    settings.height = 1050;
   }
   return settings;
 }

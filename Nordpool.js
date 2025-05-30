@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.756
+let version = 0.757
 let allValues = [];
 let widget;
 let day;
@@ -205,109 +205,66 @@ async function ask() {
 }
 
 async function askForShowAtPosition(position) {
-  const options = ["graph", "table", "pricestats", "nothing"];
+  const displayTypes = ["graph", "table", "pricestats", "nothing"];
   const days = ["today", "tomorrow"];
+
+  // Räkna alla redan valda typer och dagkombinationer
+  const allUsed = ["top", "middle", "bottom"]
+    .map(p => settings[`showat${p}`])
+    .filter(Boolean); // filtrera bort undefined
+
+  const usedCounts = {};
+  const usedCombos = new Set();
+
+  for (let entry of allUsed) {
+    const [type, day] = entry.split(",").map(s => s.trim());
+    usedCounts[type] = (usedCounts[type] || 0) + 1;
+    if (day) usedCombos.add(`${type},${day}`);
+  }
+
+  // Filtrera bort visningstyper som redan används två gånger
+  const availableTypes = displayTypes.filter(type =>
+    type === "nothing" || (usedCounts[type] || 0) < 2
+  );
+
+  // Välj visningstyp
   const alert = new Alert();
   alert.message = `${t("showwhat")} ${t(position)}?`;
-  options.forEach(o => alert.addAction(t(o)));
+  availableTypes.forEach(o => alert.addAction(t(o)));
   const index = await alert.presentAlert();
-  const choice = options[index];
+  const choice = availableTypes[index];
+
   let result;
   if (choice === "nothing") {
     result = "nothing";
   } else {
+    // Välj dag, men filtrera bort kombinationer som redan är använda
+    const availableDays = days.filter(day => !usedCombos.has(`${choice},${day}`));
+
+    if (availableDays.length === 0) {
+      const warn = new Alert();
+      warn.title = "Begränsning";
+      warn.message = `Du kan bara välja varje typ två gånger, och varje kombination av typ + dag en gång.`;
+      warn.addAction("OK");
+      await warn.presentAlert();
+      return await askForShowAtPosition(position); // Starta om frågan
+    }
+
     const dayAlert = new Alert();
     dayAlert.title = t(position).charAt(0).toUpperCase() + t(position).slice(1);
     dayAlert.message = t("showday") + "?";
-    days.forEach(d => dayAlert.addAction(t(d)));
+    availableDays.forEach(d => dayAlert.addAction(t(d)));
     const dayIndex = await dayAlert.presentAlert();
-    const dayChoice = days[dayIndex];
+    const dayChoice = availableDays[dayIndex];
 
     result = `${choice}, ${dayChoice}`;
   }
+
   settings[`showat${position}`] = result;
   fm.writeString(filePath, JSON.stringify(settings, null, 2));
   return result;
 }
 
-// Show graph
-async function askForShowAtTopDay() {
-  let alert = new Alert();
-  alert.title = t("top").charAt(0).toUpperCase() + t("top").slice(1);
-  alert.message = t("showday") + "?";
-  alert.addAction(t("today"));
-  alert.addAction(t("tomorrow"));
-  let index = await alert.presentAlert();
-  settings.showattopday = ["today","tomorrow"][index];
-  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["today","tomorrow"][index];
-}
-// Show graph
-async function askForShowAtMiddleDay() {
-  let alert = new Alert();
-  alert.title = t("middle").charAt(0).toUpperCase() + t("middle").slice(1);
-  alert.message = t("showday") + "?";
-  alert.addAction(t("today"));
-  alert.addAction(t("tomorrow"));
-  let index = await alert.presentAlert();
-  settings.showatmiddleday = ["today","tomorrow"][index];
-  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["today","tomorrow"][index];
-}
-
-// Show graph
-async function askForShowAtBottomDay() {
-  let alert = new Alert();
-  alert.title = t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1)
-  alert.message = t("showday") + "?";
-  alert.addAction(t("today"));
-  alert.addAction(t("tomorrow"));
-  let index = await alert.presentAlert();
-  settings.showatbottomday = ["today","tomorrow"][index];
-  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["today","tomorrow"][index];
-}
-
-// Ask Top
-async function askForShowAtTop() {
-  let alert = new Alert();
-  alert.message = t("showwhat") + t("top") + "?";
-  alert.addAction(t("graph"));
-  alert.addAction(t("table"));
-  alert.addAction(t("pricestats"));
-  alert.addAction(t("nothing"));
-  let index = await alert.presentAlert();
-  settings.showattop = ["graph","table","pricestats","nothing"][index];
-  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["graph","table","pricestats","nothing"][index];
-}
-
-// Ask Top
-async function askForShowAtMiddle() {
-  let alert = new Alert();
-  alert.message = t("showwhat") + t("middle") + "?";
-  alert.addAction(t("graph"));
-  alert.addAction(t("table"));
-  alert.addAction(t("pricestats"));
-  alert.addAction(t("nothing"));
-  let index = await alert.presentAlert();
-  settings.showatmiddle = ["graph","table","pricestats","nothing"][index];
-  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["graph","table","pricestats","nothing"][index];
-}
-// Ask Top
-async function askForShowAtBottom() {
-  let alert = new Alert();
-  alert.message = t("showwhat") + t("bottom") + "?";
-  alert.addAction(t("graph"));
-  alert.addAction(t("table"));
-  alert.addAction(t("pricestats"));
-  alert.addAction(t("nothing"));
-  let index = await alert.presentAlert();
-  settings.showatbottom = ["graph","table","pricestats","nothing"][index];
-  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
-  return ["graph","table","pricestats","nothing"][index];
-}
 
 // Select resolution
 async function askForLanguage() {
@@ -403,49 +360,6 @@ async function askForResolution() {
   alert.addAction("60 min");
   let index = await alert.presentAlert();
   return [15, 60][index];
-}
-
-// Select currency
-async function askForCurrency() {
-  let allowedCurrencies = {
-    AT: ["EUR"],
-    BE: ["EUR"],
-    BG: ["BGN", "EUR"],
-    DK1: ["DKK", "EUR", "NOK", "SEK"],
-    DK2: ["DKK", "EUR", "NOK", "SEK"],
-    EE: ["EUR", "DKK", "NOK", "SEK"],
-    FI: ["EUR", "DKK", "NOK", "SEK"],
-    FR: ["EUR"],
-    GER: ["EUR"],
-    LT: ["EUR", "DKK", "NOK", "SEK"],
-    LV: ["EUR", "DKK", "NOK", "SEK"],
-    NL: ["EUR"],
-    NO1: ["NOK", "DKK", "EUR", "SEK"],
-    NO2: ["NOK", "DKK", "EUR", "SEK"],
-    NO3: ["NOK", "DKK", "EUR", "SEK"],
-    NO4: ["NOK", "DKK", "EUR", "SEK"],
-    NO5: ["NOK", "DKK", "EUR", "SEK"],
-    PL: ["PLN", "EUR"],
-    SE1: ["SEK", "DKK", "EUR", "NOK"],
-    SE2: ["SEK", "DKK", "EUR", "NOK"],
-    SE3: ["SEK", "DKK", "EUR", "NOK"],
-    SE4: ["SEK", "DKK", "EUR", "NOK"],
-    TEL: ["RON", "EUR"],
-    SYS: ["EUR", "DKK", "NOK", "SEK"],
-  };
-  let alert = new Alert();
-  alert.message = t("chooseyourcurrency") + ":";
-  let currencies = allowedCurrencies[settings.area] || [];
-  for (let currency of currencies) {
-    alert.addAction(currency);
-  }
-  if (currencies.length === 0) {
-    alert.addAction("No options");
-    await alert.presentAlert();
-    return null;
-  }
-  let index = await alert.presentAlert();
-  return currencies[index];
 }
 
 // Include VAT?

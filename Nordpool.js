@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.764
+let version = 0.765
 let allValues = [];
 let widget;
 let day;
@@ -222,7 +222,7 @@ async function askForAllShowPositions() {
     let filteredOptions = options.filter(type => {
       if (type === "graph" && usedGraph >= 2) return false;
       if (type === "table" && usedTable >= 2) return false;
-      if ((usedGraph + usedTable) >= 2 && (type === "graph" || type === "table")) return false;
+      if ((usedGraph + usedTable) >= 3 && (type === "graph" || type === "table")) return false;
       return true;
     });
 
@@ -258,6 +258,10 @@ async function askForAllShowPositions() {
   settings.height = 1150
   if (totalGraph === 2) {
     settings.height = 550;
+  } else if (totalGraph === 2 && totalTable === 1) {
+    settings.height = 350;
+  } else if (totalTable === 2 && totalGraph === 1) {
+    settings.height = 410;    
   } else if (totalGraph === 1 && totalTable === 1) {
     settings.height = 750;
   } else if (totalGraph === 1 && totalPriceStats === 1) {
@@ -534,7 +538,7 @@ async function Graph(day) {
     }
     while (counterdot < 24)
     
-    let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+height+"&c="
+    let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+settings.height+"&c="
     graphtoday += encodeURI("{\
       data: { \
         labels: ["+hours+"],\
@@ -710,7 +714,6 @@ async function renderSection(position) {
       await PriceStats(day);
       break;
     default:
-      console.warn(`Unknown type "${type}" at ${position}`);
   }
 }
 

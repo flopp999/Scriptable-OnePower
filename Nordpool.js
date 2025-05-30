@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.765
+let version = 0.766
 let allValues = [];
 let widget;
 let day;
@@ -400,15 +400,18 @@ async function Table(day) {
   }
   
   let left = listwidget.addStack();
-  left.layoutHorizontally();
   let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
   whatday.font = Font.lightSystemFont(13);
-  let right = left.addStack();
-  right.layoutVertically();
-  let update = right.addStack();
-  update.addSpacer();
-  let updatetext = update.addText(t("updated") + updated);
+  left.addSpacer();
+  if (prices == 0) {
+    whatday = left.addText("Available after 13:00");
+    whatday.textColor = new Color("#ffffff");
+    whatday.font = Font.lightSystemFont(13);
+    listwidget.addSpacer(5);
+    return;
+  }
+  let updatetext = left.addText(t("updated") + updated);
   updatetext.font = Font.lightSystemFont(13);
   updatetext.textColor = new Color("#ffffff");
   

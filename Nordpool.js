@@ -50,7 +50,7 @@ if (config.runsInWidget){
   if (keys.length < 10 || keys == undefined) {
     let widget = new ListWidget();
     widget.addText("You need to run \"" + Script.name() + "\" in the app");
-    Script.setWidget(widget)M
+    Script.setWidget(widget);
     Script.complete();
     return;
   
@@ -132,7 +132,6 @@ async function readsettings() {
       if (keys.length < 10) {
         throw new Error("Settings file is incomplete or corrupted");
         return;
-        }
       }
     } else {
       await askForLanguage();

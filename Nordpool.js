@@ -117,7 +117,7 @@ async function readsettings() {
       langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
       await readTranslations();
       let keys = Object.keys(settings);
-      if (keys.length < 13) {
+      if (keys.length < 10) {
         if (config.runsInWidget) {
           let widget = new ListWidget();
           widget.addText("You need to run this script in the app");

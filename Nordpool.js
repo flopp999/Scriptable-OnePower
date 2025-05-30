@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.766
+let version = 0.767
 let allValues = [];
 let widget;
 let day;
@@ -124,7 +124,7 @@ async function readsettings() {
       settings = JSON.parse(raw);
       langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
       await readTranslations();
-      let keys = Object.keys(settings);
+      keys = Object.keys(settings);
       if (keys.length < 10) {
         throw new Error("Settings file is incomplete or corrupted");
         return;

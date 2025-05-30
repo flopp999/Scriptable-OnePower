@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.750
+let version = 0.751
 let allValues = [];
 let widget;
 let day;
@@ -188,26 +188,59 @@ async function ask() {
   [settings.area, settings.vat, settings.currency] = await askForArea();
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
-  settings.showattop = await askForShowAtTop();
-  if (settings.showattop != "nothing") {
-    settings.showattopday = await askForShowAtTopDay();
-  } else {
-    settings.showattopday = ""
-  }
-  settings.showatmiddle = await askForShowAtMiddle();
-  if (settings.showatmiddle != "nothing") {
-    settings.showatmiddleday = await askForShowAtMiddleDay();
-  } else {
-    settings.showatmiddleday = ""
-  }
-  settings.showatbottom = await askForShowAtBottom();
-  if (settings.showatbottom != "nothing") {
-    settings.showatbottomday = await askForShowAtBottomDay();
-  } else {
-    settings.showatbottomday = ""
-  }
+  await askForShowAtPosition("top");
+  await askForShowAtPosition("middle");
+  await askForShowAtPosition("bottom");
+  //settings.showattop = await askForShowAtTop();
+  //if (settings.showattop != "nothing") {
+  //  settings.showattopday = await askForShowAtTopDay();
+  //} else {
+    //settings.showattopday = ""
+  //}
+  //settings.showatmiddle = await askForShowAtMiddle();
+  //if (settings.showatmiddle != "nothing") {
+ //   settings.showatmiddleday = await askForShowAtMiddleDay();
+  //} else {
+   // settings.showatmiddleday = ""
+ // }
+  //settings.showatbottom = await askForShowAtBottom();
+  //if (settings.showatbottom != "nothing") {
+   // settings.showatbottomday = await askForShowAtBottomDay();
+  //} else {
+   // settings.showatbottomday = ""
+  //}
   settings.resolution = 60;
   return settings
+}
+
+async function askForShowAtPosition(position) {
+  const options = ["graph", "table", "pricestats", "nothing"];
+  const days = ["today", "tomorrow"];
+
+  const alert = new Alert();
+  alert.message = `${t("showwhat")} ${t(position)}?`;
+  options.forEach(o => alert.addAction(t(o)));
+  const index = await alert.presentAlert();
+  const choice = options[index];
+
+  let result;
+
+  if (choice === "nothing") {
+    result = "nothing";
+  } else {
+    const dayAlert = new Alert();
+    dayAlert.title = t(position).charAt(0).toUpperCase() + t(position).slice(1);
+    dayAlert.message = t("showday") + "?";
+    days.forEach(d => dayAlert.addAction(t(d)));
+    const dayIndex = await dayAlert.presentAlert();
+    const dayChoice = days[dayIndex];
+
+    result = `${choice}, ${dayChoice}`;
+  }
+
+  settings[`showat${position}`] = result;
+  fm.writeString(filePath, JSON.stringify(settings, null, 2));
+  return result;
 }
 
 

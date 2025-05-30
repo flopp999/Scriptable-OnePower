@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.754
+let version = 0.755
 let allValues = [];
 let widget;
 let day;
@@ -53,7 +53,6 @@ if (config.runsInWidget){
     Script.setWidget(widget);
     Script.complete();
     return;
-  
   }
 }
 if (config.runsInWidget){
@@ -67,12 +66,11 @@ async function start() {
   const [bottomType, bottomDay] = settings.showatbottom.split(",").map(s => s.trim());
   let alert = new Alert();
   let vatText = includevat == 1 ? t("yes") : t("no")
-  //let showdayText = showday == "Today" ? t("today") : t("tomorrow")
   alert.message = 
     t("changesetup") + "?\n" +
-    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ": " + t(topType) + ", " + t(topDay) + "\n" +
-    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ": " + t(middleType) + ", " + t(middleDay) + "\n" +
-    t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ": " + t(bottomType) + ", " + t(bottomDay) + "\n" +
+    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(topType) + (topDay ? ", " + t(topDay) : "") + "\n" +
+    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(middleType) + (middleDay ? ", " + t(middleDay) : "") + "\n" +
+    t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "") + "\n" +
     t("area") + ": " + area + ", " + currency + "\n" +
     "Extras: " + extras + "\n" +
     t("withvat") + ": " + vatText + "\n";
@@ -102,10 +100,6 @@ async function updatecode() {
         }
         const codeString = response.toRawString(); // eller response.toString()
         fm.writeString(module.filename, codeString);
-        
-          //const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
-          //const codeString = await req.loadString();
-          //fm.writeString(module.filename, codeString);
         let updateNotify = new Notification();
         updateNotify.title = Script.name();
         updateNotify.body = "New version installed";
@@ -203,24 +197,6 @@ async function ask() {
   await askForShowAtPosition("top");
   await askForShowAtPosition("middle");
   await askForShowAtPosition("bottom");
-  //settings.showattop = await askForShowAtTop();
-  //if (settings.showattop != "nothing") {
-  //  settings.showattopday = await askForShowAtTopDay();
-  //} else {
-    //settings.showattopday = ""
-  //}
-  //settings.showatmiddle = await askForShowAtMiddle();
-  //if (settings.showatmiddle != "nothing") {
- //   settings.showatmiddleday = await askForShowAtMiddleDay();
-  //} else {
-   // settings.showatmiddleday = ""
- // }
-  //settings.showatbottom = await askForShowAtBottom();
-  //if (settings.showatbottom != "nothing") {
-   // settings.showatbottomday = await askForShowAtBottomDay();
-  //} else {
-   // settings.showatbottomday = ""
-  //}
   settings.resolution = 60;
   return settings
 }
@@ -228,15 +204,12 @@ async function ask() {
 async function askForShowAtPosition(position) {
   const options = ["graph", "table", "pricestats", "nothing"];
   const days = ["today", "tomorrow"];
-
   const alert = new Alert();
   alert.message = `${t("showwhat")} ${t(position)}?`;
   options.forEach(o => alert.addAction(t(o)));
   const index = await alert.presentAlert();
   const choice = options[index];
-
   let result;
-
   if (choice === "nothing") {
     result = "nothing";
   } else {
@@ -249,12 +222,10 @@ async function askForShowAtPosition(position) {
 
     result = `${choice}, ${dayChoice}`;
   }
-
   settings[`showat${position}`] = result;
   fm.writeString(filePath, JSON.stringify(settings, null, 2));
   return result;
 }
-
 
 // Show graph
 async function askForShowAtTopDay() {
@@ -615,21 +586,14 @@ async function Graph(day) {
     await DateTomorrow();
   }
   let left = listwidget.addStack();
-  //left.layoutHorizontally();
   let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
   whatday.font = Font.lightSystemFont(13);
-  //let right = left.addStack();
-  //right.layoutVertically();
-  //let update = right.addStack();
   left.addSpacer();
   let updatetext = left.addText(t("updated") + updated);
   updatetext.font = Font.lightSystemFont(13);
   updatetext.textColor = new Color("#ffffff");
   if (resolution == 60) {
-    //if ( settings.showattop == "Table" || settings.showatmiddle == "Table" || settings.showatbottom == "Table" ) {
-    //  height = 770
-    //}
     let avgtoday = []
     let dotNow = ""
     let countertoday = 0
@@ -712,13 +676,9 @@ async function PriceStats(day) {
     await DateTomorrow();
   }
   let left = listwidget.addStack();
-  //left.layoutHorizontally();
   let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
   whatday.font = Font.lightSystemFont(13);
-  //let right = left.addStack();
-  //right.layoutVertically();
-  //let update = right.addStack();
   left.addSpacer();
   let updatetext = left.addText(t("updated") + updated);
   updatetext.font = Font.lightSystemFont(13);
@@ -745,7 +705,6 @@ async function PriceStats(day) {
   highest.textColor = new Color("#fa60ff");
   listwidget.addSpacer(5);
 }
-
 
 const smallFont = 10;
 const mediumFont = 12;
@@ -836,11 +795,7 @@ async function renderSection(position) {
   }
 }
 
-
 let listwidget = new ListWidget();
-
-
-
 
 async function createWidgetNodata(){
   listwidget.backgroundColor = new Color("#000000");
@@ -855,63 +810,11 @@ async function createWidgetNodata(){
   return listwidget
 }
 async function createWidget(){
-  //await DateToday();
   listwidget.backgroundColor = new Color("#000000");
-  //const functionMap = {
-  //Table: Table,
-  //PriceStats: PriceStats,
-  //Graph: Graph
-//};
-
-// Lista på inställningar och deras nuvarande värden
-//const positions = [
-  //settings.showattop,
-  //settings.showatmiddle,
-  //settings.showatbottom
-//];
-
-// Loopa igenom och kör rätt funktion om den finns i functionMap
-//for (let value of positions) {
-  //const func = functionMap[value];
-  //if (func) {
-    //log("a");
-    //await func(); // Anropa funktionen asynkront
-  //}
-//}
-  //return listwidget
   await renderSection("top");
   await renderSection("middle");
-  await renderSection("bottom");
-  if (settings.showattop == "table") {
-    await Table(settings.showattopday);
-  }
-   else if (settings.showattop == "pricestats") {
-    await PriceStats(settings.showattopday);
-  }
-   else if (settings.showattop == "graph") {
-    await Graph(settings.showattopday);
-  }
-  if (settings.showatmiddle == "table") {
-    await Table(settings.showatmiddleday);
-  }
-   else if (settings.showatmiddle == "pricestats") {
-    await PriceStats(settings.showatmiddleday);
-  }
-   else if (settings.showatmiddle == "graph") {
-    await Graph(settings.showatmiddleday);
-  }
-  if (settings.showatbottom == "table") {
-    await Table(settings.showatbottomday);
-  }
-   else if (settings.showatbottom == "pricestats") {
-    await PriceStats(settings.showatbottomday);
-  }
-   else if (settings.showatbottom == "graph") {
-    await Graph(settings.showatbottomday);
-  }
-  
+  await renderSection("bottom");  
   let moms = listwidget.addStack();
-  //moms.addSpacer();
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");

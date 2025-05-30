@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.760
+let version = 0.762
 let allValues = [];
 let widget;
 let day;
@@ -32,7 +32,7 @@ const fileName = Script.name() + "_Settings.json";
 const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
 let filePath = fm.joinPath(dir, fileName);
-let height = 550;
+let height = 1150;
 let width = 1300;
 let keys = [];
 
@@ -252,6 +252,14 @@ async function askForAllShowPositions() {
 
   // När allt är klart: spara
   fm.writeString(filePath, JSON.stringify(settings, null, 2));
+  const totalGraph = chosenCombinations.filter(c => c.type === "graph").length;
+  const totalTable = chosenCombinations.filter(c => c.type === "table").length;
+
+  if (totalGraph === 2) {
+    height = 550;
+  } else if (totalGraph === 1 && totalTable === 1) {
+    height = 750;
+  }
   return settings;
 }
 

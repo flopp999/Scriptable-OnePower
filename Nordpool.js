@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.751
+let version = 0.752
 let allValues = [];
 let widget;
 let day;
@@ -801,8 +801,34 @@ async function DateTomorrow() {
   priceDiff = (priceHighest - priceLowest)/3;
   priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
 }
+// Funktionen som kallar rätt innehåll
+async function renderSection(position) {
+  const value = settings[`showat${position}`];
+
+  if (!value || value === "nothing") return;
+
+  const [type, day] = value.split(",").map(s => s.trim());
+
+  switch (type) {
+    case "table":
+      await Table(day);
+      break;
+    case "graph":
+      await Graph(day);
+      break;
+    case "pricestats":
+      await PriceStats(day);
+      break;
+    default:
+      console.warn(`Unknown type "${type}" at ${position}`);
+  }
+}
+
 
 let listwidget = new ListWidget();
+
+
+
 
 async function createWidgetNodata(){
   listwidget.backgroundColor = new Color("#000000");
@@ -841,7 +867,9 @@ async function createWidget(){
   //}
 //}
   //return listwidget
-
+  await renderSection("top");
+  await renderSection("middle");
+  await renderSection("bottom");
   if (settings.showattop == "table") {
     await Table(settings.showattopday);
   }

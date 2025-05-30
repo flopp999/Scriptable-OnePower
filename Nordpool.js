@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.757
+let version = 0.758
 let allValues = [];
 let widget;
 let day;
@@ -204,67 +204,57 @@ async function ask() {
   return settings
 }
 
-async function askForShowAtPosition(position) {
-  const displayTypes = ["graph", "table", "pricestats", "nothing"];
+async function askAllShowPositions() {
+  const options = ["graph", "table", "pricestats", "nothing"];
   const days = ["today", "tomorrow"];
+  const chosenCombinations = [];
+  const tempSettings = {};
 
-  // Räkna alla redan valda typer och dagkombinationer
-  const allUsed = ["top", "middle", "bottom"]
-    .map(p => settings[`showat${p}`])
-    .filter(Boolean); // filtrera bort undefined
+  const positions = ["top", "middle", "bottom"];
 
-  const usedCounts = {};
-  const usedCombos = new Set();
+  for (let position of positions) {
+    let filteredOptions = options.slice();
 
-  for (let entry of allUsed) {
-    const [type, day] = entry.split(",").map(s => s.trim());
-    usedCounts[type] = (usedCounts[type] || 0) + 1;
-    if (day) usedCombos.add(`${type},${day}`);
-  }
+    // Begränsa till max 2 val totalt för graph, table, pricestats
+    const usedCount = (type) =>
+      chosenCombinations.filter(c => c && c.type === type).length;
 
-  // Filtrera bort visningstyper som redan används två gånger
-  const availableTypes = displayTypes.filter(type =>
-    type === "nothing" || (usedCounts[type] || 0) < 2
-  );
+    filteredOptions = filteredOptions.filter(type =>
+      usedCount(type) < 2
+    );
 
-  // Välj visningstyp
-  const alert = new Alert();
-  alert.message = `${t("showwhat")} ${t(position)}?`;
-  availableTypes.forEach(o => alert.addAction(t(o)));
-  const index = await alert.presentAlert();
-  const choice = availableTypes[index];
+    const alert = new Alert();
+    alert.message = `${t("showwhat")} ${t(position)}?`;
+    filteredOptions.forEach(o => alert.addAction(t(o)));
+    const index = await alert.presentAlert();
+    const choice = filteredOptions[index];
 
-  let result;
-  if (choice === "nothing") {
-    result = "nothing";
-  } else {
-    // Välj dag, men filtrera bort kombinationer som redan är använda
-    const availableDays = days.filter(day => !usedCombos.has(`${choice},${day}`));
+    let day = "";
+    if (choice !== "nothing") {
+      const usedDaysForType = chosenCombinations
+        .filter(c => c.type === choice)
+        .map(c => c.day);
 
-    if (availableDays.length === 0) {
-      const warn = new Alert();
-      warn.title = "Begränsning";
-      warn.message = `Du kan bara välja varje typ två gånger, och varje kombination av typ + dag en gång.`;
-      warn.addAction("OK");
-      await warn.presentAlert();
-      return await askForShowAtPosition(position); // Starta om frågan
+      const availableDays = days.filter(d => !usedDaysForType.includes(d));
+
+      const dayAlert = new Alert();
+      dayAlert.title = t(position).charAt(0).toUpperCase() + t(position).slice(1);
+      dayAlert.message = t("showday") + "?";
+      availableDays.forEach(d => dayAlert.addAction(t(d)));
+
+      const dayIndex = await dayAlert.presentAlert();
+      day = availableDays[dayIndex];
     }
 
-    const dayAlert = new Alert();
-    dayAlert.title = t(position).charAt(0).toUpperCase() + t(position).slice(1);
-    dayAlert.message = t("showday") + "?";
-    availableDays.forEach(d => dayAlert.addAction(t(d)));
-    const dayIndex = await dayAlert.presentAlert();
-    const dayChoice = availableDays[dayIndex];
-
-    result = `${choice}, ${dayChoice}`;
+    chosenCombinations.push({ position, type: choice, day });
+    tempSettings[`showat${position}`] = choice;
+    tempSettings[`showat${position}day`] = day;
   }
 
-  settings[`showat${position}`] = result;
-  fm.writeString(filePath, JSON.stringify(settings, null, 2));
-  return result;
+  // Skriv till settings.json först när alla val är klara
+  fm.writeString(filePath, JSON.stringify(tempSettings, null, 2));
+  return tempSettings;
 }
-
 
 // Select resolution
 async function askForLanguage() {

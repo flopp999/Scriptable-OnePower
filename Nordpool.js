@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.755
+let version = 0.756
 let allValues = [];
 let widget;
 let day;
@@ -89,10 +89,12 @@ async function start() {
 async function updatecode() {
   try {
     const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Version.txt");
+    req.timeoutInterval = 1;
     const serverVersion = await req.loadString()
     if (version < serverVersion) {
       try {
         const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
+        req.timeoutInterval = 1;
         const response = await req.load(); // laddar utan att direkt kasta fel
         const status = req.response.statusCode;
         if (status !== 200) {
@@ -166,6 +168,7 @@ async function readTranslations() {
   let url = "https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Translations.json";
   let filename = Script.name() + "_Translations.json";
   let req = new Request(url);
+  req.timeoutInterval = 1;
   let content = await req.loadString();
   let path = fm.joinPath(dir, filename);
   fm.writeString(path, content);
@@ -659,6 +662,7 @@ async function Graph(day) {
             }\
           }\
     }")
+    graphtoday.timeoutInterval = 1;
     const GRAPH = await new Request(graphtoday).loadImage()
     let emptyrow = listwidget.addStack()
     listwidget.addSpacer(5)

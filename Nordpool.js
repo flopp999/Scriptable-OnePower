@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.758
+let version = 0.759
 let allValues = [];
 let widget;
 let day;
@@ -208,20 +208,25 @@ async function askAllShowPositions() {
   const options = ["graph", "table", "pricestats", "nothing"];
   const days = ["today", "tomorrow"];
   const chosenCombinations = [];
-  const tempSettings = {};
-
   const positions = ["top", "middle", "bottom"];
+  
 
   for (let position of positions) {
-    let filteredOptions = options.slice();
-
-    // Begränsa till max 2 val totalt för graph, table, pricestats
+    // Räkna hur många gånger varje typ har använts
     const usedCount = (type) =>
       chosenCombinations.filter(c => c && c.type === type).length;
 
-    filteredOptions = filteredOptions.filter(type =>
-      usedCount(type) < 2
-    );
+    // Räkna total användning av graph och table
+    const usedGraph = usedCount("graph");
+    const usedTable = usedCount("table");
+
+    // Skapa tillåtna val
+    let filteredOptions = options.filter(type => {
+      if (type === "graph" && usedGraph >= 2) return false;
+      if (type === "table" && usedTable >= 2) return false;
+      if ((usedGraph + usedTable) >= 2 && (type === "graph" || type === "table")) return false;
+      return true;
+    });
 
     const alert = new Alert();
     alert.message = `${t("showwhat")} ${t(position)}?`;
@@ -234,27 +239,25 @@ async function askAllShowPositions() {
       const usedDaysForType = chosenCombinations
         .filter(c => c.type === choice)
         .map(c => c.day);
-
       const availableDays = days.filter(d => !usedDaysForType.includes(d));
-
       const dayAlert = new Alert();
       dayAlert.title = t(position).charAt(0).toUpperCase() + t(position).slice(1);
       dayAlert.message = t("showday") + "?";
       availableDays.forEach(d => dayAlert.addAction(t(d)));
-
       const dayIndex = await dayAlert.presentAlert();
       day = availableDays[dayIndex];
     }
 
     chosenCombinations.push({ position, type: choice, day });
-    tempSettings[`showat${position}`] = choice;
-    tempSettings[`showat${position}day`] = day;
+    settings[`showat${position}`] = choice;
+    settings[`showat${position}day`] = day;
   }
 
-  // Skriv till settings.json först när alla val är klara
-  fm.writeString(filePath, JSON.stringify(tempSettings, null, 2));
+  // När allt är klart: spara
+  fm.writeString(filePath, JSON.stringify(settings, null, 2));
   return tempSettings;
 }
+
 
 // Select resolution
 async function askForLanguage() {

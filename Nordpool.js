@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.759
+let version = 0.760
 let allValues = [];
 let widget;
 let day;
@@ -197,20 +197,18 @@ async function ask() {
   [settings.area, settings.vat, settings.currency] = await askForArea();
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
-  await askForShowAtPosition("top");
-  await askForShowAtPosition("middle");
-  await askForShowAtPosition("bottom");
+  await askForAllShowPositions("top");
+  //await askForShowAtPosition("middle");
+  //await askForShowAtPosition("bottom");
   settings.resolution = 60;
   return settings
 }
 
-async function askAllShowPositions() {
+async function askForAllShowPositions() {
   const options = ["graph", "table", "pricestats", "nothing"];
   const days = ["today", "tomorrow"];
   const chosenCombinations = [];
   const positions = ["top", "middle", "bottom"];
-  
-
   for (let position of positions) {
     // Räkna hur många gånger varje typ har använts
     const usedCount = (type) =>
@@ -249,13 +247,12 @@ async function askAllShowPositions() {
     }
 
     chosenCombinations.push({ position, type: choice, day });
-    settings[`showat${position}`] = choice;
-    settings[`showat${position}day`] = day;
+    settings[`showat${position}`] = `${choice}, ${day}`;
   }
 
   // När allt är klart: spara
   fm.writeString(filePath, JSON.stringify(settings, null, 2));
-  return tempSettings;
+  return settings;
 }
 
 

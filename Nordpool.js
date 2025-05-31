@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.767
+let version = 0.768
 let allValues = [];
 let widget;
 let daybefore;
@@ -399,7 +399,7 @@ async function Table(day) {
    if (day == "tomorrow") {
    await DateTomorrow();
   }
-  
+  if (daybefore != day){
   let left = listwidget.addStack();
   let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
@@ -411,10 +411,13 @@ async function Table(day) {
     whatday.font = Font.lightSystemFont(13);
     listwidget.addSpacer(5);
     return;
-  }
+  }else{
+  
   let updatetext = left.addText(t("updated") + updated);
   updatetext.font = Font.lightSystemFont(13);
   updatetext.textColor = new Color("#ffffff");
+  }
+  }
   daybefore = day;
   let head = listwidget.addStack()
   let stackNames = ["first", "second", "third", "fourth", "fifth"];
@@ -511,27 +514,25 @@ async function Graph(day) {
   if (day == "tomorrow") {
     await DateTomorrow();
   }
-  if (daybefore != day){
-    
-  let left = listwidget.addStack();
-  let whatday = left.addText(date);
-  whatday.textColor = new Color("#ffffff");
-  whatday.font = Font.lightSystemFont(13);
-  left.addSpacer();
-     daybefore = day;
-  if (prices == 0) {
-    whatday = left.addText("Available after 13:00");
+  if (daybefore != day){ 
+    let left = listwidget.addStack();
+    let whatday = left.addText(date);
     whatday.textColor = new Color("#ffffff");
     whatday.font = Font.lightSystemFont(13);
-    listwidget.addSpacer(5);
-    return;
-  } else {
-  let updatetext = left.addText(t("updated") + updated);
-  updatetext.font = Font.lightSystemFont(13);
-  updatetext.textColor = new Color("#ffffff");
+    left.addSpacer();
+    if (prices == 0) {
+      whatday = left.addText("Available after 13:00");
+      whatday.textColor = new Color("#ffffff");
+      whatday.font = Font.lightSystemFont(13);
+      listwidget.addSpacer(5);
+      return;
+    } else {
+      let updatetext = left.addText(t("updated") + updated);
+      updatetext.font = Font.lightSystemFont(13);
+      updatetext.textColor = new Color("#ffffff");
     }
   }
-  
+  daybefore = day;
   if (resolution == 60) {
     let avgtoday = []
     let dotNow = ""
@@ -624,15 +625,15 @@ async function PriceStats(day) {
     await DateTomorrow();
   }
   if (daybefore != day){
-  let left = listwidget.addStack();
-  let whatday = left.addText(date);
-  whatday.textColor = new Color("#ffffff");
-  whatday.font = Font.lightSystemFont(13);
-  left.addSpacer();
-  let updatetext = left.addText(t("updated") + updated);
-  updatetext.font = Font.lightSystemFont(13);
-  updatetext.textColor = new Color("#ffffff");
-     }
+    let left = listwidget.addStack();
+    let whatday = left.addText(date);
+    whatday.textColor = new Color("#ffffff");
+    whatday.font = Font.lightSystemFont(13);
+    left.addSpacer();
+    let updatetext = left.addText(t("updated") + updated);
+    updatetext.font = Font.lightSystemFont(13);
+    updatetext.textColor = new Color("#ffffff");
+  }
   daybefore = day;
   if (prices == 0) {
     return;

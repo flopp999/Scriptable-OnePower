@@ -7,6 +7,7 @@
 let version = 0.767
 let allValues = [];
 let widget;
+let daybefore;
 let day;
 let date;
 let prices;
@@ -414,7 +415,7 @@ async function Table(day) {
   let updatetext = left.addText(t("updated") + updated);
   updatetext.font = Font.lightSystemFont(13);
   updatetext.textColor = new Color("#ffffff");
-  
+  daybefore = day;
   let head = listwidget.addStack()
   let stackNames = ["first", "second", "third", "fourth", "fifth"];
   let timeStacks = {};
@@ -510,14 +511,27 @@ async function Graph(day) {
   if (day == "tomorrow") {
     await DateTomorrow();
   }
+  if (daybefore != day){
+    
   let left = listwidget.addStack();
   let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
   whatday.font = Font.lightSystemFont(13);
   left.addSpacer();
+     daybefore = day;
+  if (prices == 0) {
+    whatday = left.addText("Available after 13:00");
+    whatday.textColor = new Color("#ffffff");
+    whatday.font = Font.lightSystemFont(13);
+    listwidget.addSpacer(5);
+    return;
+  } else {
   let updatetext = left.addText(t("updated") + updated);
   updatetext.font = Font.lightSystemFont(13);
   updatetext.textColor = new Color("#ffffff");
+    }
+  }
+  
   if (resolution == 60) {
     let avgtoday = []
     let dotNow = ""
@@ -563,6 +577,14 @@ async function Graph(day) {
             pointRadius:0\
           },\
           {\
+            data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
+            type:'line',\
+            fill:false,\
+            borderColor: 'rgb(0,150,0)',\
+            borderWidth:6,\
+            pointRadius:0\
+          },\
+          {\
             data:["+pricesJSON+"],\
             type:'bar',\
             fill:false,\
@@ -601,6 +623,7 @@ async function PriceStats(day) {
   if (day == "tomorrow") {
     await DateTomorrow();
   }
+  if (daybefore != day){
   let left = listwidget.addStack();
   let whatday = left.addText(date);
   whatday.textColor = new Color("#ffffff");
@@ -609,12 +632,20 @@ async function PriceStats(day) {
   let updatetext = left.addText(t("updated") + updated);
   updatetext.font = Font.lightSystemFont(13);
   updatetext.textColor = new Color("#ffffff");
+     }
+  daybefore = day;
+  if (prices == 0) {
+    return;
+    }
   let bottom = listwidget.addStack();
+  if (day != "tomorrow"){
+  
   // now
   let now = bottom.addText(t("now") + " " + Math.round(pricesJSON[hour]));
   now.font = Font.lightSystemFont(11);
   now.textColor = new Color("#00ffff");
   bottom.addSpacer();
+    }
   // lowest
   let lowest = bottom.addText(t("lowest") + " " + Math.round(priceLowest));
   lowest.font = Font.lightSystemFont(11);

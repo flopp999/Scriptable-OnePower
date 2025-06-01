@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.773
+let version = 0.774
 let allValues = [];
 let widget;
 let daybefore;
@@ -605,7 +605,7 @@ async function Graph(day, graphOption) {
             data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
             type: 'line',\
             fill: false,\
-            borderColor: 'rgb(0,0,255)',\
+            borderColor: 'rgb(255,255,255)',\
             borderWidth: 6,\
             pointRadius: 0\
           },\

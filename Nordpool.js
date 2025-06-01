@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.772
+let version = 0.773
 let allValues = [];
 let widget;
 let daybefore;
@@ -72,7 +72,7 @@ async function start() {
     t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(topType) + (topDay ? ", " + t(topDay) : "") + "\n" +
     t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(middleType) + (middleDay ? ", " + t(middleDay) : "") + "\n" +
     t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "") + "\n" +
-    t("area") + ": " + area + ", " + currency + "\n" +
+    t("area") + ": " + area + "\n" +
     "Extras: " + extras + "\n" +
     t("withvat") + ": " + vatText + "\n";
   if (includevat == 1) {
@@ -605,7 +605,7 @@ async function Graph(day, graphOption) {
             data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
             type: 'line',\
             fill: false,\
-            borderColor: 'rgb(0,150,0)',\
+            borderColor: 'rgb(0,0,255)',\
             borderWidth: 6,\
             pointRadius: 0\
           },\

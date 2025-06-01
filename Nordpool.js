@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.770
+let version = 0.771
 let allValues = [];
 let widget;
 let daybefore;
@@ -208,7 +208,7 @@ async function ask() {
 async function askForAllShowPositions() {
   const options = ["graph", "table", "pricestats", "nothing"];
   const days = ["today", "tomorrow"];
-  const graphTypes = ["line", "bars"];
+  const graphTypes = ["line", "bar"];
   const chosenCombinations = [];
   const positions = ["top", "middle", "bottom"];
   const graphOption = {};

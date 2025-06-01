@@ -576,35 +576,36 @@ async function Graph(day, graphOption) {
         labels: ["+hours+"],\
         datasets: [\
         {\
-            data:["+dotNow+"],\
-            type:'line',\
-            fill:false,\
-            borderColor:'rgb(0,255,255)',\
-            borderWidth:65,\
-            pointRadius:6\
+            data: ["+dotNow+"],\
+            type: 'line',\
+            fill: false,\
+            borderColor: 'rgb(0,255,255)',\
+            borderWidth: 65,\
+            pointRadius: 6\
           },\
           {\
-            data:["+avgtoday+"],\
-            type:'line',\
-            fill:false,\
+            data: ["+avgtoday+"],\
+            type: 'line',\
+            fill: false,\
             borderColor: 'orange',\
-            borderWidth:6,\
-            pointRadius:0\
+            borderWidth: 6,\
+            pointRadius: 0\
           },\
           {\
-            data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
-            type:'line',\
-            fill:false,\
+            data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
+            type: 'line',\
+            fill: false,\
             borderColor: 'rgb(0,150,0)',\
-            borderWidth:6,\
-            pointRadius:0\
+            borderWidth: 6,\
+            pointRadius: 0\
           },\
           {\
-            data:["+pricesJSON+"],\
-            type:'"+graphOption+"',\
-            fill:false,\
+            data: ["+pricesJSON+"],\
+            type: '"+graphOption+"',\
+            fill: false,\
             borderColor: getGradientFillHelper('vertical',['rgb(255,25,255)','rgb(255,48,8)','orange','rgb(255,255,0)','rgb(0,150,0)']),\
             borderWidth: 20, \
+            pointRadius: 0\
           },\
         ]\
       },\
@@ -612,12 +613,17 @@ async function Graph(day, graphOption) {
           {\
             legend:\
             {\
-              display:false\
+              display: false\
             },\
             scales:\
             {\
-              xAxes:[{offset:true,ticks:{fontSize:35,fontColor:'white'}}],\
-              yAxes:[{ticks:{stepSize:10,beginAtZero:true,fontSize:35,fontColor:'white'}}]\
+              xAxes: [{\
+                offset:true,\
+                ticks:{fontSize:35,fontColor:'white'}\
+              }],\
+              yAxes: [{\
+                ticks:{stepSize:10,beginAtZero:true,fontSize:35,fontColor:'white'}\
+              }]\
             }\
           }\
     }")
@@ -640,7 +646,8 @@ async function PriceStats(day) {
   }
   if (daybefore != day){
     let left = listwidget.addStack();
-    let whatday = left.addText(date);
+    let whatday = left.
+      addText(date);
     whatday.textColor = new Color("#ffffff");
     whatday.font = Font.lightSystemFont(13);
     left.addSpacer();

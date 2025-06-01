@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.768
+let version = 0.769
 let allValues = [];
 let widget;
 let daybefore;
@@ -257,11 +257,11 @@ async function askForAllShowPositions() {
   const totalTable = chosenCombinations.filter(c => c.type === "table").length;
   const totalPriceStats = chosenCombinations.filter(c => c.type === "pricestats").length;
   settings.height = 1150
-  if (totalGraph === 2) {
+  if (totalGraph === 2  && totalTable === 0) {
     settings.height = 550;
   } else if (totalGraph === 2 && totalTable === 1) {
     settings.height = 350;
-  } else if (totalTable === 2 && totalGraph === 1) {
+  } else if (totalGraph === 1 && totalTable === 2) {
     settings.height = 410;    
   } else if (totalGraph === 1 && totalTable === 1) {
     settings.height = 750;
@@ -525,6 +525,7 @@ async function Graph(day) {
       whatday.textColor = new Color("#ffffff");
       whatday.font = Font.lightSystemFont(13);
       listwidget.addSpacer(5);
+      daybefore = day;
       return;
     } else {
       let updatetext = left.addText(t("updated") + updated);

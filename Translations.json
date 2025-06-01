@@ -9,6 +9,26 @@
     "sv": "",
     "de": ""
   },
+  "": {
+    "en": "",
+    "sv": "",
+    "de": ""
+  },  
+  "bar": {
+    "en": "Bar",
+    "sv": "Stapel",
+    "de": "Bar"
+  },
+  "line": {
+    "en": "Line",
+    "sv": "Linje",
+    "de": "Line"
+  },
+  "choosegraphtype": {
+    "en": "Select chart type",
+    "sv": "Välj typ av graf",
+    "de": "Select chart type"
+  },
   "now": {
     "en": "Now",
     "sv": "Nu",

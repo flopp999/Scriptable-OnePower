@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.769
+let version = 0.770
 let allValues = [];
 let widget;
 let daybefore;
@@ -208,8 +208,10 @@ async function ask() {
 async function askForAllShowPositions() {
   const options = ["graph", "table", "pricestats", "nothing"];
   const days = ["today", "tomorrow"];
+  const graphTypes = ["line", "bars"];
   const chosenCombinations = [];
   const positions = ["top", "middle", "bottom"];
+  const graphOption = {};
   for (let position of positions) {
     // Räkna hur många gånger varje typ har använts
     const usedCount = (type) =>
@@ -234,6 +236,15 @@ async function askForAllShowPositions() {
     const choice = filteredOptions[index];
 
     let day = "";
+    if (choice === "graph") {
+      const graphTypeAlert = new Alert();
+      graphTypeAlert.title = t(position).charAt(0).toUpperCase() + t(position).slice(1);
+      graphTypeAlert.message = t("choosegraphtype"); // t.ex. "Välj graf-typ"
+      graphTypes.forEach(g => graphTypeAlert.addAction(t(g)));
+      const gIndex = await graphTypeAlert.presentAlert();
+      const selectedGraphType = graphTypes[gIndex];
+      graphOption[position] = selectedGraphType;
+    }
     if (choice !== "nothing") {
       const usedDaysForType = chosenCombinations
         .filter(c => c.type === choice)
@@ -250,7 +261,9 @@ async function askForAllShowPositions() {
     chosenCombinations.push({ position, type: choice, day });
     settings[`showat${position}`] = `${choice}, ${day}`;
   }
-
+  if (Object.keys(graphOption).length > 0) {
+    settings.graphOption = graphOption;
+  }
   // När allt är klart: spara
   fm.writeString(filePath, JSON.stringify(settings, null, 2));
   const totalGraph = chosenCombinations.filter(c => c.type === "graph").length;
@@ -506,7 +519,7 @@ async function Table(day) {
   listwidget.addSpacer(5);
 }
 
-async function Graph(day) {
+async function Graph(day, graphOption) {
 //chart
   if (day == "today") {
     await DateToday();
@@ -588,7 +601,7 @@ async function Graph(day) {
           },\
           {\
             data:["+pricesJSON+"],\
-            type:'bar',\
+            type:'"+graphOption+"',\
             fill:false,\
             borderColor: getGradientFillHelper('vertical',['rgb(255,25,255)','rgb(255,48,8)','orange','rgb(255,255,0)','rgb(0,150,0)']),\
             borderWidth: 20, \
@@ -738,13 +751,13 @@ async function renderSection(position) {
   if (!value || value === "nothing") return;
 
   const [type, day] = value.split(",").map(s => s.trim());
-
+  const graphOption = settings.graphOption[position]
   switch (type) {
     case "table":
       await Table(day);
       break;
     case "graph":
-      await Graph(day);
+      await Graph(day, graphOption);
       break;
     case "pricestats":
       await PriceStats(day);

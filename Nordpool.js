@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.771
+let version = 0.772
 let allValues = [];
 let widget;
 let daybefore;
@@ -269,20 +269,30 @@ async function askForAllShowPositions() {
   const totalGraph = chosenCombinations.filter(c => c.type === "graph").length;
   const totalTable = chosenCombinations.filter(c => c.type === "table").length;
   const totalPriceStats = chosenCombinations.filter(c => c.type === "pricestats").length;
-  settings.height = 1150
-  if (totalGraph === 2  && totalTable === 0) {
-    settings.height = 550;
-  } else if (totalGraph === 2 && totalTable === 1) {
-    settings.height = 350;
-  } else if (totalGraph === 1 && totalTable === 2) {
-    settings.height = 410;    
-  } else if (totalGraph === 1 && totalTable === 1) {
-    settings.height = 750;
-  } else if (totalGraph === 1 && totalPriceStats === 1) {
-    settings.height = 1050;
-  }
+  const heightMap = {
+    "1-0-0": 800,
+    "0-1-0": 800,
+    "0-0-1": 800,
+  
+    "1-1-0": 750,
+    "1-0-1": 1050,
+    "0-1-1": 900,
+    "2-0-0": 550,
+    "0-2-0": 600,
+  
+    "1-1-1": 700,
+    "2-1-0": 350,
+    "1-2-0": 410,
+    "2-0-1": 510,
+    "0-2-1": 580,
+    "1-0-2": 950,
+    "0-1-2": 900,
+  };
+  
+  const key = `${totalGraph}-${totalTable}-${totalPriceStats}`;
+  settings.height = heightMap[key] ?? 1150;
   return settings;
-}
+  }
 
 
 // Select resolution

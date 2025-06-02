@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.775
+let version = 0.776
 let allValues = [];
 let widget;
 let daybefore;
@@ -730,6 +730,21 @@ async function DateToday() {
 async function DateTomorrow() { 
   allValues = [];
   const tomorrowPath = fm.joinPath(dir, "tomorrowprices.json");
+  async function getTomorrowData() {
+    console.log("Senast ändrad:", modified.toLocaleString());
+    const tomorrowDateObj = new Date();
+    tomorrowDateObj.setDate(tomorrowDateObj.getDate() + 1);
+    const yyyyTomorrow = tomorrowDateObj.getFullYear();
+    const mmTomorrow = String(tomorrowDateObj.getMonth() + 1).padStart(2, '0');
+    const ddTomorrow = String(tomorrowDateObj.getDate()).padStart(2, '0');
+    const tomorrowStr = `${yyyyTomorrow}-${mmTomorrow}-${ddTomorrow}`;
+    const tomorrowUrl = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${tomorrowStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
+    const requestTomorrow = new Request(tomorrowUrl);
+    requestTomorrow.timeoutInterval = 1;
+    let responseTomorrow = (await requestTomorrow.loadJSON());
+    const tomorrowJSON = JSON.stringify(responseTomorrow, null ,2);
+    fm.writeString(tomorrowPath, tomorrowJSON);
+  }
   if (fm.fileExists(tomorrowPath)) {
     let modified = fm.modificationDate(tomorrowPath);
     let now = new Date();
@@ -751,40 +766,29 @@ async function DateTomorrow() {
   
     if (hoursDiff > 6 || isFromYesterday) {
       console.log("⚠️ Filen är äldre än 6h eller från igår.");
-      console.log("Senast ändrad:", modified.toLocaleString());
-      const tomorrowDateObj = new Date();
-      tomorrowDateObj.setDate(tomorrowDateObj.getDate() + 1);
-      const yyyyTomorrow = tomorrowDateObj.getFullYear();
-      const mmTomorrow = String(tomorrowDateObj.getMonth() + 1).padStart(2, '0');
-      const ddTomorrow = String(tomorrowDateObj.getDate()).padStart(2, '0');
-      const tomorrowStr = `${yyyyTomorrow}-${mmTomorrow}-${ddTomorrow}`;
-      const tomorrowUrl = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${tomorrowStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
-      const requestTomorrow = new Request(tomorrowUrl);
-      requestTomorrow.timeoutInterval = 1;
-      let responseTomorrow = (await requestTomorrow.loadJSON());
-      const tomorrowJSON = JSON.stringify(responseTomorrow, null ,2);
-      fm.writeString(tomorrowPath, tomorrowJSON);
+      await getTomorrowData();
     } else {
       console.log("✅ Filen är ny nog.");
+      let content = fm.readString(tomorrowPath);
+      responseTomorrow = JSON.parse(content);
+      date = responseTomorrow.deliveryDateCET;  
+      prices = responseTomorrow.multiIndexEntries;
+      let tomorrowUpdated = responseTomorrow.updatedAt;
+      updated = tomorrowUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
+      for (let i = 0; i < prices.length; i++) {
+        const value = prices[i]["entryPerArea"][`${area}`];
+        allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
+      }
+      pricesJSON = JSON.parse(JSON.stringify(allValues));
+      priceLowest = (Math.min(...pricesJSON.map(Number)));
+      priceHighest = (Math.max(...pricesJSON.map(Number)));
+      priceDiff = (priceHighest - priceLowest)/3;
+      priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
     }
   } else {
     console.log("❌ Filen finns inte.");
+    await getTomorrowData();
   }
- let content = fm.readString(tomorrowPath);
-    responseTomorrow = JSON.parse(content);
-  date = responseTomorrow.deliveryDateCET;  
-  prices = responseTomorrow.multiIndexEntries;
-  let tomorrowUpdated = responseTomorrow.updatedAt;
-  updated = tomorrowUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
-  for (let i = 0; i < prices.length; i++) {
-    const value = prices[i]["entryPerArea"][`${area}`];
-    allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
-  }
-  pricesJSON = JSON.parse(JSON.stringify(allValues));
-  priceLowest = (Math.min(...pricesJSON.map(Number)));
-  priceHighest = (Math.max(...pricesJSON.map(Number)));
-  priceDiff = (priceHighest - priceLowest)/3;
-  priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
 }
 
 async function renderSection(position) {

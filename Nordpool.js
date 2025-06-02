@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.774
+let version = 0.775
 let allValues = [];
 let widget;
 let daybefore;
@@ -96,12 +96,12 @@ async function updatecode() {
       try {
         const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
         req.timeoutInterval = 1;
-        const response = await req.load(); // laddar utan att direkt kasta fel
+        const response = await req.load();
         const status = req.response.statusCode;
         if (status !== 200) {
           throw new Error(`Fel: HTTP ${status}`);
         }
-        const codeString = response.toRawString(); // eller response.toString()
+        const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
         let updateNotify = new Notification();
         updateNotify.title = Script.name();
@@ -190,7 +190,7 @@ async function readTranslations() {
 
 function t(key) {
   const entry = translationData[key];
-  if (!entry) return `[${key}]`; // nyckel saknas
+  if (!entry) return `[${key}]`; // key is missing
   return entry[currentLang] || entry["en"] || `[${key}]`;
 }
 
@@ -199,8 +199,6 @@ async function ask() {
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
   await askForAllShowPositions("top");
-  //await askForShowAtPosition("middle");
-  //await askForShowAtPosition("bottom");
   settings.resolution = 60;
   return settings
 }
@@ -213,15 +211,12 @@ async function askForAllShowPositions() {
   const positions = ["top", "middle", "bottom"];
   const graphOption = {};
   for (let position of positions) {
-    // Räkna hur många gånger varje typ har använts
     const usedCount = (type) =>
       chosenCombinations.filter(c => c && c.type === type).length;
 
-    // Räkna total användning av graph och table
     const usedGraph = usedCount("graph");
     const usedTable = usedCount("table");
 
-    // Skapa tillåtna val
     let filteredOptions = options.filter(type => {
       if (type === "graph" && usedGraph >= 2) return false;
       if (type === "table" && usedTable >= 2) return false;
@@ -429,7 +424,7 @@ async function Table(day) {
   whatday.font = Font.lightSystemFont(13);
   left.addSpacer();
   if (prices == 0) {
-    whatday = left.addText("Available after 13:00");
+    whatday = left.addText(t("after13"));
     whatday.textColor = new Color("#ffffff");
     whatday.font = Font.lightSystemFont(13);
     listwidget.addSpacer(5);
@@ -734,19 +729,49 @@ async function DateToday() {
 // Tomorrow date
 async function DateTomorrow() { 
   allValues = [];
-  const tomorrowDateObj = new Date();
-  tomorrowDateObj.setDate(tomorrowDateObj.getDate() + 1);
-  const yyyyTomorrow = tomorrowDateObj.getFullYear();
-  const mmTomorrow = String(tomorrowDateObj.getMonth() + 1).padStart(2, '0');
-  const ddTomorrow = String(tomorrowDateObj.getDate()).padStart(2, '0');
-  const tomorrowStr = `${yyyyTomorrow}-${mmTomorrow}-${ddTomorrow}`;
-  const tomorrowUrl = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${tomorrowStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
-  const requestTomorrow = new Request(tomorrowUrl);
-  requestTomorrow.timeoutInterval = 1;
-  let responseTomorrow = (await requestTomorrow.loadJSON());
-  const tomorrowJSON = JSON.stringify(responseTomorrow, null ,2);
   const tomorrowPath = fm.joinPath(dir, "tomorrowprices.json");
-  fm.writeString(tomorrowPath, tomorrowJSON);
+  if (fm.fileExists(tomorrowPath)) {
+    let modified = fm.modificationDate(tomorrowPath);
+    let now = new Date();
+  
+    let hoursDiff = (now - modified) / (1000 * 60 * 60); // Millisekunder → timmar
+  
+    // Kolla om filen är från igår
+    let modifiedDay = modified.getDate();
+    let modifiedMonth = modified.getMonth();
+    let modifiedYear = modified.getFullYear();
+  
+    let yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+  
+    let isFromYesterday =
+      modifiedDay === yesterday.getDate() &&
+      modifiedMonth === yesterday.getMonth() &&
+      modifiedYear === yesterday.getFullYear();
+  
+    if (hoursDiff > 6 || isFromYesterday) {
+      console.log("⚠️ Filen är äldre än 6h eller från igår.");
+      console.log("Senast ändrad:", modified.toLocaleString());
+      const tomorrowDateObj = new Date();
+      tomorrowDateObj.setDate(tomorrowDateObj.getDate() + 1);
+      const yyyyTomorrow = tomorrowDateObj.getFullYear();
+      const mmTomorrow = String(tomorrowDateObj.getMonth() + 1).padStart(2, '0');
+      const ddTomorrow = String(tomorrowDateObj.getDate()).padStart(2, '0');
+      const tomorrowStr = `${yyyyTomorrow}-${mmTomorrow}-${ddTomorrow}`;
+      const tomorrowUrl = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${tomorrowStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
+      const requestTomorrow = new Request(tomorrowUrl);
+      requestTomorrow.timeoutInterval = 1;
+      let responseTomorrow = (await requestTomorrow.loadJSON());
+      const tomorrowJSON = JSON.stringify(responseTomorrow, null ,2);
+      fm.writeString(tomorrowPath, tomorrowJSON);
+    } else {
+      console.log("✅ Filen är ny nog.");
+    }
+  } else {
+    console.log("❌ Filen finns inte.");
+  }
+ let content = fm.readString(tomorrowPath);
+    responseTomorrow = JSON.parse(content);
   date = responseTomorrow.deliveryDateCET;  
   prices = responseTomorrow.multiIndexEntries;
   let tomorrowUpdated = responseTomorrow.updatedAt;
@@ -761,7 +786,7 @@ async function DateTomorrow() {
   priceDiff = (priceHighest - priceLowest)/3;
   priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
 }
-// Funktionen som kallar rätt innehåll
+
 async function renderSection(position) {
   const value = settings[`showat${position}`];
 
@@ -785,18 +810,6 @@ async function renderSection(position) {
 
 let listwidget = new ListWidget();
 
-async function createWidgetNodata(){
-  listwidget.backgroundColor = new Color("#000000");
-  let row = listwidget.addStack();
-  row.layoutVertically();
-  let Nodata = row.addText("Could not get data.");
-  Nodata.textColor = new Color("#ffffff");
-  Nodata.font = Font.lightSystemFont(20);
-  let Nodata2 = row.addText("Tomorrow prices is available from 13:00");
-  Nodata2.font = Font.lightSystemFont(10);
-  Nodata2.textColor = new Color("#ffffff");
-  return listwidget
-}
 async function createWidget(){
   listwidget.backgroundColor = new Color("#000000");
   await renderSection("top");

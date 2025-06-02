@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.776
+let version = 0.777
 let allValues = [];
 let widget;
 let daybefore;
@@ -731,6 +731,7 @@ async function DateTomorrow() {
   allValues = [];
   const tomorrowPath = fm.joinPath(dir, "tomorrowprices.json");
   async function getTomorrowData() {
+    let modified = fm.modificationDate(tomorrowPath);
     console.log("Senast ändrad:", modified.toLocaleString());
     const tomorrowDateObj = new Date();
     tomorrowDateObj.setDate(tomorrowDateObj.getDate() + 1);

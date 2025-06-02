@@ -48,7 +48,7 @@ if (!config.runsInWidget){
 
 if (config.runsInWidget){
  await readsettings();
-  if (keys.length < 10 || keys == undefined) {
+  if (keys.length < 11 || keys == undefined) {
     let widget = new ListWidget();
     widget.addText("You need to run \"" + Script.name() + "\" in the app");
     Script.setWidget(widget);
@@ -126,7 +126,7 @@ async function readsettings() {
       langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
       await readTranslations();
       keys = Object.keys(settings);
-      if (keys.length < 10) {
+      if (keys.length < 11) {
         throw new Error("Settings file is incomplete or corrupted");
         return;
       }
@@ -766,14 +766,11 @@ async function DateTomorrow() {
       modifiedYear === yesterday.getFullYear();
   
     if (hoursDiff > 6 || isFromYesterday) {
-      console.log("⚠️ Filen är äldre än 6h eller från igår.");
       await getTomorrowData();
     }
   } else {
-    console.log("❌ Filen finns inte.");
     await getTomorrowData();
   }
-  console.log("✅ Filen är ny nog.");
   let content = fm.readString(tomorrowPath);
   responseTomorrow = JSON.parse(content);
   date = responseTomorrow.deliveryDateCET;  

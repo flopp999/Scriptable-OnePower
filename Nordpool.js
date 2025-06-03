@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.780
+let version = 0.781
 let allValues = [];
 let widget;
 let daybefore;
@@ -29,10 +29,10 @@ let hour;
 let minute;
 let translationData;
 let currentLang;
-const fileName = Script.name() + "_Settings.json";
+const fileNameSettings = Script.name() + "_Settings.json";
 const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
-let filePath = fm.joinPath(dir, fileName);
+let filePathSettings = fm.joinPath(dir, fileNameSettings);
 let height = 1150;
 let width = 1300;
 let keys = [];
@@ -83,7 +83,7 @@ async function start() {
   let index = await alert.presentAlert();
   if (index === 0) {
     settings = await ask();
-    fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+    fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
   }
 }
 
@@ -103,6 +103,7 @@ async function updatecode() {
         }
         const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
+        fm.remove(filePathSettings);
         let updateNotify = new Notification();
         updateNotify.title = Script.name();
         updateNotify.body = "New version installed";
@@ -118,10 +119,9 @@ async function updatecode() {
 }
 
 async function readsettings() {
-  let filePath = fm.joinPath(dir, fileName);
   try {
-    if (fm.fileExists(filePath)) {
-      let raw = fm.readString(filePath);
+    if (fm.fileExists(filePathSettings)) {
+      let raw = fm.readString(filePathSettings);
       settings = JSON.parse(raw);
       langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
       await readTranslations();
@@ -131,6 +131,9 @@ async function readsettings() {
         return;
       }
     } else {
+      if (config.runsInWidget) {
+        return;
+      }
       await askForLanguage();
       await readTranslations();
       let alert = new Alert();
@@ -146,11 +149,11 @@ async function readsettings() {
     }
   } catch (error) {
     if (config.runsInWidget) {
-  return;
-}
+      return;
+    }
     console.warn("Settings file not found or error reading file: " + error.message);
     settings = await ask();
-    fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+    fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
   }
 }
 
@@ -170,11 +173,10 @@ async function readTranslations() {
   let req = new Request(url);
   req.timeoutInterval = 1;
   let content = await req.loadString();
-  let path = fm.joinPath(dir, filename);
+  path = fm.joinPath(dir, filename);
   fm.writeString(path, content);
   try {
     const fm = FileManager.iCloud()
-    const path = fm.joinPath(fm.documentsDirectory(), filename);
     translationData = JSON.parse(fm.readString(path));
     const langMap = {
       1: "en",
@@ -259,7 +261,7 @@ async function askForAllShowPositions() {
     settings.graphOption = graphOption;
   }
   
-  fm.writeString(filePath, JSON.stringify(settings, null, 2));
+  fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
   const totalGraph = chosenCombinations.filter(c => c.type === "graph").length;
   const totalTable = chosenCombinations.filter(c => c.type === "table").length;
   const totalPriceStats = chosenCombinations.filter(c => c.type === "pricestats").length;
@@ -271,7 +273,7 @@ async function askForAllShowPositions() {
     "1-1-0": 750,
     "1-0-1": 1130,
     "0-1-1": 900,
-    "2-0-0": 580,
+    "2-0-0": 550,
     "0-2-0": 600,
   
     "1-1-1": 800,
@@ -298,7 +300,7 @@ async function askForLanguage() {
   alert.addAction("Svenska");
   let index = await alert.presentAlert();
   settings.language = [1,2,3][index];
-  fm.writeString(filePath, JSON.stringify(settings, null, 2)); // Pretty print
+  fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
   langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
   return [1,2,3][index];
 }

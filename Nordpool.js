@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.781
+let version = 0.782
 let allValues = [];
 let widget;
 let daybefore;
@@ -257,9 +257,7 @@ async function askForAllShowPositions() {
     chosenCombinations.push({ position, type: choice, day });
     settings[`showat${position}`] = `${choice}, ${day}`;
   }
-  if (Object.keys(graphOption).length > 0) {
-    settings.graphOption = graphOption;
-  }
+  settings.graphOption = graphOption;
   
   fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
   const totalGraph = chosenCombinations.filter(c => c.type === "graph").length;

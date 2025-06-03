@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.779
+let version = 0.780
 let allValues = [];
 let widget;
 let daybefore;
@@ -162,7 +162,6 @@ async function createVariables() {
   includevat = settings.includevat;
   extras = settings.extras;
   language = settings.language;
-  //showday = settings.showday;
 }
 
 async function readTranslations() {
@@ -234,7 +233,7 @@ async function askForAllShowPositions() {
     if (choice === "graph") {
       const graphTypeAlert = new Alert();
       graphTypeAlert.title = t(position).charAt(0).toUpperCase() + t(position).slice(1);
-      graphTypeAlert.message = t("choosegraphtype"); // t.ex. "Välj graf-typ"
+      graphTypeAlert.message = t("choosegraphtype");
       graphTypes.forEach(g => graphTypeAlert.addAction(t(g)));
       const gIndex = await graphTypeAlert.presentAlert();
       const selectedGraphType = graphTypes[gIndex];
@@ -259,7 +258,7 @@ async function askForAllShowPositions() {
   if (Object.keys(graphOption).length > 0) {
     settings.graphOption = graphOption;
   }
-  // När allt är klart: spara
+  
   fm.writeString(filePath, JSON.stringify(settings, null, 2));
   const totalGraph = chosenCombinations.filter(c => c.type === "graph").length;
   const totalTable = chosenCombinations.filter(c => c.type === "table").length;
@@ -731,8 +730,6 @@ async function DateTomorrow() {
   allValues = [];
   tomorrowPath = fm.joinPath(dir, "tomorrowprices.json");
   async function getTomorrowData() {
-    //let modified = fm.modificationDate(tomorrowPath);
-    //console.log("Senast ändrad:", modified.toLocaleString());
     const tomorrowDateObj = new Date();
     tomorrowDateObj.setDate(tomorrowDateObj.getDate() + 1);
     const yyyyTomorrow = tomorrowDateObj.getFullYear();
@@ -749,21 +746,16 @@ async function DateTomorrow() {
   if (fm.fileExists(tomorrowPath)) {
     let modified = fm.modificationDate(tomorrowPath);
     let now = new Date();
-  
-    let hoursDiff = (now - modified) / (1000 * 60 * 60); // Millisekunder → timmar
-  
-    // Kolla om filen är från igår
+    let hoursDiff = (now - modified) / (1000 * 60 * 60);
     let modifiedDay = modified.getDate();
     let modifiedMonth = modified.getMonth();
     let modifiedYear = modified.getFullYear();
-  
     let yesterday = new Date(now);
     yesterday.setDate(now.getDate() - 1);
-  
     let isFromYesterday =
-      modifiedDay === yesterday.getDate() &&
-      modifiedMonth === yesterday.getMonth() &&
-      modifiedYear === yesterday.getFullYear();
+    modifiedDay === yesterday.getDate() &&
+    modifiedMonth === yesterday.getMonth() &&
+    modifiedYear === yesterday.getFullYear();
   
     if (hoursDiff > 6 || isFromYesterday) {
       await getTomorrowData();

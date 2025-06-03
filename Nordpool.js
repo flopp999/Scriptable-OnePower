@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.778
+let version = 0.779
 let allValues = [];
 let widget;
 let daybefore;
@@ -265,22 +265,22 @@ async function askForAllShowPositions() {
   const totalTable = chosenCombinations.filter(c => c.type === "table").length;
   const totalPriceStats = chosenCombinations.filter(c => c.type === "pricestats").length;
   const heightMap = {
-    "1-0-0": 800,
+    "1-0-0": 1200,
     "0-1-0": 800,
     "0-0-1": 800,
   
     "1-1-0": 750,
-    "1-0-1": 1050,
+    "1-0-1": 1130,
     "0-1-1": 900,
-    "2-0-0": 550,
+    "2-0-0": 580,
     "0-2-0": 600,
   
-    "1-1-1": 700,
-    "2-1-0": 350,
-    "1-2-0": 410,
-    "2-0-1": 510,
+    "1-1-1": 800,
+    "2-1-0": 410,
+    "1-2-0": 540,
+    "2-0-1": 470,
     "0-2-1": 580,
-    "1-0-2": 950,
+    "1-0-2": 1050,
     "0-1-2": 900,
   };
   

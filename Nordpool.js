@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.782
+let version = 0.783
 let allValues = [];
 let widget;
 let daybefore;
@@ -30,9 +30,11 @@ let minute;
 let translationData;
 let currentLang;
 const fileNameSettings = Script.name() + "_Settings.json";
+const fileNameTranslations = Script.name() + "_Translations.json";
 const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
 let filePathSettings = fm.joinPath(dir, fileNameSettings);
+let filePathTranslations = fm.joinPath(dir, fileNameTranslations);
 let height = 1150;
 let width = 1300;
 let keys = [];
@@ -168,16 +170,16 @@ async function createVariables() {
 }
 
 async function readTranslations() {
-  let url = "https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Translations.json";
-  let filename = Script.name() + "_Translations.json";
-  let req = new Request(url);
-  req.timeoutInterval = 1;
-  let content = await req.loadString();
-  path = fm.joinPath(dir, filename);
-  fm.writeString(path, content);
+  if (!fm.fileExists(filePathTranslations)) {
+    let url = "https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Translations.json";
+    //let filename = Script.name() + "_Translations.json";
+    let req = new Request(url);
+    req.timeoutInterval = 1;
+    let content = await req.loadString();
+    fm.writeString(filePathTranslations, content);
+  }
   try {
-    const fm = FileManager.iCloud()
-    translationData = JSON.parse(fm.readString(path));
+    translationData = JSON.parse(fm.readString(filePathTranslations));
     const langMap = {
       1: "en",
       2: "de",
@@ -697,20 +699,43 @@ const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 // Today date
 async function DateToday() {
   allValues = [];
-  const todayDateObj = new Date();
-  const yyyyToday = todayDateObj.getFullYear();
-  const mmToday = String(todayDateObj.getMonth() + 1).padStart(2, '0');
-  const ddToday = String(todayDateObj.getDate()).padStart(2, '0');
-  const todayStr = `${yyyyToday}-${mmToday}-${ddToday}`;
-  const todayUrl = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${todayStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
-  hour = todayDateObj.getHours();
-  minute = todayDateObj.getMinutes();
-  const requestToday = new Request(todayUrl);
-  requestToday.timeoutInterval = 1;
-  let responseToday = (await requestToday.loadJSON());
-  const todayJSON = JSON.stringify(responseToday, null ,2);
-  const todayPath = fm.joinPath(dir, "todayprices.json");
-  fm.writeString(todayPath, todayJSON);
+  todayPath = fm.joinPath(dir, "todayprices.json");
+  async function getTodayData() {
+    const todayDateObj = new Date();
+    todayDateObj.setDate(todayDateObj.getDate() + 1);
+    const yyyyToday = todayDateObj.getFullYear();
+    const mmToday = String(todayDateObj.getMonth() + 1).padStart(2, '0');
+    const ddToday = String(todayDateObj.getDate()).padStart(2, '0');
+    const todayStr = `${yyyyToday}-${mmToday}-${ddToday}`;
+    const todayUrl = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${todayStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
+    const requestToday = new Request(todayUrl);
+    requestToday.timeoutInterval = 1;
+    let responseToday = (await requestToday.loadJSON());
+    const todayJSON = JSON.stringify(responseToday, null ,2);
+    fm.writeString(todayPath, todayJSON);
+  }
+  if (fm.fileExists(todayPath)) {
+    let modified = fm.modificationDate(todayPath);
+    let now = new Date();
+    let hoursDiff = (now - modified) / (1000 * 60 * 60);
+    let modifiedDay = modified.getDate();
+    let modifiedMonth = modified.getMonth();
+    let modifiedYear = modified.getFullYear();
+    let yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    let isFromYesterday =
+    modifiedDay === yesterday.getDate() &&
+    modifiedMonth === yesterday.getMonth() &&
+    modifiedYear === yesterday.getFullYear();
+  
+    if (hoursDiff > 6 || isFromYesterday) {
+      await getTodayData();
+    }
+  } else {
+    await getTodayData();
+  }
+  let content = fm.readString(todayPath);
+  responseToday = JSON.parse(content);
   date = responseToday.deliveryDateCET;  
   prices = responseToday.multiIndexEntries;
   let todayUpdated = responseToday.updatedAt;
@@ -725,6 +750,7 @@ async function DateToday() {
   priceDiff = (priceHighest - priceLowest)/3;
   priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
 }
+
 // Tomorrow date
 async function DateTomorrow() { 
   allValues = [];

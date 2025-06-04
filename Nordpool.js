@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.784
+let version = 0.785
 let allValues = [];
 let widget;
 let daybefore;
@@ -700,8 +700,8 @@ const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 async function DateToday() {
   allValues = [];
   todayPath = fm.joinPath(dir, "todayprices.json");
+  todayDateObj = new Date();
   async function getTodayData() {
-    const todayDateObj = new Date();
     todayDateObj.setDate(todayDateObj.getDate() + 1);
     const yyyyToday = todayDateObj.getFullYear();
     const mmToday = String(todayDateObj.getMonth() + 1).padStart(2, '0');

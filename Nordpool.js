@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.788
+let version = 0.789
 let allValues = [];
 let widget;
 let daybefore;
@@ -709,7 +709,6 @@ const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 // Today date
 async function Data(day) {
   allValues = [];
-  log(day)
   Path = fm.joinPath(dir, "NordPool_" + day + "Prices.json");
   DateObj = new Date();
   async function getData() {
@@ -740,7 +739,6 @@ async function Data(day) {
     modifiedDay === yesterday.getDate() &&
     modifiedMonth === yesterday.getMonth() &&
     modifiedYear === yesterday.getFullYear();
-  
     if (hoursDiff > 6 || isFromYesterday) {
       await getData();
     }
@@ -764,7 +762,6 @@ async function Data(day) {
   priceHighest = (Math.max(...pricesJSON.map(Number)));
   priceDiff = (priceHighest - priceLowest)/3;
   priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
-  stop
 }
 
 // Tomorrow date

@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.785
+let version = 0.786
 let allValues = [];
 let widget;
 let daybefore;
@@ -33,8 +33,8 @@ const fileNameSettings = Script.name() + "_Settings.json";
 const fileNameTranslations = Script.name() + "_Translations.json";
 const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
-let filePathSettings = fm.joinPath(dir, fileNameSettings);
-let filePathTranslations = fm.joinPath(dir, fileNameTranslations);
+const filePathSettings = fm.joinPath(dir, fileNameSettings);
+const filePathTranslations = fm.joinPath(dir, fileNameTranslations);
 let height = 1150;
 let width = 1300;
 let keys = [];
@@ -101,7 +101,7 @@ async function updatecode() {
         const response = await req.load();
         const status = req.response.statusCode;
         if (status !== 200) {
-          throw new Error(`Fel: HTTP ${status}`);
+          throw new Error(`Error: HTTP ${status}`);
         }
         const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
@@ -111,14 +111,14 @@ async function updatecode() {
         const responseTranslations = await reqTranslations.load();
         const statusTranslations = reqTranslations.response.statusCode;
         if (statusTranslations !== 200) {
-          throw new Error(`Fel: HTTP ${statusTranslations}`);
+          throw new Error(`Error: HTTP ${statusTranslations}`);
         }
         const codeStringTranslations = responseTranslations.toRawString();
         fm.writeString(filePathTranslations, codeStringTranslations);
         fm.remove(filePathSettings);
         let updateNotify = new Notification();
         updateNotify.title = Script.name();
-        updateNotify.body = "New version installed";
+        updateNotify.body = "New version installed, " + serverVersion;
         updateNotify.sound = "default";
         await updateNotify.schedule();
       } catch (error) {

@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.783
+let version = 0.784
 let allValues = [];
 let widget;
 let daybefore;
@@ -734,6 +734,8 @@ async function DateToday() {
   } else {
     await getTodayData();
   }
+  hour = todayDateObj.getHours();
+  minute = todayDateObj.getMinutes();
   let content = fm.readString(todayPath);
   responseToday = JSON.parse(content);
   date = responseToday.deliveryDateCET;  

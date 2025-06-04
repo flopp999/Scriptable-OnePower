@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.786
+let version = 0.787
 let allValues = [];
 let widget;
 let daybefore;
@@ -536,12 +536,13 @@ async function Table(day) {
 
 async function Graph(day, graphOption) {
 //chart
-  if (day == "today") {
-    await DateToday();
-  }
-  if (day == "tomorrow") {
-    await DateTomorrow();
-  }
+  await Data(day);
+  //if (day == "today") {
+    //await DateToday();
+  //}
+  //if (day == "tomorrow") {
+    //await DateTomorrow();
+  //}
   if (daybefore != day){ 
     let left = listwidget.addStack();
     let whatday = left.addText(date);
@@ -706,25 +707,27 @@ const bigFont = 13.5;
 const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 
 // Today date
-async function DateToday() {
+async function Data(day) {
   allValues = [];
-  todayPath = fm.joinPath(dir, "NordPool_TodayPrices.json");
-  todayDateObj = new Date();
-  async function getTodayData() {
-    todayDateObj.setDate(todayDateObj.getDate() + 1);
-    const yyyyToday = todayDateObj.getFullYear();
-    const mmToday = String(todayDateObj.getMonth() + 1).padStart(2, '0');
-    const ddToday = String(todayDateObj.getDate()).padStart(2, '0');
-    const todayStr = `${yyyyToday}-${mmToday}-${ddToday}`;
-    const todayUrl = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${todayStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
-    const requestToday = new Request(todayUrl);
-    requestToday.timeoutInterval = 1;
-    let responseToday = (await requestToday.loadJSON());
-    const todayJSON = JSON.stringify(responseToday, null ,2);
-    fm.writeString(todayPath, todayJSON);
+  log(day)
+  stop
+  Path = fm.joinPath(dir, "NordPool_" + day + "Prices.json");
+  DateObj = new Date();
+  async function getData() {
+    DateObj.setDate(DateObj.getDate() + 1);
+    const yyyy = DateObj.getFullYear();
+    const mm = String(DateObj.getMonth() + 1).padStart(2, '0');
+    const dd = String(DateObj.getDate()).padStart(2, '0');
+    const Str = `${yyyy}-${mm}-${dd}`;
+    const Url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${todayStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
+    const request = new Request(Url);
+    request.timeoutInterval = 1;
+    let response = (await request.loadJSON());
+    const JSON = JSON.stringify(response, null ,2);
+    fm.writeString(Path, JSON);
   }
-  if (fm.fileExists(todayPath)) {
-    let modified = fm.modificationDate(todayPath);
+  if (fm.fileExists(Path)) {
+    let modified = fm.modificationDate(Path);
     let now = new Date();
     let hoursDiff = (now - modified) / (1000 * 60 * 60);
     let modifiedDay = modified.getDate();
@@ -738,19 +741,19 @@ async function DateToday() {
     modifiedYear === yesterday.getFullYear();
   
     if (hoursDiff > 6 || isFromYesterday) {
-      await getTodayData();
+      await getData();
     }
   } else {
-    await getTodayData();
+    await getData();
   }
-  hour = todayDateObj.getHours();
-  minute = todayDateObj.getMinutes();
-  let content = fm.readString(todayPath);
-  responseToday = JSON.parse(content);
-  date = responseToday.deliveryDateCET;  
-  prices = responseToday.multiIndexEntries;
-  let todayUpdated = responseToday.updatedAt;
-  updated = todayUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
+  hour = DateObj.getHours();
+  minute = DateObj.getMinutes();
+  let content = fm.readString(Path);
+  response = JSON.parse(content);
+  date = response.deliveryDateCET;  
+  prices = response.multiIndexEntries;
+  let Updated = response.updatedAt;
+  updated = Updated.replace(/\.\d+Z$/, '').replace('T', ' ');
   for (let i = 0; i < prices.length; i++) {
     const value = prices[i]["entryPerArea"][`${area}`];
     allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
@@ -760,6 +763,7 @@ async function DateToday() {
   priceHighest = (Math.max(...pricesJSON.map(Number)));
   priceDiff = (priceHighest - priceLowest)/3;
   priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
+  stop
 }
 
 // Tomorrow date

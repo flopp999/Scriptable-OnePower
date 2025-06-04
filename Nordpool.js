@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.787
+let version = 0.788
 let allValues = [];
 let widget;
 let daybefore;
@@ -710,21 +710,22 @@ const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 async function Data(day) {
   allValues = [];
   log(day)
-  stop
   Path = fm.joinPath(dir, "NordPool_" + day + "Prices.json");
   DateObj = new Date();
   async function getData() {
-    DateObj.setDate(DateObj.getDate() + 1);
+    if (day == "tomorrow") {
+      DateObj.setDate(DateObj.getDate() + 1);
+    }
     const yyyy = DateObj.getFullYear();
     const mm = String(DateObj.getMonth() + 1).padStart(2, '0');
     const dd = String(DateObj.getDate()).padStart(2, '0');
-    const Str = `${yyyy}-${mm}-${dd}`;
-    const Url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${todayStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
+    const date = `${yyyy}-${mm}-${dd}`;
+    const Url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${date}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
     const request = new Request(Url);
     request.timeoutInterval = 1;
     let response = (await request.loadJSON());
-    const JSON = JSON.stringify(response, null ,2);
-    fm.writeString(Path, JSON);
+    const dataJSON = JSON.stringify(response, null ,2);
+    fm.writeString(Path, dataJSON);
   }
   if (fm.fileExists(Path)) {
     let modified = fm.modificationDate(Path);

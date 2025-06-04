@@ -182,7 +182,6 @@ async function createVariables() {
 async function readTranslations() {
   if (!fm.fileExists(filePathTranslations)) {
     let url = "https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Translations.json";
-    //let filename = Script.name() + "_Translations.json";
     let req = new Request(url);
     req.timeoutInterval = 1;
     let content = await req.loadString();
@@ -709,7 +708,7 @@ const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 // Today date
 async function DateToday() {
   allValues = [];
-  todayPath = fm.joinPath(dir, "todayprices.json");
+  todayPath = fm.joinPath(dir, "NordPool_TodayPrices.json");
   todayDateObj = new Date();
   async function getTodayData() {
     todayDateObj.setDate(todayDateObj.getDate() + 1);
@@ -766,7 +765,7 @@ async function DateToday() {
 // Tomorrow date
 async function DateTomorrow() { 
   allValues = [];
-  tomorrowPath = fm.joinPath(dir, "tomorrowprices.json");
+  tomorrowPath = fm.joinPath(dir, "NordPool_TomorrowPrices.json");
   async function getTomorrowData() {
     const tomorrowDateObj = new Date();
     tomorrowDateObj.setDate(tomorrowDateObj.getDate() + 1);

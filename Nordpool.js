@@ -421,12 +421,7 @@ async function askForExtras() {
 }
 
 async function Table(day) {
-  if (day == "today") {
-   await DateToday();
-  }
-   if (day == "tomorrow") {
-   await DateTomorrow();
-  }
+  await Data(day);
   if (daybefore != day){
   let left = listwidget.addStack();
   let whatday = left.addText(date);
@@ -654,12 +649,7 @@ async function Graph(day, graphOption) {
 }
 
 async function PriceStats(day) {
-  if (day == "today") {
-    await DateToday();
-  }
-  if (day == "tomorrow") {
-    await DateTomorrow();
-  }
+  await Data(day);
   if (daybefore != day){
     let left = listwidget.addStack();
     let whatday = left.

@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.790
+let version = 0.791
 let allValues = [];
 let widget;
 let daybefore;
@@ -285,7 +285,7 @@ async function askForAllShowPositions() {
     "2-0-0": 550,
     "0-2-0": 600,
   
-    "1-1-1": 800,
+    "1-1-1": 730,
     "2-1-0": 380,
     "1-2-0": 540,
     "2-0-1": 470,

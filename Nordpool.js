@@ -105,6 +105,16 @@ async function updatecode() {
         }
         const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
+
+        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Translations.json");
+        reqTranslations.timeoutInterval = 1;
+        const responseTranslations = await reqTranslations.load();
+        const statusTranslations = reqTranslations.response.statusCode;
+        if (statusTranslations !== 200) {
+          throw new Error(`Fel: HTTP ${statusTranslations}`);
+        }
+        const codeStringTranslations = responseTranslations.toRawString();
+        fm.writeString(filePathTranslations, codeStringTranslations);
         fm.remove(filePathSettings);
         let updateNotify = new Notification();
         updateNotify.title = Script.name();

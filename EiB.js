@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.791
+let version = 0.1
 let allValues = [];
 let widget;
 let daybefore;
@@ -91,12 +91,12 @@ async function start() {
 
 async function updatecode() {
   try {
-    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Version.txt");
+    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/Version.txt");
     req.timeoutInterval = 1;
     const serverVersion = await req.loadString()
     if (version < serverVersion) {
       try {
-        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
+        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/EiB.js");
         req.timeoutInterval = 1;
         const response = await req.load();
         const status = req.response.statusCode;
@@ -106,7 +106,7 @@ async function updatecode() {
         const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
 
-        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Translations.json");
+        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/Translations.json");
         reqTranslations.timeoutInterval = 1;
         const responseTranslations = await reqTranslations.load();
         const statusTranslations = reqTranslations.response.statusCode;
@@ -181,7 +181,7 @@ async function createVariables() {
 
 async function readTranslations() {
   if (!fm.fileExists(filePathTranslations)) {
-    let url = "https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Translations.json";
+    let url = "https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/Translations.json";
     let req = new Request(url);
     req.timeoutInterval = 1;
     let content = await req.loadString();
@@ -407,7 +407,7 @@ async function askForIncludeVAT() {
 }
 
 // Include extra cost?
-async function askForExtras() {
+async function askForUsername() {
   let alert = new Alert();
   alert.title = t("extraelectricitycost");
   alert.message = (t("enterextra") + `${settings.currency}`);
@@ -415,10 +415,21 @@ async function askForExtras() {
   alert.addAction("OK");
   await alert.present();
   let input = alert.textFieldValue(0);
-  input = input.replace(",", ".")
-  let newCost = parseFloat(input);
-  return newCost;
+  return input;
 }
+
+// Include extra cost?
+async function askForPassword() {
+  let alert = new Alert();
+  alert.title = t("extraelectricitycost");
+  alert.message = (t("enterextra") + `${settings.currency}`);
+  alert.addTextField("e.g. 0.30",String(settings.extras ?? "0")).setDecimalPadKeyboard();
+  alert.addAction("OK");
+  await alert.present();
+  let input = alert.textFieldValue(0);
+  return inout;
+}
+
 
 async function Table(day) {
   await Data(day);
@@ -693,7 +704,7 @@ const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 // Today date
 async function Data(day) {
   allValues = [];
-  Path = fm.joinPath(dir, "NordPool_" + day + "Prices.json");
+  Path = fm.joinPath(dir, "EiB_" + day + "Revenue.json");
   DateObj = new Date();
   async function getData() {
     if (day == "tomorrow") {
@@ -702,8 +713,10 @@ async function Data(day) {
     const yyyy = DateObj.getFullYear();
     const mm = String(DateObj.getMonth() + 1).padStart(2, '0');
     const dd = String(DateObj.getDate()).padStart(2, '0');
-    const date = `${yyyy}-${mm}-${dd}`;
-    const Url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${date}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
+    //const todate = `${yyyy}-${mm}-${dd}`;
+    const todate = `2024-04-01`;
+    const fromdate = `2024-03-01`;
+    const Url = `https://api.checkwatt.se/ems/revenue?fromDate=${fromdate}&toDate=${todate}`;
     const request = new Request(Url);
     request.timeoutInterval = 1;
     let response = (await request.loadJSON());
@@ -737,61 +750,6 @@ async function Data(day) {
   prices = response.multiIndexEntries;
   let Updated = response.updatedAt;
   updated = Updated.replace(/\.\d+Z$/, '').replace('T', ' ');
-  for (let i = 0; i < prices.length; i++) {
-    const value = prices[i]["entryPerArea"][`${area}`];
-    allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
-  }
-  pricesJSON = JSON.parse(JSON.stringify(allValues));
-  priceLowest = (Math.min(...pricesJSON.map(Number)));
-  priceHighest = (Math.max(...pricesJSON.map(Number)));
-  priceDiff = (priceHighest - priceLowest)/3;
-  priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
-}
-
-// Tomorrow date
-async function DateTomorrow() { 
-  allValues = [];
-  tomorrowPath = fm.joinPath(dir, "NordPool_TomorrowPrices.json");
-  async function getTomorrowData() {
-    const tomorrowDateObj = new Date();
-    tomorrowDateObj.setDate(tomorrowDateObj.getDate() + 1);
-    const yyyyTomorrow = tomorrowDateObj.getFullYear();
-    const mmTomorrow = String(tomorrowDateObj.getMonth() + 1).padStart(2, '0');
-    const ddTomorrow = String(tomorrowDateObj.getDate()).padStart(2, '0');
-    const tomorrowStr = `${yyyyTomorrow}-${mmTomorrow}-${ddTomorrow}`;
-    const tomorrowUrl = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${tomorrowStr}&market=DayAhead&indexNames=${area}&currency=${currency}&resolutionInMinutes=${resolution}`;
-    const requestTomorrow = new Request(tomorrowUrl);
-    requestTomorrow.timeoutInterval = 1;
-    let responseTomorrow = (await requestTomorrow.loadJSON());
-    const tomorrowJSON = JSON.stringify(responseTomorrow, null ,2);
-    fm.writeString(tomorrowPath, tomorrowJSON);
-  }
-  if (fm.fileExists(tomorrowPath)) {
-    let modified = fm.modificationDate(tomorrowPath);
-    let now = new Date();
-    let hoursDiff = (now - modified) / (1000 * 60 * 60);
-    let modifiedDay = modified.getDate();
-    let modifiedMonth = modified.getMonth();
-    let modifiedYear = modified.getFullYear();
-    let yesterday = new Date(now);
-    yesterday.setDate(now.getDate() - 1);
-    let isFromYesterday =
-    modifiedDay === yesterday.getDate() &&
-    modifiedMonth === yesterday.getMonth() &&
-    modifiedYear === yesterday.getFullYear();
-  
-    if (hoursDiff > 6 || isFromYesterday) {
-      await getTomorrowData();
-    }
-  } else {
-    await getTomorrowData();
-  }
-  let content = fm.readString(tomorrowPath);
-  responseTomorrow = JSON.parse(content);
-  date = responseTomorrow.deliveryDateCET;  
-  prices = responseTomorrow.multiIndexEntries;
-  let tomorrowUpdated = responseTomorrow.updatedAt;
-  updated = tomorrowUpdated.replace(/\.\d+Z$/, '').replace('T', ' ');
   for (let i = 0; i < prices.length; i++) {
     const value = prices[i]["entryPerArea"][`${area}`];
     allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));

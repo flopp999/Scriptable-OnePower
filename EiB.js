@@ -556,26 +556,7 @@ async function Table(day) {
 async function Graph(day, graphOption) {
 //chart
   await Datas(day);
-  if (daybefore != day){ 
-    let left = listwidget.addStack();
-    //let whatday = left.addText(date);
-    //whatday.textColor = new Color("#ffffff");
-    //whatday.font = Font.lightSystemFont(13);
-    left.addSpacer();
-    if (prices == 0) {
-      whatday = left.addText("Available after 13:00");
-      whatday.textColor = new Color("#ffffff");
-      whatday.font = Font.lightSystemFont(13);
-      listwidget.addSpacer(5);
-      daybefore = day;
-      return;
-    } else {
-      let updatetext = left.addText(t("updated") + updated);
-      updatetext.font = Font.lightSystemFont(13);
-      updatetext.textColor = new Color("#ffffff");
-    }
-  }
-  daybefore = day;
+
   if (60 == 60) {
     let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+settings.height+"&c="
     graphtoday += encodeURI("{\
@@ -586,7 +567,7 @@ async function Graph(day, graphOption) {
             data: ["+revenues+"],\
             type: '"+graphOption+"',\
             fill: false,\
-            borderColor: getGradientFillHelper('vertical',['rgb(255,25,255)','rgb(255,48,8)','orange','rgb(255,255,0)','rgb(0,150,0)']),\
+            borderColor: getGradientFillHelper('vertical',['rgb(0,150,0)','rgb(255,255,0)','orange','rgb(255,48,8)','rgb(255,25,255)']),\
             borderWidth: 20, \
             pointRadius: 0\
           },\
@@ -605,7 +586,7 @@ async function Graph(day, graphOption) {
                 ticks:{fontSize:35,fontColor:'white'}\
               }],\
               yAxes: [{\
-                ticks:{stepSize:10,beginAtZero:true,fontSize:35,fontColor:'white'}\
+                gridLines: {color:'white'},ticks:{stepSize:10,beginAtZero:true,fontSize:35,fontColor:'white'}\
               }]\
             }\
           }\

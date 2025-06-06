@@ -1,230 +1,174 @@
 {
   "": {
     "en": "",
-    "sv": "",
-    "de": ""
+    "sv": ""
   },
   "": {
     "en": "",
-    "sv": "",
-    "de": ""
+    "sv": ""
   },
   "after13": {
     "en": "Available after 13:00",
-    "sv": "Tillgängligt efter 13:00",
-    "de": "Available after 13:00"
+    "sv": "Tillgängligt efter 13:00"
   },  
   "bar": {
     "en": "Bar",
-    "sv": "Stapel",
-    "de": "Bar"
+    "sv": "Stapel"
   },
   "line": {
     "en": "Line",
     "sv": "Linje",
-    "de": "Line"
   },
   "choosegraphtype": {
     "en": "Select chart type",
-    "sv": "Välj typ av graf",
-    "de": "Select chart type"
+    "sv": "Välj typ av graf"
   },
   "now": {
     "en": "Now",
     "sv": "Nu",
-    "de": "Now"
   },
   "top": {
     "en": "at the top",
-    "sv": "högst upp",
-    "de": "at the top"
+    "sv": "högst upp"
   },
   "middle": {
     "en": "in the middle",
-    "sv": "i mitten",
-    "de": "in the middle"
+    "sv": "i mitten"
   },
   "bottom": {
     "en": "at the bottom",
-    "sv": "längst ner",
-    "de": "at the bottom"
+    "sv": "längst ner"
   },
   "tomorrow": {
     "en": "Tomorrow",
-    "sv": "Imorgon",
-    "de": "Tomorrow"
+    "sv": "Imorgon"
   },
   "today": {
     "en": "Today",
-    "sv": "Idag",
-    "de": "Today"
+    "sv": "Idag"
   },
   "showday": {
     "en": "Electricity price for",
-    "sv": "Elpris för",
-    "de": "Electricity price for"
+    "sv": "Elpris för"
   },
   "nothing": {
     "en": "Nothing",
-    "sv": "Inget",
-    "de": "Nothing"
+    "sv": "Inget"
   },
   "pricestats": {
     "en": "Price Stats",
-    "sv": "Prisstatistik",
-    "de": "Price Stats"
+    "sv": "Prisstatistik"
   },
   "graph": {
     "en": "Graph",
-    "sv": "Graf",
-    "de": "Graph"
+    "sv": "Graf"
   },
   "table": {
     "en": "Table",
-    "sv": "Tabell",
-    "de": "Table"
+    "sv": "Tabell"
   },
   "showwhat": {
     "en": "What should the widget show",
-    "sv": "Vad ska widgeten visa",
-    "de": "What should the widget show"
+    "sv": "Vad ska widgeten visa"
   },
   "showtable": {
     "en": "Do you want the electricity prices in a table",
-    "sv": "Vill du ha elpriserna i en tabell",
-    "de": "Do you want the electricity prices in a table"
+    "sv": "Vill du ha elpriserna i en tabell"
   },
   "showgraph": {
     "en": "Do you want the electricity prices in a graph",
-    "sv": "Vill du ha elpriserna i en graf",
-    "de": "Do you want the electricity prices in a graph"
+    "sv": "Vill du ha elpriserna i en graf"
   },
   "area": {
     "en": "Area",
-    "sv": "Område",
-    "de": "Area"
+    "sv": "Område"
   },
   "vat": {
     "en": "VAT",
-    "sv": "Moms",
-    "de": "VAT"
+    "sv": "Moms"
   },
-  
   "buymeacoffee": {
     "en": "Do you want to buy me a coffee",
-    "sv": "Vill du köpa en kaffe åt mig",
-    "de": "Do you want to buy me a coffee"
+    "sv": "Vill du köpa en kaffe åt mig"
   },
-  
   "changesetup": {
     "en": "Do you want to change the setup",
-    "sv": "Vill du ändra sparade inställningar",
-    "de": "Do you want to change the setup"
+    "sv": "Vill du ändra sparade inställningar"
   },
-  
   "ofcourse": {
     "en": "Of course",
-    "sv": "Självklart",
-    "de": "Of course"
+    "sv": "Självklart"
   },
-  
     "noway": {
     "en": "No way :)",
-    "sv": "Glöm det :)",
-    "de": "No way :)"
+    "sv": "Glöm det :)"
   },
-  
     "no": {
     "en": "No",
-    "sv": "Nej",
-    "de": "No"
+    "sv": "Nej"
   },
     "yes": {
     "en": "Yes",
-    "sv": "Ja",
-    "de": "Yes"
+    "sv": "Ja"
   },
     "enterextra": {
     "en": "Enter the total extra cost per kWh incl. VAT(e.g. grid fees, taxes, markup) in ",
-    "sv": "Skriv in totala extra kostnader per kWh inkl. moms(t.ex. överföringsavgift, skatt) i ",
-    "de": "Enter the total extra cost per kWh incl. VAT(e.g. grid fees, taxes, markup) in "
+    "sv": "Skriv in totala extra kostnader per kWh inkl. moms(t.ex. överföringsavgift, skatt) i "
   },
     "extraelectricitycost": {
     "en": "Extra Electricity Cost",
-    "sv": "Extra elkostnader",
-    "de": "Extra Electricity Cost"
+    "sv": "Extra elkostnader"
   },
-  
   "withvat": {
     "en": "With VAT",
-    "sv": "Med moms",
-    "de": "With VAT"
+    "sv": "Med moms"
   },
-  
   "withoutvat": {
     "en": "Without VAT",
-    "sv": "Utan moms",
-    "de": "Ohne MwSt."
+    "sv": "Utan moms"
   },  
-
   "doyouwantvat": {
     "en": "Do you want the prices shown with or without VAT",
-    "sv": "Hur ska elpriserna visas",
-    "de": "Möchten Sie die Preise mit oder ohne Mehrwertsteuer angezeigt bekommen"
+    "sv": "Hur ska elpriserna visas"
   },
-  
   "chooseyourcurrency": {
     "en": "Choose your currency",
-    "sv": "Välj valuta",
-    "de": "Choose your currency"
+    "sv": "Välj valuta"
   },
-
-  
   "choosedataresolution": {
     "en": "Choose Data Resolution",
-    "sv": "Välj tidsintervall",
-    "de": "Choose Data Resolution"
+    "sv": "Välj tidsintervall"
   },
-  
   "chooseyourelectricityarea": {
     "en": "Choose your electricity area",
-    "sv": "Välj ditt elområde",
-    "de": "Choose your electricity area"
+    "sv": "Välj ditt elområde"
   },
   "image_load_error": {
     "en": "Could not load image",
-    "sv": "Kunde inte ladda bilden",
-    "de": "Bild konnte nicht geladen werden"
+    "sv": "Kunde inte ladda bilden"
   },
   "lowest": {
     "en": "lowest",
-    "sv": "lägsta",
-    "de": "niedrigste"
+    "sv": "lägsta"
   },
   "average": {
     "en": "average",
     "sv": "medel",
-    "de": "durchschnittlich"
   },
   "highest": {
     "en": "highest",
-    "sv": "högsta",
-    "de": "höchste"
+    "sv": "högsta"
   },
-  "inclvat": {
-    "en": "Incl. VAT",
-    "sv": "Inkl. moms",
-    "de": "Incl. VAT"
+  "password": {
+    "en": "Password",
+    "sv": "Lösenord",
   },
-  "exclvat": {
-    "en": "Excl. VAT",
-    "sv": "Exkl. moms",
-    "de": "Excl. VAT"
+  "username": {
+    "en": "Username",
+    "sv": "Användarnamn"
   },
-
   "askforusername": {
     "en": "What is your username ",
-    "sv": "Vad är ditt användarnamn ",
-    "de": "Nord Pool "
+    "sv": "Vad är ditt användarnamn "
   }
 }

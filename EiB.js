@@ -207,9 +207,10 @@ function t(key) {
 }
 
 async function ask() {
-  [settings.area, settings.vat, settings.currency] = await askForArea();
-  settings.includevat = await askForIncludeVAT();
-  settings.extras = await askForExtras();
+  //[settings.area, settings.vat, settings.currency] = await askForArea();
+  //settings.includevat = await askForIncludeVAT();
+  settings.username = await askForUsername();
+  settings.password = await askForPassword();
   await askForAllShowPositions("top");
   settings.resolution = 60;
   return settings

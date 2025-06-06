@@ -222,9 +222,9 @@
     "de": "Excl. VAT"
   },
 
-  "updated": {
-    "en": "Nord Pool ",
-    "sv": "Nord Pool ",
+  "askforusername": {
+    "en": "What is your username ",
+    "sv": "Vad är ditt användarnamn ",
     "de": "Nord Pool "
   }
 }

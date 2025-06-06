@@ -4,6 +4,122 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
+
+// == Inställningar ==
+const baseURL = "https://api.checkwatt.se";
+let password
+let username
+// == Login: Basic Auth och hämta JWT ==
+async function loginAndGetToken() {
+  const credentials = `${username}:${password}`;
+  const encoded = Data.fromString(credentials).toBase64String();
+  const endpoint = "/user/Login?audience=eib";
+  const url = baseURL + endpoint;
+
+  const headers = {
+    "Authorization": `Basic ${encoded}`,
+    "Accept": "application/json",
+  "Content-Type": "application/json",
+	};
+
+  const payload = {
+    OneTimePassword: ""
+  };
+
+  const req = new Request(url);
+  req.method = "POST";
+  req.headers = headers;
+  req.body = JSON.stringify(payload);
+
+  try {
+    const res = await req.loadJSON();
+		const jwt = res.JwtToken;
+    if (!jwt) throw new Error("Inget JWT-token returnerat");
+    return jwt;
+  } catch (error) {
+    console.error("❌ Misslyckades logga in:", error);
+    return null;
+  }
+}
+
+// == Hämta revenue med JWT ==
+async function fetchRevenue(jwtToken) {
+  // Dagens datum
+const now = new Date();
+
+// Första dagen i månaden
+const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+// Sista dagen i månaden
+const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+// Formatera som YYYY-MM-DD
+firstDayStr = `${firstDay.getFullYear()}-${(firstDay.getMonth() + 1).toString().padStart(2, '0')}-01`;
+lastDayStr = `${lastDay.getFullYear()}-${(lastDay.getMonth() + 1).toString().padStart(2, '0')}-${lastDay.getDate().toString().padStart(2, '0')}`;
+
+
+  //const now = new Date();
+  //log(now)
+  //fromDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
+  //fromDate = "2024-03-01"
+  //const toDateObj = new Date(now);
+  //log(toDateObj)
+  //toDateObj.setDate(now.getDate() + 2);
+  //toDate = toDateObj.toISOString().split("T")[0];
+  //toDate = "2024-04-01"
+  const endpoint = `/ems/revenue?fromDate=${firstDayStr}&toDate=${lastDayStr}`;
+  const url = baseURL + endpoint;
+
+  const headers = {
+    "Authorization": `Bearer ${jwtToken}`,
+    "Accept": "application/json"
+  };
+
+  const req = new Request(url);
+  req.method = "GET";
+  req.headers = headers;
+
+  try {
+    const revenue = await req.loadJSON();
+    
+
+    if (req.response.statusCode === 200) {
+      return revenue;
+    } else {
+      console.error("❌ Fel statuskod:", req.response.statusCode);
+    }
+  } catch (err) {
+    console.error("❌ Fel vid hämtning av revenue:", err);
+  }
+
+  return null;
+}
+
+// == Main ==
+async function main() {
+  const token = await loginAndGetToken();
+  if (token) {
+    const revenue = await fetchRevenue(token);
+    if (revenue) {
+      revenues = revenue.map(item => item.NetRevenue);
+      total = revenues.reduce((sum, value) => sum + value, 0);
+      // Visa i en alert t.ex.
+      //const alert = new Alert();
+      //alert.title = "Checkwatt Revenue";
+      //alert.message = `${total}`;
+      //await alert.present();
+    }
+  }
+}
+
+//await main();
+
+
+
+
+let firstDayStr;
+let lastDayStr;
+let revenues;
+let total;
 let version = 0.1
 let allValues = [];
 let widget;
@@ -50,7 +166,7 @@ if (!config.runsInWidget){
 
 if (config.runsInWidget){
  await readsettings();
-  if (keys.length < 11 || keys == undefined) {
+  if (keys.length < 2 || keys == undefined) {
     let widget = new ListWidget();
     widget.addText("You need to run \"" + Script.name() + "\" in the app");
     Script.setWidget(widget);
@@ -64,22 +180,22 @@ if (config.runsInWidget){
 }
 
 async function start() {
-  const [topType, topDay] = settings.showattop.split(",").map(s => s.trim());
-  const [middleType, middleDay] = settings.showatmiddle.split(",").map(s => s.trim());
-  const [bottomType, bottomDay] = settings.showatbottom.split(",").map(s => s.trim());
+  //const [topType, topDay] = settings.showattop.split(",").map(s => s.trim());
+  //const [middleType, middleDay] = settings.showatmiddle.split(",").map(s => s.trim());
+  //const [bottomType, bottomDay] = settings.showatbottom.split(",").map(s => s.trim());
   let alert = new Alert();
-  let vatText = includevat == 1 ? t("yes") : t("no")
+  //let vatText = includevat == 1 ? t("yes") : t("no")
   alert.message = 
-    t("changesetup") + "?\n" +
-    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(topType) + (topDay ? ", " + t(topDay) : "") + "\n" +
-    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(middleType) + (middleDay ? ", " + t(middleDay) : "") + "\n" +
-    t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "") + "\n" +
-    t("area") + ": " + area + "\n" +
-    "Extras: " + extras + "\n" +
-    t("withvat") + ": " + vatText + "\n";
-  if (includevat == 1) {
-    alert.message += t("vat") + ": " + vat;
-  }
+    t("changesetup") + "?"
+    //t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(topType) + (topDay ? ", " + t(topDay) : "") + "\n" +
+    //t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(middleType) + (middleDay ? ", " + t(middleDay) : "") + "\n" +
+    //t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "") + "\n" +
+    //t("area") + ": " + area + "\n" +
+    //"Extras: " + extras + "\n" +
+    //t("withvat") + ": " + vatText + "\n";
+  //if (includevat == 1) {
+    //alert.message += t("vat") + ": " + vat;
+  //}
   alert.addAction(t("yes"));
   alert.addAction(t("no"));
   let index = await alert.presentAlert();
@@ -88,6 +204,8 @@ async function start() {
     fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
   }
 }
+
+
 
 async function updatecode() {
   try {
@@ -115,7 +233,7 @@ async function updatecode() {
         }
         const codeStringTranslations = responseTranslations.toRawString();
         fm.writeString(filePathTranslations, codeStringTranslations);
-        fm.remove(filePathSettings);
+        //fm.remove(filePathSettings);
         let updateNotify = new Notification();
         updateNotify.title = Script.name();
         updateNotify.body = "New version installed, " + serverVersion;
@@ -138,7 +256,7 @@ async function readsettings() {
       langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
       await readTranslations();
       keys = Object.keys(settings);
-      if (keys.length < 11) {
+      if (keys.length < 2) {
         throw new Error("Settings file is incomplete or corrupted");
         return;
       }
@@ -170,8 +288,8 @@ async function readsettings() {
 }
 
 async function createVariables() {
-  area = settings.area;
-  resolution = settings.resolution;
+  username = settings.username;
+  password = settings.password;
   currency = settings.currency;
   vat = settings.vat;
   includevat = settings.includevat;
@@ -191,7 +309,6 @@ async function readTranslations() {
     translationData = JSON.parse(fm.readString(filePathTranslations));
     const langMap = {
       1: "en",
-      2: "de",
       3: "sv"
     };
     currentLang = langMap[langId] || "en"; // fallback to english
@@ -211,8 +328,8 @@ async function ask() {
   //settings.includevat = await askForIncludeVAT();
   settings.username = await askForUsername();
   settings.password = await askForPassword();
-  await askForAllShowPositions("top");
-  settings.resolution = 60;
+  //await askForAllShowPositions("top");
+  //settings.resolution = 60;
   return settings
 }
 
@@ -306,13 +423,12 @@ async function askForLanguage() {
   let alert = new Alert();
   alert.message = "Language/Sprache/Språk:";
   alert.addAction("English");
-  alert.addAction("Deutsch");
   alert.addAction("Svenska");
   let index = await alert.presentAlert();
-  settings.language = [1,2,3][index];
+  settings.language = [1,3][index];
   fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
   langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
-  return [1,2,3][index];
+  return [1,3][index];
 }
 
 // Select area
@@ -410,30 +526,32 @@ async function askForIncludeVAT() {
 // Include extra cost?
 async function askForUsername() {
   let alert = new Alert();
-  alert.title = t("extraelectricitycost");
-  alert.message = (t("enterextra") + `${settings.currency}`);
-  alert.addTextField("e.g. 0.30",String(settings.extras ?? "0")).setDecimalPadKeyboard();
+  alert.title = t("username");
+  alert.message = (t("askforusername"));
+  alert.addTextField().setEmailAddressKeyboard();
   alert.addAction("OK");
   await alert.present();
   let input = alert.textFieldValue(0);
+  username = input
   return input;
 }
 
 // Include extra cost?
 async function askForPassword() {
   let alert = new Alert();
-  alert.title = t("extraelectricitycost");
-  alert.message = (t("enterextra") + `${settings.currency}`);
-  alert.addTextField("e.g. 0.30",String(settings.extras ?? "0")).setDecimalPadKeyboard();
+  alert.title = t("password");
+  //alert.message = (t("enterextra") + `${settings.currency}`);
+  alert.addTextField().setDefaultKeyboard();
   alert.addAction("OK");
   await alert.present();
   let input = alert.textFieldValue(0);
-  return inout;
+  password = input;
+  return input;
 }
 
 
 async function Table(day) {
-  await Data(day);
+  await Datas(day);
   if (daybefore != day){
   let left = listwidget.addStack();
   let whatday = left.addText(date);
@@ -543,7 +661,7 @@ async function Table(day) {
 
 async function Graph(day, graphOption) {
 //chart
-  await Data(day);
+  await Datas(day);
   if (daybefore != day){ 
     let left = listwidget.addStack();
     let whatday = left.addText(date);
@@ -655,11 +773,10 @@ async function Graph(day, graphOption) {
 }
 
 async function PriceStats(day) {
-  await Data(day);
+  await Datas(day);
   if (daybefore != day){
     let left = listwidget.addStack();
-    let whatday = left.
-      addText(date);
+    let whatday = left.addText(date);
     whatday.textColor = new Color("#ffffff");
     whatday.font = Font.lightSystemFont(13);
     left.addSpacer();
@@ -703,7 +820,7 @@ const bigFont = 13.5;
 const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 
 // Today date
-async function Data(day) {
+async function Datas(day) {
   allValues = [];
   Path = fm.joinPath(dir, "EiB_" + day + "Revenue.json");
   DateObj = new Date();
@@ -786,29 +903,33 @@ async function renderSection(position) {
 let listwidget = new ListWidget();
 
 async function createWidget(){
+  await main();
   listwidget.backgroundColor = new Color("#000000");
-  await renderSection("top");
-  await renderSection("middle");
-  await renderSection("bottom");  
+  //await renderSection("top");
+  //await renderSection("middle");
+  //await renderSection("bottom");  
+  let ja = listwidget.addStack()
+  let te = ja.addText(String(firstDayStr + " till " + lastDayStr))
+  te.font = Font.lightSystemFont(15);
+  te.textColor = new Color("#ffffff")
+  ja = listwidget.addStack()
+  te = ja.addText(String(Math.round(total)) + "kr")
+  te.font = Font.lightSystemFont(15);
+  te.textColor = new Color("#ffffff")
   let moms = listwidget.addStack();
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   moms.addSpacer(120);
-  momstext = moms.addText(area);
+  //momstext = moms.addText(area);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   moms.addSpacer();
-  momstext = moms.addText("Extras: " + extras);
+  //momstext = moms.addText("Extras: " + extras);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   moms.addSpacer();
-  if (includevat == 1) {
-    momstext = moms.addText(t("inclvat"));
-  }
-  else {
-    momstext = moms.addText(t("exclvat"));
-  }
+  
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   return listwidget

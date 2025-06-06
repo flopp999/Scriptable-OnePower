@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.11
+let version = 0.12
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -532,35 +532,35 @@ async function askForPassword() {
 async function Table(day) {
   await Datas(day);
   if (daybefore != day){
-  let left = listwidget.addStack();
-  let whatday = left.addText(date);
-  whatday.textColor = new Color("#ffffff");
-  whatday.font = Font.lightSystemFont(13);
-  left.addSpacer();
-  if (prices == 0) {
-    whatday = left.addText(t("after13"));
-    whatday.textColor = new Color("#ffffff");
-    whatday.font = Font.lightSystemFont(13);
-    listwidget.addSpacer(5);
-    return;
-  }else{
-  
-  let updatetext = left.addText(t("updated") + updated);
-  updatetext.font = Font.lightSystemFont(13);
-  updatetext.textColor = new Color("#ffffff");
-  }
+	  let left = listwidget.addStack();
+	  let whatday = left.addText(date);
+	  whatday.textColor = new Color("#ffffff");
+	  whatday.font = Font.lightSystemFont(13);
+	  left.addSpacer();
+	  if (prices == 0) {
+	    whatday = left.addText(t("after13"));
+	    whatday.textColor = new Color("#ffffff");
+	    whatday.font = Font.lightSystemFont(13);
+	    listwidget.addSpacer(5);
+	    return;
+  	} else {
+  		let updatetext = left.addText(t("updated") + updated);
+	  	updatetext.font = Font.lightSystemFont(13);
+	  	updatetext.textColor = new Color("#ffffff");
+	  }
   }
   daybefore = day;
   let head = listwidget.addStack()
+}
 
 async function Graph(day, graphOption) {
 //chart
   await Datas(day);
   if (daybefore != day){ 
     let left = listwidget.addStack();
-    let whatday = left.addText(date);
-    whatday.textColor = new Color("#ffffff");
-    whatday.font = Font.lightSystemFont(13);
+    //let whatday = left.addText(date);
+    //whatday.textColor = new Color("#ffffff");
+    //whatday.font = Font.lightSystemFont(13);
     left.addSpacer();
     if (prices == 0) {
       whatday = left.addText("Available after 13:00");
@@ -576,7 +576,7 @@ async function Graph(day, graphOption) {
     }
   }
   daybefore = day;
-  if (resolution == 60) {
+  if (60 == 60) {
     let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+settings.height+"&c="
     graphtoday += encodeURI("{\
       data: { \
@@ -712,19 +712,6 @@ async function Datas(day) {
   minute = DateObj.getMinutes();
   let content = fm.readString(Path);
   response = JSON.parse(content);
-  date = response.deliveryDateCET;  
-  prices = response.multiIndexEntries;
-  let Updated = response.updatedAt;
-  updated = Updated.replace(/\.\d+Z$/, '').replace('T', ' ');
-  for (let i = 0; i < prices.length; i++) {
-    const value = prices[i]["entryPerArea"][`${area}`];
-    allValues.push(String(value/10* (1 + "." + (includevat*vat)) + extras));
-  }
-  pricesJSON = JSON.parse(JSON.stringify(allValues));
-  priceLowest = (Math.min(...pricesJSON.map(Number)));
-  priceHighest = (Math.max(...pricesJSON.map(Number)));
-  priceDiff = (priceHighest - priceLowest)/3;
-  priceAvg = pricesJSON.map(Number).reduce((a, b) => a + b, 0) / pricesJSON.length;
 }
 
 async function renderSection(position) {
@@ -752,7 +739,7 @@ let listwidget = new ListWidget();
 async function createWidget(){
   await main(); // get this month data
   listwidget.backgroundColor = new Color("#000000");
-  //await renderSection("top");
+  await renderSection("top");
   //await renderSection("middle");
   //await renderSection("bottom");  
   let ja = listwidget.addStack()

@@ -4,123 +4,14 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-
-// == Inställningar ==
+let version = 0.11
 const baseURL = "https://api.checkwatt.se";
-let password
-let username
-// == Login: Basic Auth och hämta JWT ==
-async function loginAndGetToken() {
-  const credentials = `${username}:${password}`;
-  const encoded = Data.fromString(credentials).toBase64String();
-  const endpoint = "/user/Login?audience=eib";
-  const url = baseURL + endpoint;
-
-  const headers = {
-    "Authorization": `Basic ${encoded}`,
-    "Accept": "application/json",
-  "Content-Type": "application/json",
-	};
-
-  const payload = {
-    OneTimePassword: ""
-  };
-
-  const req = new Request(url);
-  req.method = "POST";
-  req.headers = headers;
-  req.body = JSON.stringify(payload);
-
-  try {
-    const res = await req.loadJSON();
-		const jwt = res.JwtToken;
-    if (!jwt) throw new Error("Inget JWT-token returnerat");
-    return jwt;
-  } catch (error) {
-    console.error("❌ Misslyckades logga in:", error);
-    return null;
-  }
-}
-
-// == Hämta revenue med JWT ==
-async function fetchRevenue(jwtToken) {
-  // Dagens datum
-const now = new Date();
-
-// Första dagen i månaden
-const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-// Sista dagen i månaden
-const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
-// Formatera som YYYY-MM-DD
-firstDayStr = `${firstDay.getFullYear()}-${(firstDay.getMonth() + 1).toString().padStart(2, '0')}-01`;
-lastDayStr = `${lastDay.getFullYear()}-${(lastDay.getMonth() + 1).toString().padStart(2, '0')}-${lastDay.getDate().toString().padStart(2, '0')}`;
-
-
-  //const now = new Date();
-  //log(now)
-  //fromDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
-  //fromDate = "2024-03-01"
-  //const toDateObj = new Date(now);
-  //log(toDateObj)
-  //toDateObj.setDate(now.getDate() + 2);
-  //toDate = toDateObj.toISOString().split("T")[0];
-  //toDate = "2024-04-01"
-  const endpoint = `/ems/revenue?fromDate=${firstDayStr}&toDate=${lastDayStr}`;
-  const url = baseURL + endpoint;
-
-  const headers = {
-    "Authorization": `Bearer ${jwtToken}`,
-    "Accept": "application/json"
-  };
-
-  const req = new Request(url);
-  req.method = "GET";
-  req.headers = headers;
-
-  try {
-    const revenue = await req.loadJSON();
-    
-
-    if (req.response.statusCode === 200) {
-      return revenue;
-    } else {
-      console.error("❌ Fel statuskod:", req.response.statusCode);
-    }
-  } catch (err) {
-    console.error("❌ Fel vid hämtning av revenue:", err);
-  }
-
-  return null;
-}
-
-// == Main ==
-async function main() {
-  const token = await loginAndGetToken();
-  if (token) {
-    const revenue = await fetchRevenue(token);
-    if (revenue) {
-      revenues = revenue.map(item => item.NetRevenue);
-      total = revenues.reduce((sum, value) => sum + value, 0);
-      // Visa i en alert t.ex.
-      //const alert = new Alert();
-      //alert.title = "Checkwatt Revenue";
-      //alert.message = `${total}`;
-      //await alert.present();
-    }
-  }
-}
-
-//await main();
-
-
-
-
+let password;
+let username;
 let firstDayStr;
 let lastDayStr;
 let revenues;
 let total;
-let version = 0.1
 let allValues = [];
 let widget;
 let daybefore;
@@ -205,8 +96,6 @@ async function start() {
   }
 }
 
-
-
 async function updatecode() {
   try {
     const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-EiBnew/main/Version.txt");
@@ -287,6 +176,106 @@ async function readsettings() {
   }
 }
 
+// == Login: Basic Auth och hämta JWT ==
+async function loginAndGetToken() {
+  const credentials = `${username}:${password}`;
+  const encoded = Data.fromString(credentials).toBase64String();
+  const endpoint = "/user/Login?audience=eib";
+  const url = baseURL + endpoint;
+  const headers = {
+  	"Authorization": `Basic ${encoded}`,
+  	"Accept": "application/json",
+  	"Content-Type": "application/json",
+	};
+
+  const payload = {
+    OneTimePassword: ""
+  };
+
+  const req = new Request(url);
+  req.method = "POST";
+  req.headers = headers;
+  req.body = JSON.stringify(payload);
+
+  try {
+    const res = await req.loadJSON();
+		const jwt = res.JwtToken;
+    if (!jwt) throw new Error("Inget JWT-token returnerat");
+    return jwt;
+  } catch (error) {
+    console.error("❌ Misslyckades logga in:", error);
+    return null;
+  }
+}
+
+// == Hämta revenue med JWT ==
+async function fetchRevenue(jwtToken) {
+  // Dagens datum
+const now = new Date();
+
+// Första dagen i månaden
+const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+// Sista dagen i månaden
+const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+// Formatera som YYYY-MM-DD
+firstDayStr = `${firstDay.getFullYear()}-${(firstDay.getMonth() + 1).toString().padStart(2, '0')}-01`;
+lastDayStr = `${lastDay.getFullYear()}-${(lastDay.getMonth() + 1).toString().padStart(2, '0')}-${lastDay.getDate().toString().padStart(2, '0')}`;
+
+
+  //const now = new Date();
+  //log(now)
+  //fromDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
+  //fromDate = "2024-03-01"
+  //const toDateObj = new Date(now);
+  //log(toDateObj)
+  //toDateObj.setDate(now.getDate() + 2);
+  //toDate = toDateObj.toISOString().split("T")[0];
+  //toDate = "2024-04-01"
+  const endpoint = `/ems/revenue?fromDate=${firstDayStr}&toDate=${lastDayStr}`;
+  const url = baseURL + endpoint;
+
+  const headers = {
+    "Authorization": `Bearer ${jwtToken}`,
+    "Accept": "application/json"
+  };
+
+  const req = new Request(url);
+  req.method = "GET";
+  req.headers = headers;
+
+  try {
+    const revenue = await req.loadJSON();
+    if (req.response.statusCode === 200) {
+      return revenue;
+    } else {
+      console.error("❌ Fel statuskod:", req.response.statusCode);
+    }
+  } catch (err) {
+    console.error("❌ Fel vid hämtning av revenue:", err);
+  }
+  return null;
+}
+
+// == Main ==
+async function main() {
+  const token = await loginAndGetToken();
+  if (token) {
+    const revenue = await fetchRevenue(token);
+    if (revenue) {
+      revenues = revenue.map(item => item.NetRevenue);
+      total = revenues.reduce((sum, value) => sum + value, 0);
+      // Visa i en alert t.ex.
+      //const alert = new Alert();
+      //alert.title = "Checkwatt Revenue";
+      //alert.message = `${total}`;
+      //await alert.present();
+    }
+  }
+}
+
+//await main();
+
 async function createVariables() {
   username = settings.username;
   password = settings.password;
@@ -325,17 +314,17 @@ function t(key) {
 
 async function ask() {
   //[settings.area, settings.vat, settings.currency] = await askForArea();
-  //settings.includevat = await askForIncludeVAT();
+  settings.status = await askForStatus();
   settings.username = await askForUsername();
   settings.password = await askForPassword();
-  //await askForAllShowPositions("top");
+  await askForAllShowPositions();
   //settings.resolution = 60;
   return settings
 }
 
 async function askForAllShowPositions() {
   const options = ["graph", "table", "pricestats", "nothing"];
-  const days = ["today", "tomorrow"];
+  const days = ["thismonth", "thisweek"];
   const graphTypes = ["line", "bar"];
   const chosenCombinations = [];
   const positions = ["top", "middle", "bottom"];
@@ -421,7 +410,7 @@ async function askForAllShowPositions() {
 // Select resolution
 async function askForLanguage() {
   let alert = new Alert();
-  alert.message = "Language/Sprache/Språk:";
+  alert.message = "Language/Språk:";
   alert.addAction("English");
   alert.addAction("Svenska");
   let index = await alert.presentAlert();
@@ -503,22 +492,12 @@ async function askForArea() {
   return [area, vat, currencies2];
 }
 
-// Select resolution
-async function askForResolution() {
-  let alert = new Alert();
-  alert.message = t("choosedataresolution") + ":";
-  alert.addAction("15 min");
-  alert.addAction("60 min");
-  let index = await alert.presentAlert();
-  return [15, 60][index];
-}
-
 // Include VAT?
-async function askForIncludeVAT() {
+async function askForStatus() {
   let alert = new Alert();
-  alert.message = t("doyouwantvat") + "?";
-  alert.addAction(t("withvat"));
-  alert.addAction(t("withoutvat"));
+  alert.message = t("doyouwantstatus") + "?";
+  alert.addAction(t("yes"));
+  alert.addAction(t("no"));
   let index = await alert.presentAlert();
   return [1,0][index];
 }
@@ -573,91 +552,6 @@ async function Table(day) {
   }
   daybefore = day;
   let head = listwidget.addStack()
-  let stackNames = ["first", "second", "third", "fourth", "fifth"];
-  let timeStacks = {};
-  let priceStacks = {};
-
-  for (let name of stackNames) {
-    let timeStack = head.addStack();
-    timeStack.layoutVertically();
-    head.addSpacer(4);
-    let priceStack = head.addStack();
-    priceStack.layoutVertically();
-    if (name !== stackNames[stackNames.length - 1]) {
-      head.addSpacer();
-    }
-    timeStacks[name] = timeStack;
-    priceStacks[name] = priceStack;
-  }
-
-  // Loop to add time and prices
-  for (let s = 0; s < stackNames.length; s++) {
-    let name = stackNames[s];
-    let timeStack = timeStacks[name];
-    let priceStack = priceStacks[name];
-    let hourOffset = 0 + s * 5; // how many hours per column
-    // Add time
-    for (let i = hourOffset; i < hourOffset + 5; i++) {
-      if (i == 24) {
-        continue
-      }
-      for (let a = 0; a < 4; a++) {
-        let timeText = timeStack.addText(`${i}:${a === 0 ? "00" : a * 15}`);
-        timeText.leftAlignText();
-        if (allValues.length == 24) {
-          if (i === hour && day == "today") {
-            timeText.textColor = new Color("#00ffff");
-            timeText.font = Font.lightSystemFont(bigFont);
-          } else {
-            timeText.textColor = new Color("#ffffff");
-            timeText.font = Font.lightSystemFont(mediumFont);
-          }
-          break
-        }
-        if (i === hour && minute >= a * 15 && minute < (a + 1) * 15) { // actual hour and identifies which 15-minute interval
-          timeText.textColor = new Color("#00ffff");
-          timeText.font = Font.lightSystemFont(bigFont);
-        } else {
-          timeText.textColor = new Color("#ffffff");
-          timeText.font = Font.lightSystemFont(mediumFont);
-        }
-      }
-    }
-
-    // Add prices
-    let priceStart = 0 + s * Math.ceil(allValues.length*0.2083); // 0.2083 is the factor between 24 and 96
-    for (let i = priceStart; i < priceStart + Math.ceil(allValues.length*0.2083); i++) {
-      if (i == allValues.length){
-        break
-      }
-      let priceVal = Math.round(pricesJSON[i]);
-      let priceText = priceStack.addText(String(priceVal));
-      priceText.leftAlignText();
-      if (i === (hour * 4) + Math.floor(minute / 15)) {
-         priceText.font = Font.lightSystemFont(bigFont);
-      } else {
-        priceText.font = Font.lightSystemFont(mediumFont);
-      }
-      if (allValues.length == 24) {
-        if (i === hour && day == "today") {
-          priceText.font = Font.lightSystemFont(bigFont);
-        }
-      }
-      if (pricesJSON[i] == priceLowest){
-        priceText.textColor = new Color("#00cf00"); // green
-      } else if (pricesJSON[i] < priceDiff + priceLowest) {
-        priceText.textColor = new Color("#ffff00"); // yellow
-      } else if (pricesJSON[i] == priceHighest){
-        priceText.textColor = new Color("#fa60ff"); // purple
-      } else if (pricesJSON[i] > priceHighest - priceDiff) {
-        priceText.textColor =  new Color("#ff3000"); // red
-      } else {
-        priceText.textColor = new Color("#f38"); // orange
-      }
-    }
-  }
-  listwidget.addSpacer(5);
-}
 
 async function Graph(day, graphOption) {
 //chart
@@ -683,59 +577,13 @@ async function Graph(day, graphOption) {
   }
   daybefore = day;
   if (resolution == 60) {
-    let avgtoday = []
-    let dotNow = ""
-    let countertoday = 0
-    let counterdot = 0
-    
-    do{
-      avgtoday += priceAvg + ","
-      countertoday += 1
-    }
-    while (countertoday < 24)
-    
-    do{
-      if (hour == counterdot && day == "today") {
-        dotNow += pricesJSON[counterdot] + ","
-      }
-      else {
-        dotNow += ","
-      }
-      counterdot += 1
-    }
-    while (counterdot < 24)
-    
     let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+settings.height+"&c="
     graphtoday += encodeURI("{\
       data: { \
         labels: ["+hours+"],\
         datasets: [\
-        {\
-            data: ["+dotNow+"],\
-            type: 'line',\
-            fill: false,\
-            borderColor: 'rgb(0,255,255)',\
-            borderWidth: 65,\
-            pointRadius: 6\
-          },\
           {\
-            data: ["+avgtoday+"],\
-            type: 'line',\
-            fill: false,\
-            borderColor: 'orange',\
-            borderWidth: 6,\
-            pointRadius: 0\
-          },\
-          {\
-            data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
-            type: 'line',\
-            fill: false,\
-            borderColor: 'rgb(255,255,255)',\
-            borderWidth: 6,\
-            pointRadius: 0\
-          },\
-          {\
-            data: ["+pricesJSON+"],\
+            data: ["+revenues+"],\
             type: '"+graphOption+"',\
             fill: false,\
             borderColor: getGradientFillHelper('vertical',['rgb(255,25,255)','rgb(255,48,8)','orange','rgb(255,255,0)','rgb(0,150,0)']),\
@@ -881,7 +729,6 @@ async function Datas(day) {
 
 async function renderSection(position) {
   const value = settings[`showat${position}`];
-
   if (!value || value === "nothing") return;
 
   const [type, day] = value.split(",").map(s => s.trim());
@@ -903,7 +750,7 @@ async function renderSection(position) {
 let listwidget = new ListWidget();
 
 async function createWidget(){
-  await main();
+  await main(); // get this month data
   listwidget.backgroundColor = new Color("#000000");
   //await renderSection("top");
   //await renderSection("middle");

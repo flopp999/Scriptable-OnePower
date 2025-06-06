@@ -17,7 +17,7 @@
   },
   "line": {
     "en": "Line",
-    "sv": "Linje",
+    "sv": "Linje"
   },
   "choosegraphtype": {
     "en": "Select chart type",
@@ -25,7 +25,7 @@
   },
   "now": {
     "en": "Now",
-    "sv": "Nu",
+    "sv": "Nu"
   },
   "top": {
     "en": "at the top",
@@ -153,7 +153,7 @@
   },
   "average": {
     "en": "average",
-    "sv": "medel",
+    "sv": "medel"
   },
   "highest": {
     "en": "highest",
@@ -161,7 +161,7 @@
   },
   "password": {
     "en": "Password",
-    "sv": "Lösenord",
+    "sv": "Lösenord"
   },
   "username": {
     "en": "Username",

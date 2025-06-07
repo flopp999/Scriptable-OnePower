@@ -189,7 +189,7 @@ async function getDetails() {
   try {
     const revenue = await req.loadJSON();
     if (req.response.statusCode === 200) {
-			log(revenue;)
+		log(revenue);
       return revenue;
     } else {
       console.error("❌ Fel statuskod:", req.response.statusCode);

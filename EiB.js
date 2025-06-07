@@ -26,6 +26,10 @@ let hour;
 let minute;
 let translationData;
 let currentLang;
+let fcrdRevenues;
+let savingsRevenues;
+let totalRevenues;
+let totalSavings;
 const fileNameSettings = Script.name() + "_Settings.json";
 const fileNameTranslations = Script.name() + "_Translations.json";
 const fm = FileManager.iCloud();
@@ -281,12 +285,12 @@ async function fetchRevenue(jwtToken) {
 	  const revenue = await req.loadJSON();
 	  if (req.response.statusCode === 200) {
 			// Få ut alla NetRevenue för fcrd
-			const fcrdRevenues = revenue
+			fcrdRevenues = revenue
 		  .filter(item => item.Service === "fcrd")
 		  .map(item => item.NetRevenue);
 		
 			// Få ut alla NetRevenue för savings
-			const savingsRevenues = revenue
+			savingsRevenues = revenue
 			  .filter(item => item.Service === "savings")
 			  .map(item => item.NetRevenue);
 			

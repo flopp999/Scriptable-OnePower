@@ -226,6 +226,10 @@ async function getStatus() {
 			} else if (revenue[0]["Service"][0] == "sc") {
 				service = "SC"
 			}
+			FpUpInKw = revenue[0]["FpUpInKw"]
+			FpDownInKw = revenue[0]["FpDownInKw"]
+			ChargingMax = revenue[0]["RelatedMeters"][0]["PeakAcKw"]
+			DischargingMax = revenue[0]["RelatedMeters"][1]["PeakAcKw"]
       return;
     } else {
       console.error("❌ Fel statuskod:", req.response.statusCode);
@@ -300,20 +304,6 @@ async function fetchRevenue(jwtToken) {
 		console.error("❌ Fel vid hämtning av revenue:", err);
 	}
 	return null;
-}
-
-// == Main ==
-async function main() {
-  token = await loginAndGetToken();
-  if (token) {
-    const revenue = await fetchRevenue(token);
-    if (revenue) {
-      revenues = revenue.map(item => item.NetRevenue);
-      total = revenues.reduce((sum, value) => sum + value, 0);
-    }
-  }
-	await getDetails();
-	await getStatus();
 }
 
 async function createVariables() {
@@ -573,18 +563,30 @@ async function Table(day) {
   //await Datas(day);
   //if (daybefore != day){
 	  let left = listwidget.addStack();
-	  let whatday = left.addText(service);
+	  let whatday = left.addText("Mode" + service);
 	  whatday.textColor = new Color("#ffffff");
 	  whatday.font = Font.lightSystemFont(13);
 	  left.addSpacer();
-	  let whatday = left.addText(batteryCapacityKwh);
+	  whatday = left.addText("Capacity" + String(batteryCapacityKwh));
 	  whatday.textColor = new Color("#ffffff");
 	  whatday.font = Font.lightSystemFont(13);
-	  let whatday = left.addText(meterId);
+		let left = listwidget.addStack();
+	  whatday = left.addText("Up" + String(FpUpInKw));
+	  whatday.textColor = new Color("#ffffff");
+	  whatday.font = Font.lightSystemFont(13);
+		left.addSpacer();
+	  whatday = left.addText("Down" + String(FpDownInKw));
+	  whatday.textColor = new Color("#ffffff");
+	  whatday.font = Font.lightSystemFont(13);
+		let left = listwidget.addStack();
+	  whatday = left.addText("Charge" + String(ChargingMax));
+	  whatday.textColor = new Color("#ffffff");
+	  whatday.font = Font.lightSystemFont(13);
+		left.addSpacer();
+	  whatday = left.addText("Discharge" + String(DischargingMax));
 	  whatday.textColor = new Color("#ffffff");
 	  whatday.font = Font.lightSystemFont(13);
 
-  }
   daybefore = day;
   let head = listwidget.addStack()
 }

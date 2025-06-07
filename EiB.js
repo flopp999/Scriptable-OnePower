@@ -41,7 +41,7 @@ if (!config.runsInWidget){
   await readTranslations();
   await readsettings();
   await createVariables();
-  await start();
+  //await start();
   await createVariables();
 }
 
@@ -333,8 +333,8 @@ async function ask() {
   settings.username = await askForUsername();
   settings.password = await askForPassword();
 	settings.details = await getDetails();
-  settings.showtop = "graph, thismonth"
-  settings.showmiddle = "table, thismonth"
+  settings.showattop = "graph, thismonth"
+  settings.showatmiddle = "table, thismonth"
   settings.graphOption = {"top": "bar"}
   settings.height = 750
   //await askForAllShowPositions();

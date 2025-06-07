@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.14
+let version = 0.15
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -81,10 +81,10 @@ async function start() {
   let alert = new Alert();
   //let vatText = includevat == 1 ? t("yes") : t("no")
   alert.message = 
-    t("changesetup") + "?"
-    //t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(topType) + (topDay ? ", " + t(topDay) : "") + "\n" +
-    //t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(middleType) + (middleDay ? ", " + t(middleDay) : "") + "\n" +
-    //t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "") + "\n" +
+    t("changesetup") + "?" +
+    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(topType) + (topDay ? ", " + t(topDay) : "") + "\n" +
+    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(middleType) + (middleDay ? ", " + t(middleDay) : "") + "\n" +
+    t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "") + "\n"
     //t("area") + ": " + area + "\n" +
     //"Extras: " + extras + "\n" +
     //t("withvat") + ": " + vatText + "\n";
@@ -193,7 +193,6 @@ async function getDetails() {
   try {
     const revenue = await req.loadJSON();
     if (req.response.statusCode === 200) {
-			log(revenue);
 			rpiSerial = revenue["Meter"][0]["RpiSerial"]
 			meterId = revenue["Meter"][0]["Id"]
 			batteryCapacityKwh = revenue["Meter"][0]["BatteryCapacityKwh"]
@@ -220,7 +219,6 @@ async function getStatus() {
   try {
     const revenue = await req.loadJSON();
     if (req.response.statusCode === 200) {
-			log(revenue);
 			if (revenue[0]["Service"][0] == "fcrd") {
 				service = "CO"
 			} else if (revenue[0]["Service"][0] == "off") {
@@ -269,54 +267,39 @@ async function loginAndGetToken() {
     return null;
   }
 }
-
 // == Hämta revenue med JWT ==
 async function fetchRevenue(jwtToken) {
-  // Dagens datum
-const now = new Date();
-
-// Första dagen i månaden
-const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-// Sista dagen i månaden
-const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
-// Formatera som YYYY-MM-DD
-firstDayStr = `${firstDay.getFullYear()}-${(firstDay.getMonth() + 1).toString().padStart(2, '0')}-01`;
-lastDayStr = `${lastDay.getFullYear()}-${(lastDay.getMonth() + 1).toString().padStart(2, '0')}-${lastDay.getDate().toString().padStart(2, '0')}`;
-
-
-  //const now = new Date();
-  //log(now)
-  //fromDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
-  //fromDate = "2024-03-01"
-  //const toDateObj = new Date(now);
-  //log(toDateObj)
-  //toDateObj.setDate(now.getDate() + 2);
-  //toDate = toDateObj.toISOString().split("T")[0];
-  //toDate = "2024-04-01"
-  const endpoint = `/ems/revenue?fromDate=${firstDayStr}&toDate=${lastDayStr}`;
-  const url = baseURL + endpoint;
-
-  const headers = {
-    "Authorization": `Bearer ${jwtToken}`,
-    "Accept": "application/json"
-  };
-
-  const req = new Request(url);
-  req.method = "GET";
-  req.headers = headers;
-
-  try {
-    const revenue = await req.loadJSON();
-    if (req.response.statusCode === 200) {
-      return revenue;
-    } else {
-      console.error("❌ Fel statuskod:", req.response.statusCode);
-    }
-  } catch (err) {
-    console.error("❌ Fel vid hämtning av revenue:", err);
-  }
-  return null;
+	  // Dagens datum
+	const now = new Date();
+	// Första dagen i månaden
+	const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+	// Sista dagen i månaden
+	const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+	// Formatera som YYYY-MM-DD
+	firstDayStr = `${firstDay.getFullYear()}-${(firstDay.getMonth() + 1).toString().padStart(2, '0')}-01`;
+	lastDayStr = `${lastDay.getFullYear()}-${(lastDay.getMonth() + 1).toString().padStart(2, '0')}-${lastDay.getDate().toString().padStart(2, '0')}`;
+	const endpoint = `/ems/revenue?fromDate=${firstDayStr}&toDate=${lastDayStr}`;
+	const url = baseURL + endpoint;
+	const headers = {
+		"Authorization": `Bearer ${jwtToken}`,
+	  "Accept": "application/json"
+	};
+	const req = new Request(url);
+	req.method = "GET";
+	req.headers = headers;
+	try {
+	  const revenue = await req.loadJSON();
+	  if (req.response.statusCode === 200) {
+			revenues = revenue.map(item => item.NetRevenue);
+      total = revenues.reduce((sum, value) => sum + value, 0);
+	    return;
+	  } else {
+	    console.error("❌ Fel statuskod:", req.response.statusCode);
+		}
+	} catch (err) {
+		console.error("❌ Fel vid hämtning av revenue:", err);
+	}
+	return null;
 }
 
 // == Main ==
@@ -327,27 +310,19 @@ async function main() {
     if (revenue) {
       revenues = revenue.map(item => item.NetRevenue);
       total = revenues.reduce((sum, value) => sum + value, 0);
-      // Visa i en alert t.ex.
-      //const alert = new Alert();
-      //alert.title = "Checkwatt Revenue";
-      //alert.message = `${total}`;
-      //await alert.present();
     }
   }
 	await getDetails();
 	await getStatus();
 }
 
-//await main();
-
 async function createVariables() {
   username = settings.username;
   password = settings.password;
-  currency = settings.currency;
-  vat = settings.vat;
-  includevat = settings.includevat;
-  extras = settings.extras;
-  language = settings.language;
+  service = settings.service;
+  rpiSerial = settings.rpiserial;
+  batteryCapacityKwh = settings.batterycapacitykwh;
+  meterId = settings.meterid;
 }
 
 async function readTranslations() {
@@ -378,7 +353,7 @@ function t(key) {
 
 async function ask() {
   //[settings.area, settings.vat, settings.currency] = await askForArea();
-  settings.status = await askForStatus();
+  //settings.status = await askForStatus();
   settings.username = await askForUsername();
   settings.password = await askForPassword();
 	settings.details = await getDetails();
@@ -626,7 +601,7 @@ async function Graph(day, graphOption) {
     let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+settings.height+"&c="
     graphtoday += encodeURI("{\
       data: { \
-        labels: ["+hours+"],\
+        labels: ["+daysArray+"],\
         datasets: [\
           {\
             data: ["+revenues+"],\
@@ -711,7 +686,12 @@ async function PriceStats(day) {
 const smallFont = 10;
 const mediumFont = 12;
 const bigFont = 13.5;
-const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
+const now = new Date();
+// Hämta antalet dagar i innevarande månad
+const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+// Skapa array från 1 till antal dagar
+const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+log(daysArray);
 
 // Today date
 async function Datas(day) {
@@ -783,11 +763,15 @@ async function renderSection(position) {
 let listwidget = new ListWidget();
 
 async function createWidget(){
-  await main(); // get this month data
+	token = await loginAndGetToken();
+	await fetchRevenue(token);
+	await getDetails();
+	await getStatus();
+  //await main(); // get this month data
   listwidget.backgroundColor = new Color("#000000");
   await renderSection("top");
-  //await renderSection("middle");
-  //await renderSection("bottom");  
+  await renderSection("middle");
+  await renderSection("bottom");  
   let ja = listwidget.addStack()
   let te = ja.addText(String(firstDayStr + " till " + lastDayStr))
   te.font = Font.lightSystemFont(15);

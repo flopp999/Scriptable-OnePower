@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.16
+let version = 0.17
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -563,27 +563,27 @@ async function Table(day) {
   //await Datas(day);
   //if (daybefore != day){
 	  let left = listwidget.addStack();
-	  let whatday = left.addText("Mode" + service);
+	  let whatday = left.addText("Mode: " + service);
 	  whatday.textColor = new Color("#ffffff");
 	  whatday.font = Font.lightSystemFont(13);
 	  left.addSpacer();
-	  whatday = left.addText("Capacity" + String(batteryCapacityKwh));
+	  whatday = left.addText("Capacity: " + String(batteryCapacityKwh) +  "kWh");
 	  whatday.textColor = new Color("#ffffff");
 	  whatday.font = Font.lightSystemFont(13);
-		let left = listwidget.addStack();
-	  whatday = left.addText("Up" + String(FpUpInKw));
-	  whatday.textColor = new Color("#ffffff");
-	  whatday.font = Font.lightSystemFont(13);
-		left.addSpacer();
-	  whatday = left.addText("Down" + String(FpDownInKw));
-	  whatday.textColor = new Color("#ffffff");
-	  whatday.font = Font.lightSystemFont(13);
-		let left = listwidget.addStack();
-	  whatday = left.addText("Charge" + String(ChargingMax));
+		left = listwidget.addStack();
+	  whatday = left.addText("Up: " + String(FpUpInKw) + "kW");
 	  whatday.textColor = new Color("#ffffff");
 	  whatday.font = Font.lightSystemFont(13);
 		left.addSpacer();
-	  whatday = left.addText("Discharge" + String(DischargingMax));
+	  whatday = left.addText("Down: " + String(FpDownInKw) + "kW");
+	  whatday.textColor = new Color("#ffffff");
+	  whatday.font = Font.lightSystemFont(13);
+		left = listwidget.addStack();
+	  whatday = left.addText("Charge: " + String(ChargingMax) + "kW");
+	  whatday.textColor = new Color("#ffffff");
+	  whatday.font = Font.lightSystemFont(13);
+		left.addSpacer();
+	  whatday = left.addText("Discharge: " + String(DischargingMax) + "kW");
 	  whatday.textColor = new Color("#ffffff");
 	  whatday.font = Font.lightSystemFont(13);
 

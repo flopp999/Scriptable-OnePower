@@ -679,7 +679,6 @@ const now = new Date();
 const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
 // Skapa array från 1 till antal dagar
 const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-log(daysArray);
 
 // Today date
 async function Datas(day) {

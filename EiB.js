@@ -77,14 +77,14 @@ if (config.runsInWidget){
 async function start() {
   const [topType, topDay] = settings.showattop.split(",").map(s => s.trim());
   const [middleType, middleDay] = settings.showatmiddle.split(",").map(s => s.trim());
-  const [bottomType, bottomDay] = settings.showatbottom.split(",").map(s => s.trim());
+ // const [bottomType, bottomDay] = settings.showatbottom.split(",").map(s => s.trim());
   let alert = new Alert();
   //let vatText = includevat == 1 ? t("yes") : t("no")
   alert.message = 
     t("changesetup") + "?\n" +
     t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(topType) + (topDay ? ", " + t(topDay) : "") + "\n" +
-    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(middleType) + (middleDay ? ", " + t(middleDay) : "") + "\n" +
-    t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "") + "\n"
+    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(middleType) + (middleDay ? ", " + t(middleDay) : "")
+    //t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "") + "\n"
     //t("area") + ": " + area + "\n" +
     //"Extras: " + extras + "\n" +
     //t("withvat") + ": " + vatText + "\n";

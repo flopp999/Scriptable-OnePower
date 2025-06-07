@@ -54,7 +54,7 @@ Found a bug or have a feature request?
 
 ## 🧩 Widget Guide
 
-![plot](Scriptable-EiB.jpg)
+![plot](Scriptable-EiB.png)
 
 ---
 

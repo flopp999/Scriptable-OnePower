@@ -81,7 +81,7 @@ async function start() {
   let alert = new Alert();
   //let vatText = includevat == 1 ? t("yes") : t("no")
   alert.message = 
-    t("changesetup") + "?" +
+    t("changesetup") + "?\n" +
     t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(topType) + (topDay ? ", " + t(topDay) : "") + "\n" +
     t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(middleType) + (middleDay ? ", " + t(middleDay) : "") + "\n" +
     t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "") + "\n"
@@ -422,7 +422,7 @@ async function askForAllShowPositions() {
   const totalTable = chosenCombinations.filter(c => c.type === "table").length;
   const totalPriceStats = chosenCombinations.filter(c => c.type === "pricestats").length;
   const heightMap = {
-    "1-0-0": 1200,
+    "1-0-0": 1000,
     "0-1-0": 800,
     "0-0-1": 800,
   
@@ -570,24 +570,20 @@ async function askForPassword() {
 
 
 async function Table(day) {
-  await Datas(day);
-  if (daybefore != day){
+  //await Datas(day);
+  //if (daybefore != day){
 	  let left = listwidget.addStack();
-	  let whatday = left.addText(date);
+	  let whatday = left.addText(service);
 	  whatday.textColor = new Color("#ffffff");
 	  whatday.font = Font.lightSystemFont(13);
 	  left.addSpacer();
-	  if (prices == 0) {
-	    whatday = left.addText(t("after13"));
-	    whatday.textColor = new Color("#ffffff");
-	    whatday.font = Font.lightSystemFont(13);
-	    listwidget.addSpacer(5);
-	    return;
-  	} else {
-  		let updatetext = left.addText(t("updated") + updated);
-	  	updatetext.font = Font.lightSystemFont(13);
-	  	updatetext.textColor = new Color("#ffffff");
-	  }
+	  let whatday = left.addText(batteryCapacityKwh);
+	  whatday.textColor = new Color("#ffffff");
+	  whatday.font = Font.lightSystemFont(13);
+	  let whatday = left.addText(meterId);
+	  whatday.textColor = new Color("#ffffff");
+	  whatday.font = Font.lightSystemFont(13);
+
   }
   daybefore = day;
   let head = listwidget.addStack()
@@ -623,10 +619,10 @@ async function Graph(day, graphOption) {
             {\
               xAxes: [{\
                 offset:true,\
-                ticks:{fontSize:35,fontColor:'white'}\
+                ticks:{fontSize:30,fontColor:'white'}\
               }],\
               yAxes: [{\
-                gridLines: {color:'white'},ticks:{stepSize:10,beginAtZero:true,fontSize:35,fontColor:'white'}\
+                gridLines: {color:'white'},ticks:{stepSize:10,beginAtZero:true,fontSize:30,fontColor:'white'}\
               }]\
             }\
           }\

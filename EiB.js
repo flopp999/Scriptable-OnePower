@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.21
+let version = 0.22
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -280,8 +280,22 @@ async function fetchRevenue(jwtToken) {
 	try {
 	  const revenue = await req.loadJSON();
 	  if (req.response.statusCode === 200) {
-			revenues = revenue.map(item => item.NetRevenue);
-      total = revenues.reduce((sum, value) => sum + value, 0);
+			// Få ut alla NetRevenue för fcrd
+			const fcrdRevenues = revenue
+		  .filter(item => item.Service === "fcrd")
+		  .map(item => item.NetRevenue);
+		
+			// Få ut alla NetRevenue för savings
+			const savingsRevenues = revenue
+			  .filter(item => item.Service === "savings")
+			  .map(item => item.NetRevenue);
+			
+			log("FCRD: " + fcrdRevenues);
+			log("SAVINGS: " + savingsRevenues);
+				//revenues = revenue.map(item => item.NetRevenue);
+      totalFcrd = fcrdRevenues.reduce((sum, value) => sum + value, 0);
+			totalSavings = savingsRevenues.reduce((sum, value) => sum + value, 0);
+			
 	    return;
 	  } else {
 	    console.error("❌ Fel statuskod:", req.response.statusCode);

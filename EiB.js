@@ -353,11 +353,11 @@ async function ask() {
 }
 
 async function askForAllShowPositions() {
-  const options = ["graph", "table", "pricestats", "nothing"];
-  const days = ["thismonth", "thisweek"];
-  const graphTypes = ["line", "bar"];
+  const options = ["graph", "table", "nothing"];
+  const days = ["thismonth"];
+  const graphTypes = ["bar"];
   const chosenCombinations = [];
-  const positions = ["top", "middle", "bottom"];
+  const positions = ["top", "middle"];
   const graphOption = {};
   for (let position of positions) {
     const usedCount = (type) =>

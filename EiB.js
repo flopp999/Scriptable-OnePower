@@ -8,6 +8,9 @@ let version = 0.14
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
+let rpiSerial;
+let meterId;
+let batteryCapacityKwh;
 let token;
 let firstDayStr;
 let lastDayStr;
@@ -205,7 +208,7 @@ async function getDetails() {
 }
 
 async function getStatus() {
-  const endpoint = `/site/Statuses?serial=` + serial;
+  const endpoint = `/site/Statuses?serial=` + rpiSerial;
   const url = baseURL + endpoint;
   const headers = {
     "Authorization": `Bearer ${token}`,
@@ -217,8 +220,15 @@ async function getStatus() {
   try {
     const revenue = await req.loadJSON();
     if (req.response.statusCode === 200) {
-		log(revenue);
-      return revenue;
+			log(revenue);
+			if (revenue[0]["Service"][0] == "fcrd") {
+				service = "CO"
+			} else if (revenue[0]["Service"][0] == "off") {
+				service = "Avaktiverad"
+			} else if (revenue[0]["Service"][0] == "sc") {
+				service = "SC"
+			}
+      return;
     } else {
       console.error("❌ Fel statuskod:", req.response.statusCode);
     }

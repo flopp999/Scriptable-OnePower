@@ -1,10 +1,8 @@
-# ⚡️ Scriptable NordPool Widget
+# ⚡️ Scriptable EiB Widget
 
-A simple and customizable Scriptable widget that displays **Nord Pool electricity prices** directly on your iPhone or iPad.  
-Data is fetched directly from Nord Pool.  
+A simple and customizable Scriptable widget that displays **Energy In Balance Revenue** directly on your iPhone or iPad.  
+Data is fetched directly from EiB.  
 New versions of the script will be updated automatically.  
-The user can select what content to display in the widget. The available options are Graph, Table, Price Statistics, or Empty.  
-There are three sections: Top, Middle, and Bottom — please refer to the image for their locations.  
 
 ---
 
@@ -25,7 +23,7 @@ Download Scriptable here:
 ## 🔧 How to Install
 
 1. Go to the latest version of the script:  
-   👉 [Download Nordpool.js](https://github.com/flopp999/Scriptable-NordPool/releases/latest/download/Nordpool.js)  
+   👉 [Download Nordpool.js](https://github.com/flopp999/Scriptable-EiB/releases/latest/download/EiB.js)  
    and copy the entire content.
 2. Open **Scriptable** and tap the **+** icon in the top right.
 3. Paste the script, then tap **Play** (▶️) to run it.

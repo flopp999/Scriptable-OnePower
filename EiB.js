@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.12
+let version = 0.13
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -176,6 +176,30 @@ async function readsettings() {
   }
 }
 
+async function getDetails() {
+  const endpoint = `/controlpanel/CustomerDetail`;
+  const url = baseURL + endpoint;
+  const headers = {
+    "Authorization": `Bearer ${jwtToken}`,
+    "Accept": "application/json"
+  };
+  const req = new Request(url);
+  req.method = "GET";
+  req.headers = headers;
+  try {
+    const revenue = await req.loadJSON();
+    if (req.response.statusCode === 200) {
+			log(revenue;)
+      return revenue;
+    } else {
+      console.error("❌ Fel statuskod:", req.response.statusCode);
+    }
+  } catch (err) {
+    console.error("❌ Fel vid hämtning av revenue:", err);
+  }
+  return null;
+}
+
 // == Login: Basic Auth och hämta JWT ==
 async function loginAndGetToken() {
   const credentials = `${username}:${password}`;
@@ -272,6 +296,7 @@ async function main() {
       //await alert.present();
     }
   }
+	await getDetails();
 }
 
 //await main();
@@ -317,6 +342,7 @@ async function ask() {
   settings.status = await askForStatus();
   settings.username = await askForUsername();
   settings.password = await askForPassword();
+	settings.details = await getDetails();
   await askForAllShowPositions();
   //settings.resolution = 60;
   return settings
@@ -567,7 +593,7 @@ async function Graph(day, graphOption) {
             data: ["+revenues+"],\
             type: '"+graphOption+"',\
             fill: false,\
-            borderColor: getGradientFillHelper('vertical',['rgb(0,150,0)','rgb(255,255,0)','orange','rgb(255,48,8)','rgb(255,25,255)']),\
+            borderColor: getGradientFillHelper('vertical',['red','orange','green']),\
             borderWidth: 20, \
             pointRadius: 0\
           },\

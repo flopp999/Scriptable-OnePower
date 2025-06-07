@@ -8,6 +8,7 @@ let version = 0.14
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
+let token;
 let firstDayStr;
 let lastDayStr;
 let revenues;
@@ -180,7 +181,34 @@ async function getDetails() {
   const endpoint = `/controlpanel/CustomerDetail`;
   const url = baseURL + endpoint;
   const headers = {
-    "Authorization": `Bearer ${jwtToken}`,
+    "Authorization": `Bearer ${token}`,
+    "Accept": "application/json"
+  };
+  const req = new Request(url);
+  req.method = "GET";
+  req.headers = headers;
+  try {
+    const revenue = await req.loadJSON();
+    if (req.response.statusCode === 200) {
+			log(revenue);
+			rpiSerial = revenue["Meter"][0]["RpiSerial"]
+			meterId = revenue["Meter"][0]["Id"]
+			batteryCapacityKwh = revenue["Meter"][0]["BatteryCapacityKwh"]
+      return revenue;
+    } else {
+      console.error("❌ Fel statuskod:", req.response.statusCode);
+    }
+  } catch (err) {
+    console.error("❌ Fel vid hämtning av revenue:", err);
+  }
+  return null;
+}
+
+async function getStatus() {
+  const endpoint = `/site/Statuses?serial=` + serial;
+  const url = baseURL + endpoint;
+  const headers = {
+    "Authorization": `Bearer ${token}`,
     "Accept": "application/json"
   };
   const req = new Request(url);
@@ -283,7 +311,7 @@ lastDayStr = `${lastDay.getFullYear()}-${(lastDay.getMonth() + 1).toString().pad
 
 // == Main ==
 async function main() {
-  const token = await loginAndGetToken();
+  token = await loginAndGetToken();
   if (token) {
     const revenue = await fetchRevenue(token);
     if (revenue) {
@@ -297,6 +325,7 @@ async function main() {
     }
   }
 	await getDetails();
+	await getStatus();
 }
 
 //await main();

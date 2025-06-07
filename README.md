@@ -34,7 +34,7 @@ Download Scriptable here:
 - ✅ English  
 - ✅ Swedish  
 
-Want support for another language? [Open an issue](https://github.com/flopp999/Scriptable-NordPool/issues) and I’ll add it!
+Want support for another language? [Open an issue](https://github.com/flopp999/Scriptable-NEiB/issues) and I’ll add it!
 
 ---
 
@@ -48,21 +48,13 @@ Want support for another language? [Open an issue](https://github.com/flopp999/S
 ## 📬 Feedback
 
 Found a bug or have a feature request?  
-👉 [Open an issue](https://github.com/flopp999/Scriptable-NordPool/issues)
+👉 [Open an issue](https://github.com/flopp999/Scriptable-EiB/issues)
 
 ---
 
 ## 🧩 Widget Guide
 
-Explanation of the elements in the widget:
-
-🟥 Red box – Date the prices applies to  
-🟩 Green box – Script version  
-🟨 Yellow box – Area  
-🟪 Purple box – Extra cost (included in the displayed prices)  
-🟦 Blue box – Last price update by NordPool  
-
-![plot](Scriptable-NordPool.png)
+![plot](Scriptable-EiB.png)
 
 ---
 

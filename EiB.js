@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.15
+let version = 0.16
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -75,9 +75,9 @@ if (config.runsInWidget){
 }
 
 async function start() {
-  //const [topType, topDay] = settings.showattop.split(",").map(s => s.trim());
-  //const [middleType, middleDay] = settings.showatmiddle.split(",").map(s => s.trim());
-  //const [bottomType, bottomDay] = settings.showatbottom.split(",").map(s => s.trim());
+  const [topType, topDay] = settings.showattop.split(",").map(s => s.trim());
+  const [middleType, middleDay] = settings.showatmiddle.split(",").map(s => s.trim());
+  const [bottomType, bottomDay] = settings.showatbottom.split(",").map(s => s.trim());
   let alert = new Alert();
   //let vatText = includevat == 1 ? t("yes") : t("no")
   alert.message = 

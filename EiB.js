@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.17
+let version = 0.18
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -537,7 +537,7 @@ async function askForUsername() {
   let alert = new Alert();
   alert.title = t("username");
   alert.message = (t("askforusername"));
-  alert.addTextField().setEmailAddressKeyboard();
+  alert.addTextField("example@mail.com",settings.username).setEmailAddressKeyboard();
   alert.addAction("OK");
   await alert.present();
   let input = alert.textFieldValue(0);
@@ -605,7 +605,7 @@ async function Graph(day, graphOption) {
             data: ["+revenues+"],\
             type: '"+graphOption+"',\
             fill: false,\
-            borderColor: getGradientFillHelper('vertical',['red','orange','green']),\
+            borderColor: getGradientFillHelper('vertical',['rgb(0,255,0)','orange','rgb(255,0,0)']),\
             borderWidth: 20, \
             pointRadius: 0\
           },\

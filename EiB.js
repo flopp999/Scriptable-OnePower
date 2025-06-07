@@ -761,26 +761,14 @@ async function createWidget(){
   //await renderSection("bottom");  
   let ja = listwidget.addStack()
   let te = ja.addText(String(firstDayStr + " till " + lastDayStr))
-  te.font = Font.lightSystemFont(15);
+  te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff")
-  ja = listwidget.addStack()
-  te = ja.addText(String(Math.round(total)) + "kr")
-  te.font = Font.lightSystemFont(15);
-  te.textColor = new Color("#ffffff")
+  ja.addSpacer();
+  te = ja.addText(String(Math.round(total)) + "kr");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
   let moms = listwidget.addStack();
   momstext = moms.addText("v. " + version);
-  momstext.font = Font.lightSystemFont(10);
-  momstext.textColor = new Color("#ffffff");
-  moms.addSpacer(120);
-  //momstext = moms.addText(area);
-  momstext.font = Font.lightSystemFont(10);
-  momstext.textColor = new Color("#ffffff");
-  moms.addSpacer();
-  //momstext = moms.addText("Extras: " + extras);
-  momstext.font = Font.lightSystemFont(10);
-  momstext.textColor = new Color("#ffffff");
-  moms.addSpacer();
-  
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   return listwidget

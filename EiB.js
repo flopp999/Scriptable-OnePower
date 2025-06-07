@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.22
+let version = 0.23
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -606,7 +606,7 @@ async function Graph(day, graphOption) {
         labels: ["+daysArray+"],\
         datasets: [\
           {\
-            data: ["+revenues+"],\
+            data: ["+fcrdRevenues+"],\
             type: '"+graphOption+"',\
             fill: false,\
             borderColor: getGradientFillHelper('vertical',['rgb(0,255,0)','orange','rgb(255,0,0)']),\
@@ -777,11 +777,26 @@ async function createWidget(){
   let te = ja.addText(String(firstDayStr + " till " + lastDayStr))
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff")
-  ja.addSpacer();
-  te = ja.addText(String(Math.round(total)) + "kr");
+	ja = listwidget.addStack()
+  te = ja.addText("FCR-D");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
-  let moms = listwidget.addStack();
+  ja.addSpacer();
+	te = ja.addText(String(Math.round(totalFcrd)) + "kr");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+  ja = listwidget.addStack()
+  te = ja.addText("Savings");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+  ja.addSpacer();
+	te = ja.addText(String(Math.round(totalSavings)) + "kr");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+  
+	
+	ja.addSpacer();
+	let moms = listwidget.addStack();
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");

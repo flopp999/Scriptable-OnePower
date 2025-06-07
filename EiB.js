@@ -769,7 +769,7 @@ async function createWidget(){
   listwidget.backgroundColor = new Color("#000000");
   await renderSection("top");
   await renderSection("middle");
-  await renderSection("bottom");  
+  //await renderSection("bottom");  
   let ja = listwidget.addStack()
   let te = ja.addText(String(firstDayStr + " till " + lastDayStr))
   te.font = Font.lightSystemFont(15);

@@ -781,6 +781,7 @@ async function createWidget(){
   let te = ja.addText(String(firstDayStr + " till " + lastDayStr))
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff")
+	
 	ja = listwidget.addStack()
   te = ja.addText("FCR-D");
   te.font = Font.lightSystemFont(13);
@@ -789,6 +790,7 @@ async function createWidget(){
 	te = ja.addText(String(Math.round(totalFcrd)) + "kr");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
+	
   ja = listwidget.addStack()
   te = ja.addText("Savings");
   te.font = Font.lightSystemFont(13);
@@ -797,9 +799,7 @@ async function createWidget(){
 	te = ja.addText(String(Math.round(totalSavings)) + "kr");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
-  
-	
-	ja.addSpacer();
+
 	let moms = listwidget.addStack();
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);

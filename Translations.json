@@ -155,9 +155,9 @@
     "en": "average",
     "sv": "medel"
   },
-  "highest": {
+  "askforpassword": {
     "en": "highest",
-    "sv": "högsta"
+    "sv": "Vad är ditt läsenord till EiB"
   },
   "password": {
     "en": "Password",
@@ -169,6 +169,6 @@
   },
   "askforusername": {
     "en": "What is your username ",
-    "sv": "Vad är ditt användarnamn "
+    "sv": "Vad är ditt användarnamn till EiB "
   }
 }

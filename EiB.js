@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.18
+let version = 0.19
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -126,7 +126,7 @@ async function updatecode() {
         }
         const codeStringTranslations = responseTranslations.toRawString();
         fm.writeString(filePathTranslations, codeStringTranslations);
-        //fm.remove(filePathSettings);
+        fm.remove(filePathSettings);
         let updateNotify = new Notification();
         updateNotify.title = Script.name();
         updateNotify.body = "New version installed, " + serverVersion;
@@ -549,7 +549,7 @@ async function askForUsername() {
 async function askForPassword() {
   let alert = new Alert();
   alert.title = t("password");
-  //alert.message = (t("enterextra") + `${settings.currency}`);
+  alert.message = (t("askforpassword"));
   alert.addTextField().setDefaultKeyboard();
   alert.addAction("OK");
   await alert.present();

@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.19
+let version = 0.20
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -16,23 +16,9 @@ let firstDayStr;
 let lastDayStr;
 let revenues;
 let total;
-let allValues = [];
 let widget;
-let daybefore;
 let day;
 let date;
-let prices;
-let pricesJSON;
-let priceAvg;
-let priceLowest;
-let priceHighest;
-let priceDiff;
-let area;
-let resolution;
-let currency;
-let vat;
-let includevat;
-let extras;
 let language;
 let settings = {}
 let langId;
@@ -347,7 +333,11 @@ async function ask() {
   settings.username = await askForUsername();
   settings.password = await askForPassword();
 	settings.details = await getDetails();
-  await askForAllShowPositions();
+  settings.showtop = "graph, thismonth"
+  settings.showmiddle = "table, thismonth"
+  settings.graphOption = {"top": "bar"}
+  settings.height = 750
+  //await askForAllShowPositions();
   //settings.resolution = 60;
   return settings
 }

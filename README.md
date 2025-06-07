@@ -1,7 +1,7 @@
 # ⚡️ Scriptable EiB Widget
 
-A simple and customizable Scriptable widget that displays **Energy In Balance Revenue** directly on your iPhone or iPad.  
-Data is fetched directly from EiB.  
+A simple Scriptable widget that displays data from **Energy In Balance** directly on your iPhone or iPad.  
+Data is fetched directly from https://energyinbalance.se/  
 New versions of the script will be updated automatically.  
 
 ---
@@ -20,10 +20,10 @@ New versions of the script will be updated automatically.
 Download Scriptable here:  
 [https://apps.apple.com/ca/app/scriptable/id1405459188](https://apps.apple.com/ca/app/scriptable/id1405459188)
 
-## 🔧 How to Install
+## 🔧 How to Install Code
 
 1. Go to the latest version of the script:  
-   👉 [Download Nordpool.js](https://github.com/flopp999/Scriptable-EiB/releases/latest/download/EiB.js)  
+   👉 [Download EiB.js](https://github.com/flopp999/Scriptable-EiB/releases/latest/download/EiB.js)  
    and copy the entire content.
 2. Open **Scriptable** and tap the **+** icon in the top right.
 3. Paste the script, then tap **Play** (▶️) to run it.
@@ -34,7 +34,7 @@ Download Scriptable here:
 - ✅ English  
 - ✅ Swedish  
 
-Want support for another language? [Open an issue](https://github.com/flopp999/Scriptable-NEiB/issues) and I’ll add it!
+Want support for another language? [Open an issue](https://github.com/flopp999/Scriptable-EiB/issues) and I’ll add it!
 
 ---
 

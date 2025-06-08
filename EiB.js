@@ -214,6 +214,8 @@ async function getStatus() {
 				service = "Avaktiverad"
 			} else if (revenue[0]["Service"][0] == "sc") {
 				service = "SC"
+			} else {
+				service = "Okänt"
 			}
 			FpUpInKw = revenue[0]["FpUpInKw"]
 			FpDownInKw = revenue[0]["FpDownInKw"]
@@ -295,7 +297,7 @@ async function fetchRevenue(jwtToken) {
 			  .filter(item => item.Service === "savings")
 			  .map(item => item.NetRevenue);
 			// Få ut alla NetRevenue för ffr
-			fcrdRevenues = revenue
+			ffrRevenues = revenue
 		  .filter(item => item.Service === "ffr")
 		  .map(item => item.NetRevenue);
 
@@ -604,11 +606,12 @@ async function Graph(day, graphOption) {
             scales:\
             {\
               xAxes: [{\
+								stacked: true,\
                 offset:true,\
                 ticks:{fontSize:30,fontColor:'white'}\
               }],\
               yAxes: [{\
-                gridLines: {color:'white'},ticks:{stepSize:10,beginAtZero:true,fontSize:30,fontColor:'white'}\
+                stacked:true, gridLines: {color:'white'},ticks:{stepSize:10,beginAtZero:true,fontSize:30,fontColor:'white'}\
               }]\
             }\
           }\

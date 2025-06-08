@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.26
+let version = 0.27
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -383,18 +383,13 @@ function t(key) {
 }
 
 async function ask() {
-  //[settings.area, settings.vat, settings.currency] = await askForArea();
-  //settings.status = await askForStatus();
   settings.username = await askForUsername();
   settings.password = await askForPassword();
-	settings.details = await getDetails();
   settings.showattop = "graph, thismonth"
   settings.showatmiddle = "status, thismonth"
 	settings.showatbottom = "revenue, thismonth"
   settings.graphOption = {"top": "bar"}
   settings.height = 750
-  //await askForAllShowPositions();
-  //settings.resolution = 60;
   return settings
 }
 
@@ -532,44 +527,35 @@ async function askForPassword() {
 }
 
 
-async function Table(day) {
-  
-	  let row = listwidget.addStack();
-	  row.layoutHorizontally()
-    let left = row.addStack()
-    left.layoutVertically()
-    row.addSpacer(55)
-    let mid = row.addStack()
-    mid.layoutVertically()
-    let right = row.addStack()
-    right.layoutVertically()
-    let whatday = left.addText("Mode: " + service);
-	  whatday.textColor = new Color("#ffffff");
-	  whatday.font = Font.lightSystemFont(13);
-	  whatday = mid.addText("Capacity: " + String(batteryCapacityKwh) +  "kWh");
-	  whatday.textColor = new Color("#ffffff");
-	  whatday.font = Font.lightSystemFont(13);
-
- 
-	 whatday = left.addText("Charge: " + String(ChargingMax) + "kW");
-	  whatday.textColor = new Color("#ffffff");
-	  whatday.font = Font.lightSystemFont(13);
-    
-	 whatday = mid.addText("Discharge: " + String(DischargingMax) + "kW");
-	  whatday.textColor = new Color("#ffffff");
-	  whatday.font = Font.lightSystemFont(13);
-
-
-
-whatday = left.addText("Up: " + String(FpUpInKw) + "kW");
-	  whatday.textColor = new Color("#ffffff");
-	  whatday.font = Font.lightSystemFont(13);
-		whatday = mid.addText("Down: " + String(FpDownInKw) + "kW");
-	  whatday.textColor = new Color("#ffffff");
-	  whatday.font = Font.lightSystemFont(13);
-		
-  
-  let head = listwidget.addStack()
+async function Status(day) {
+	let row = listwidget.addStack();
+	row.layoutHorizontally()
+  let left = row.addStack()
+  left.layoutVertically()
+	row.addSpacer(55)
+	let mid = row.addStack()
+	mid.layoutVertically()
+	let right = row.addStack()
+	right.layoutVertically()
+	let whatday = left.addText("Mode: " + service);
+	whatday.textColor = new Color("#ffffff");
+	whatday.font = Font.lightSystemFont(13);
+	whatday = mid.addText("Capacity: " + String(batteryCapacityKwh) +  "kWh");
+	whatday.textColor = new Color("#ffffff");
+	whatday.font = Font.lightSystemFont(13);
+  whatday = left.addText("Charge: " + String(ChargingMax) + "kW");
+  whatday.textColor = new Color("#ffffff");
+	whatday.font = Font.lightSystemFont(13);
+  whatday = mid.addText("Discharge: " + String(DischargingMax) + "kW");
+  whatday.textColor = new Color("#ffffff");
+  whatday.font = Font.lightSystemFont(13);
+	whatday = left.addText("Up: " + String(FpUpInKw) + "kW");
+	whatday.textColor = new Color("#ffffff");
+	whatday.font = Font.lightSystemFont(13);
+	whatday = mid.addText("Down: " + String(FpDownInKw) + "kW");
+	whatday.textColor = new Color("#ffffff");
+	whatday.font = Font.lightSystemFont(13);
+	let head = listwidget.addStack()
 }
 
 async function Graph(day, graphOption) {
@@ -650,9 +636,7 @@ async function renderSection(position) {
 let listwidget = new ListWidget();
 
 async function Revenue() {
-	  let ja = listwidget.addStack()
-  //log(firstDayStr)
-  //const dateString = "2025-06-01";
+	let ja = listwidget.addStack()
   const date = new Date(firstDayStr);
 
 // Formatera till månadsnamn (svenska)
@@ -688,12 +672,10 @@ async function Revenue() {
   te = saveleft.addText("Savings");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
-  //ja.addSpacer();
-	te = savemid.addText(String(Math.round(totalSavings)) + "kr");
+  te = savemid.addText(String(Math.round(totalSavings)) + "kr");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
-
-te = saveright.addText("Detta året");
+	te = saveright.addText("Detta året");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
 	te = saveright.addText("FCR-D");

@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.27
+let version = 0.28
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -25,14 +25,15 @@ let langId;
 let hour;
 let minute;
 let translationData;
+let monthName;
 let currentLang;
 let fcrdRevenues;
-let savingsRevenues;
-let totalRevenues;
-let totalSavings;
 let fcrdRevenuesYear;
+let ffrRevenues;
+let ffrRevenuesYear;
+let savingsRevenues;
 let savingsRevenuesYear;
-let totalRevenuesYear;
+let totalSavings;
 let totalSavingsYear;
 const fileNameSettings = Script.name() + "_Settings.json";
 const fileNameTranslations = Script.name() + "_Translations.json";
@@ -78,13 +79,7 @@ async function start() {
     t("changesetup") + "?\n" +
     t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(topType) + (topDay ? ", " + t(topDay) : "") + "\n" +
     t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(middleType) + (middleDay ? ", " + t(middleDay) : "")
-    //t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "") + "\n"
-    //t("area") + ": " + area + "\n" +
-    //"Extras: " + extras + "\n" +
-    //t("withvat") + ": " + vatText + "\n";
-  //if (includevat == 1) {
-    //alert.message += t("vat") + ": " + vat;
-  //}
+    //t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "")
   alert.addAction(t("yes"));
   alert.addAction(t("no"));
   let index = await alert.presentAlert();
@@ -299,9 +294,14 @@ async function fetchRevenue(jwtToken) {
 			savingsRevenues = revenue
 			  .filter(item => item.Service === "savings")
 			  .map(item => item.NetRevenue);
-			
+			// Få ut alla NetRevenue för ffr
+			fcrdRevenues = revenue
+		  .filter(item => item.Service === "ffr")
+		  .map(item => item.NetRevenue);
+
 				//revenues = revenue.map(item => item.NetRevenue);
       totalFcrd = fcrdRevenues.reduce((sum, value) => sum + value, 0);
+			totalFfr = ffrRevenues.reduce((sum, value) => sum + value, 0);
 			totalSavings = savingsRevenues.reduce((sum, value) => sum + value, 0);
 	   
     } else {
@@ -333,8 +333,14 @@ async function fetchRevenue(jwtToken) {
 			  .filter(item => item.Service === "savings")
 			  .map(item => item.NetRevenue);
 			
+			ffrRevenuesYear = revenueYear
+		  .filter(item => item.Service === "ffr")
+		  .map(item => item.NetRevenue);
+			
+			
 			//revenues = revenue.map(item => item.NetRevenue);
       totalFcrdYear = fcrdRevenuesYear.reduce((sum, value) => sum + value, 0);
+			totalFfrYear = ffrRevenuesYear.reduce((sum, value) => sum + value, 0);
 			totalSavingsYear = savingsRevenuesYear.reduce((sum, value) => sum + value, 0);
 			
 	    return;
@@ -394,23 +400,23 @@ async function ask() {
 }
 
 async function askForAllShowPositions() {
-  const options = ["graph", "table", "nothing"];
+  const options = ["graph", "status", "nothing"];
   const days = ["thismonth"];
   const graphTypes = ["bar"];
   const chosenCombinations = [];
-  const positions = ["top", "middle"];
+  const positions = ["top", "middle", "bottom"];
   const graphOption = {};
   for (let position of positions) {
     const usedCount = (type) =>
       chosenCombinations.filter(c => c && c.type === type).length;
 
     const usedGraph = usedCount("graph");
-    const usedTable = usedCount("table");
+    const usedStatus = usedCount("status");
 
     let filteredOptions = options.filter(type => {
       if (type === "graph" && usedGraph >= 2) return false;
-      if (type === "table" && usedTable >= 2) return false;
-      if ((usedGraph + usedTable) >= 3 && (type === "graph" || type === "table")) return false;
+      if (type === "status" && usedStatus >= 2) return false;
+      if ((usedGraph + usedStatus) >= 3 && (type === "graph" || type === "status")) return false;
       return true;
     });
 
@@ -450,7 +456,7 @@ async function askForAllShowPositions() {
   
   fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
   const totalGraph = chosenCombinations.filter(c => c.type === "graph").length;
-  const totalTable = chosenCombinations.filter(c => c.type === "table").length;
+  const totalStatus = chosenCombinations.filter(c => c.type === "status").length;
   const totalPriceStats = chosenCombinations.filter(c => c.type === "pricestats").length;
   const heightMap = {
     "1-0-0": 1000,
@@ -472,7 +478,7 @@ async function askForAllShowPositions() {
     "0-1-2": 900,
   };
   
-  const key = `${totalGraph}-${totalTable}-${totalPriceStats}`;
+  const key = `${totalGraph}-${totalStatus}-${totalPriceStats}`;
   settings.height = heightMap[key] ?? 1150;
   return settings;
   }
@@ -526,7 +532,6 @@ async function askForPassword() {
   return input;
 }
 
-
 async function Status(day) {
 	let row = listwidget.addStack();
 	row.layoutHorizontally()
@@ -570,7 +575,15 @@ async function Graph(day, graphOption) {
             data: ["+fcrdRevenues+"],\
             type: '"+graphOption+"',\
             fill: false,\
-            borderColor: getGradientFillHelper('vertical',['rgb(0,255,0)','orange','rgb(255,0,0)']),\
+            borderColor: 'rgb(221,204,119)',\
+            borderWidth: 20, \
+            pointRadius: 0\
+          },\
+					{\
+            data: ["+savingsRevenues+"],\
+            type: '"+graphOption+"',\
+            fill: false,\
+            borderColor: 'rgb(128,153,82)',\
             borderWidth: 20, \
             pointRadius: 0\
           },\
@@ -578,6 +591,12 @@ async function Graph(day, graphOption) {
       },\
         options:\
           {\
+						title: {\
+							display: true,\
+							fontSize: 40,\
+							fontColor: 'white',\
+							text: '"+monthName+"'\
+						},\
             legend:\
             {\
               display: false\
@@ -596,8 +615,8 @@ async function Graph(day, graphOption) {
     }")
     graphtoday.timeoutInterval = 1;
     const GRAPH = await new Request(graphtoday).loadImage()
-    let emptyrow = listwidget.addStack()
-    listwidget.addSpacer(5)
+    //let emptyrow = listwidget.addStack()
+    //listwidget.addSpacer(5)
     let chart = listwidget.addStack()
     chart.addImage(GRAPH) 
   }
@@ -637,11 +656,6 @@ let listwidget = new ListWidget();
 
 async function Revenue() {
 	let ja = listwidget.addStack()
-  const date = new Date(firstDayStr);
-
-// Formatera till månadsnamn (svenska)
-  monthName = date.toLocaleDateString("sv-SE", { month: "long" });
-  monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
   
   listwidget.addSpacer(10)
 	let save = listwidget.addStack();
@@ -698,14 +712,15 @@ async function createWidget(){
 	await fetchRevenue(token);
 	await getDetails();
 	await getStatus();
+	const date = new Date(firstDayStr);
+  monthName = date.toLocaleDateString("sv-SE", { month: "long" });
+  monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
   listwidget.backgroundColor = new Color("#000000");
   await renderSection("top");
   await renderSection("middle");
   await renderSection("bottom");  
-
   listwidget.addSpacer(10)
   let moms = listwidget.addStack();
-  
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");

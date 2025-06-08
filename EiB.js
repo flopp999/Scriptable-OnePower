@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.25
+let version = 0.26
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -30,6 +30,10 @@ let fcrdRevenues;
 let savingsRevenues;
 let totalRevenues;
 let totalSavings;
+let fcrdRevenuesYear;
+let savingsRevenuesYear;
+let totalRevenuesYear;
+let totalSavingsYear;
 const fileNameSettings = Script.name() + "_Settings.json";
 const fileNameTranslations = Script.name() + "_Translations.json";
 const fm = FileManager.iCloud();
@@ -266,13 +270,15 @@ async function fetchRevenue(jwtToken) {
 	  // Dagens datum
 	const now = new Date();
 	// Första dagen i månaden
+  const dayOne = new Date(now.getFullYear(), 0,1);
 	const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
 	// Sista dagen i månaden
 	const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 	// Formatera som YYYY-MM-DD
 	firstDayStr = `${firstDay.getFullYear()}-${(firstDay.getMonth() + 1).toString().padStart(2, '0')}-01`;
 	lastDayStr = `${lastDay.getFullYear()}-${(lastDay.getMonth() + 1).toString().padStart(2, '0')}-${lastDay.getDate().toString().padStart(2, '0')}`;
-	const endpoint = `/ems/revenue?fromDate=${firstDayStr}&toDate=${lastDayStr}`;
+  dayOneDayStr = `${dayOne.getFullYear()}-01-01`;
+  const endpoint = `/ems/revenue?fromDate=${firstDayStr}&toDate=${lastDayStr}`;
 	const url = baseURL + endpoint;
 	const headers = {
 		"Authorization": `Bearer ${jwtToken}`,
@@ -294,18 +300,49 @@ async function fetchRevenue(jwtToken) {
 			  .filter(item => item.Service === "savings")
 			  .map(item => item.NetRevenue);
 			
-			log("FCRD: " + fcrdRevenues);
-			log("SAVINGS: " + savingsRevenues);
 				//revenues = revenue.map(item => item.NetRevenue);
       totalFcrd = fcrdRevenues.reduce((sum, value) => sum + value, 0);
 			totalSavings = savingsRevenues.reduce((sum, value) => sum + value, 0);
+	   
+    } else {
+	    console.error("❌ Fel statuskod:", req.response.statusCode);
+		}
+	} catch (err) {
+		console.error("❌ Fel vid hämtning av revenue:", err);
+	}
+  
+  const endpointYear = `/ems/revenue?fromDate=${dayOneDayStr}&toDate=${lastDayStr}`;
+  const urlYear = baseURL + endpointYear;
+	const headersYear = {
+		"Authorization": `Bearer ${jwtToken}`,
+	  "Accept": "application/json"
+	};
+	const reqYear = new Request(urlYear);
+	reqYear.method = "GET";
+	reqYear.headers = headersYear;
+	try {
+	  const revenueYear = await reqYear.loadJSON();
+	  if (reqYear.response.statusCode === 200) {
+			// Få ut alla NetRevenue för fcrd
+			fcrdRevenuesYear = revenueYear
+		  .filter(item => item.Service === "fcrd")
+		  .map(item => item.NetRevenue);
+		
+			// Få ut alla NetRevenue för savings
+			savingsRevenuesYear = revenueYear
+			  .filter(item => item.Service === "savings")
+			  .map(item => item.NetRevenue);
+			
+			//revenues = revenue.map(item => item.NetRevenue);
+      totalFcrdYear = fcrdRevenuesYear.reduce((sum, value) => sum + value, 0);
+			totalSavingsYear = savingsRevenuesYear.reduce((sum, value) => sum + value, 0);
 			
 	    return;
 	  } else {
 	    console.error("❌ Fel statuskod:", req.response.statusCode);
 		}
 	} catch (err) {
-		console.error("❌ Fel vid hämtning av revenue:", err);
+		console.error("❌ Fel vid hämt ning av revenue:", err);
 	}
 	return null;
 }
@@ -352,7 +389,8 @@ async function ask() {
   settings.password = await askForPassword();
 	settings.details = await getDetails();
   settings.showattop = "graph, thismonth"
-  settings.showatmiddle = "table, thismonth"
+  settings.showatmiddle = "status, thismonth"
+	settings.showatbottom = "revenue, thismonth"
   settings.graphOption = {"top": "bar"}
   settings.height = 750
   //await askForAllShowPositions();
@@ -444,7 +482,6 @@ async function askForAllShowPositions() {
   return settings;
   }
 
-
 // Select resolution
 async function askForLanguage() {
   let alert = new Alert();
@@ -456,78 +493,6 @@ async function askForLanguage() {
   fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
   langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
   return [1,3][index];
-}
-
-// Select area
-async function askForArea() {
-  let alert = new Alert();
-  alert.message = t("chooseyourelectricityarea") + ":";
-  let areas = [
-    "AT","BE","BG","DK1","DK2","EE","FI","FR","GER",
-    "LT","LV","NL","NO1","NO2","NO3","NO4","NO5",
-    "PL","SE1","SE2","SE3","SE4","TEL","SYS"
-  ];
-  for (let area of areas) {
-    alert.addAction(area);
-  }
-  let index = await alert.presentAlert();
-  let area = [
-    "AT","BE","BG","DK1","DK2","EE","FI","FR","GER",
-    "LT","LV","NL","NO1","NO2","NO3","NO4","NO5",
-    "PL","SE1","SE2","SE3","SE4","TEL","SYS"][index];
-  let vat = [
-    20,  // AT - Austria
-    6,   // BE - Belgium
-    20,  // BG - Bulgaria
-    25,  // DK1 - Denmark (East)
-    25,  // DK2 - Denmark (West)
-    20,  // EE - Estonia
-    24,  // FI - Finland
-    20,  // FR - France
-    19,  // GER - Germany
-    21,  // LT - Lithuania
-    21,  // LV - Latvia
-    21,  // NL - Netherlands
-    25,  // NO1 - Norway
-    25,  // NO2 - Norway
-    25,  // NO3 - Norway
-    25,  // NO4 - Norway
-    25,  // NO5 - Norway
-    23,  // PL - Poland
-    25,  // SE1 - Sweden
-    25,  // SE2 - Sweden
-    25,  // SE3 - Sweden
-    25,  // SE4 - Sweden
-    19,   // TEL - Romania
-    0    // SYS - System price or not applicable
-    ][index];
-  let currencies2 = [
-    "EUR",  // AT - Austria
-    "EUR",
-    "BGN",
-    "DKK",
-    "DKK",
-    "EUR",
-    "EUR",
-    "EUR",
-    "EUR",
-    "EUR",
-    "EUR",
-    "EUR",
-    "NOK",
-    "NOK",
-    "NOK",
-    "NOK",
-    "NOK",
-    "PLN",
-    "SEK", // SE1 - Sweden
-    "SEK", // SE2 - Sweden
-    "SEK", // SE3 - Sweden
-    "SEK", // SE4 - Sweden
-    "RON",
-    "EUR"
-    ][index];
-  return [area, vat, currencies2];
 }
 
 // Include VAT?
@@ -568,41 +533,47 @@ async function askForPassword() {
 
 
 async function Table(day) {
-  //await Datas(day);
-  //if (daybefore != day){
-	  let left = listwidget.addStack();
-	  let whatday = left.addText("Mode: " + service);
+  
+	  let row = listwidget.addStack();
+	  row.layoutHorizontally()
+    let left = row.addStack()
+    left.layoutVertically()
+    row.addSpacer(55)
+    let mid = row.addStack()
+    mid.layoutVertically()
+    let right = row.addStack()
+    right.layoutVertically()
+    let whatday = left.addText("Mode: " + service);
 	  whatday.textColor = new Color("#ffffff");
 	  whatday.font = Font.lightSystemFont(13);
-	  left.addSpacer();
-	  whatday = left.addText("Capacity: " + String(batteryCapacityKwh) +  "kWh");
-	  whatday.textColor = new Color("#ffffff");
-	  whatday.font = Font.lightSystemFont(13);
-		left = listwidget.addStack();
-	  whatday = left.addText("Up: " + String(FpUpInKw) + "kW");
-	  whatday.textColor = new Color("#ffffff");
-	  whatday.font = Font.lightSystemFont(13);
-		left.addSpacer();
-	  whatday = left.addText("Down: " + String(FpDownInKw) + "kW");
-	  whatday.textColor = new Color("#ffffff");
-	  whatday.font = Font.lightSystemFont(13);
-		left = listwidget.addStack();
-	  whatday = left.addText("Charge: " + String(ChargingMax) + "kW");
-	  whatday.textColor = new Color("#ffffff");
-	  whatday.font = Font.lightSystemFont(13);
-		left.addSpacer();
-	  whatday = left.addText("Discharge: " + String(DischargingMax) + "kW");
+	  whatday = mid.addText("Capacity: " + String(batteryCapacityKwh) +  "kWh");
 	  whatday.textColor = new Color("#ffffff");
 	  whatday.font = Font.lightSystemFont(13);
 
-  daybefore = day;
+ 
+	 whatday = left.addText("Charge: " + String(ChargingMax) + "kW");
+	  whatday.textColor = new Color("#ffffff");
+	  whatday.font = Font.lightSystemFont(13);
+    
+	 whatday = mid.addText("Discharge: " + String(DischargingMax) + "kW");
+	  whatday.textColor = new Color("#ffffff");
+	  whatday.font = Font.lightSystemFont(13);
+
+
+
+whatday = left.addText("Up: " + String(FpUpInKw) + "kW");
+	  whatday.textColor = new Color("#ffffff");
+	  whatday.font = Font.lightSystemFont(13);
+		whatday = mid.addText("Down: " + String(FpDownInKw) + "kW");
+	  whatday.textColor = new Color("#ffffff");
+	  whatday.font = Font.lightSystemFont(13);
+		
+  
   let head = listwidget.addStack()
 }
 
 async function Graph(day, graphOption) {
 //chart
-  await Datas(day);
-
   if (60 == 60) {
     let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+settings.height+"&c="
     graphtoday += encodeURI("{\
@@ -647,48 +618,6 @@ async function Graph(day, graphOption) {
   listwidget.addSpacer(5);
 }
 
-async function PriceStats(day) {
-  await Datas(day);
-  if (daybefore != day){
-    let left = listwidget.addStack();
-    let whatday = left.addText(date);
-    whatday.textColor = new Color("#ffffff");
-    whatday.font = Font.lightSystemFont(13);
-    left.addSpacer();
-    let updatetext = left.addText(t("updated") + updated);
-    updatetext.font = Font.lightSystemFont(13);
-    updatetext.textColor = new Color("#ffffff");
-  }
-  daybefore = day;
-  if (prices == 0) {
-    return;
-    }
-  let bottom = listwidget.addStack();
-  if (day != "tomorrow"){
-  
-  // now
-  let now = bottom.addText(t("now") + " " + Math.round(pricesJSON[hour]));
-  now.font = Font.lightSystemFont(11);
-  now.textColor = new Color("#00ffff");
-  bottom.addSpacer();
-    }
-  // lowest
-  let lowest = bottom.addText(t("lowest") + " " + Math.round(priceLowest));
-  lowest.font = Font.lightSystemFont(11);
-  lowest.textColor = new Color("#00cf00");
-  bottom.addSpacer();
-  // average
-  let avg = bottom.addText(t("average") + " " + Math.round(priceAvg));
-  avg.font = Font.lightSystemFont(11);
-  avg.textColor = new Color("#f38");
-  bottom.addSpacer();
-  // highest
-  let highest = bottom.addText(t("highest") + " " + Math.round(priceHighest));
-  highest.font = Font.lightSystemFont(11);
-  highest.textColor = new Color("#fa60ff");
-  listwidget.addSpacer(5);
-}
-
 const smallFont = 10;
 const mediumFont = 12;
 const bigFont = 13.5;
@@ -698,53 +627,6 @@ const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
 // Skapa array från 1 till antal dagar
 const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
-// Today date
-async function Datas(day) {
-  allValues = [];
-  Path = fm.joinPath(dir, "EiB_" + day + "Revenue.json");
-  DateObj = new Date();
-  async function getData() {
-    if (day == "tomorrow") {
-      DateObj.setDate(DateObj.getDate() + 1);
-    }
-    const yyyy = DateObj.getFullYear();
-    const mm = String(DateObj.getMonth() + 1).padStart(2, '0');
-    const dd = String(DateObj.getDate()).padStart(2, '0');
-    //const todate = `${yyyy}-${mm}-${dd}`;
-    const todate = `2024-04-01`;
-    const fromdate = `2024-03-01`;
-    const Url = `https://api.checkwatt.se/ems/revenue?fromDate=${fromdate}&toDate=${todate}`;
-    const request = new Request(Url);
-    request.timeoutInterval = 1;
-    let response = (await request.loadJSON());
-    const dataJSON = JSON.stringify(response, null ,2);
-    fm.writeString(Path, dataJSON);
-  }
-  if (fm.fileExists(Path)) {
-    let modified = fm.modificationDate(Path);
-    let now = new Date();
-    let hoursDiff = (now - modified) / (1000 * 60 * 60);
-    let modifiedDay = modified.getDate();
-    let modifiedMonth = modified.getMonth();
-    let modifiedYear = modified.getFullYear();
-    let yesterday = new Date(now);
-    yesterday.setDate(now.getDate() - 1);
-    let isFromYesterday =
-    modifiedDay === yesterday.getDate() &&
-    modifiedMonth === yesterday.getMonth() &&
-    modifiedYear === yesterday.getFullYear();
-    if (hoursDiff > 6 || isFromYesterday) {
-      await getData();
-    }
-  } else {
-    await getData();
-  }
-  hour = DateObj.getHours();
-  minute = DateObj.getMinutes();
-  let content = fm.readString(Path);
-  response = JSON.parse(content);
-}
-
 async function renderSection(position) {
   const value = settings[`showat${position}`];
   if (!value || value === "nothing") return;
@@ -752,14 +634,14 @@ async function renderSection(position) {
   const [type, day] = value.split(",").map(s => s.trim());
   const graphOption = settings.graphOption[position]
   switch (type) {
-    case "table":
-      await Table(day);
+    case "status":
+      await Status(day);
       break;
     case "graph":
       await Graph(day, graphOption);
       break;
-    case "pricestats":
-      await PriceStats(day);
+    case "revenue":
+      await Revenue();
       break;
     default:
   }
@@ -767,40 +649,81 @@ async function renderSection(position) {
 
 let listwidget = new ListWidget();
 
+async function Revenue() {
+	  let ja = listwidget.addStack()
+  //log(firstDayStr)
+  //const dateString = "2025-06-01";
+  const date = new Date(firstDayStr);
+
+// Formatera till månadsnamn (svenska)
+  monthName = date.toLocaleDateString("sv-SE", { month: "long" });
+  monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+  
+  listwidget.addSpacer(10)
+	let save = listwidget.addStack();
+  save.layoutHorizontally()
+  let saveleft = save.addStack()
+  saveleft.layoutVertically()
+  save.addSpacer(30)
+  let savemid = save.addStack()
+  savemid.layoutVertically()
+  save.addSpacer(30)
+  let saveright = save.addStack()
+  saveright.layoutVertically()
+  save.addSpacer(30)
+  let savemost = save.addStack()
+  savemost.layoutVertically()
+  let te = saveleft.addText(String(monthName))
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff")
+  savemid.addText("")
+  te = saveleft.addText("FCR-D");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+  //ja.addSpacer();
+	te = savemid.addText(String(Math.round(totalFcrd)) + "kr");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+  //ja = listwidget.addStack()
+  te = saveleft.addText("Savings");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+  //ja.addSpacer();
+	te = savemid.addText(String(Math.round(totalSavings)) + "kr");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+
+te = saveright.addText("Detta året");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+	te = saveright.addText("FCR-D");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+  te = saveright.addText("Savings");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+  savemost.addText("")
+  te = savemost.addText(String(Math.round(totalFcrdYear)) + "kr");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+  te = savemost.addText(String(Math.round(totalSavingsYear)) + "kr");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+}
+
 async function createWidget(){
 	token = await loginAndGetToken();
 	await fetchRevenue(token);
 	await getDetails();
 	await getStatus();
-  //await main(); // get this month data
   listwidget.backgroundColor = new Color("#000000");
   await renderSection("top");
   await renderSection("middle");
-  //await renderSection("bottom");  
-  let ja = listwidget.addStack()
-  let te = ja.addText(String(firstDayStr + " till " + lastDayStr))
-  te.font = Font.lightSystemFont(13);
-  te.textColor = new Color("#ffffff")
-	
-	ja = listwidget.addStack()
-  te = ja.addText("FCR-D");
-  te.font = Font.lightSystemFont(13);
-  te.textColor = new Color("#ffffff");
-  ja.addSpacer();
-	te = ja.addText(String(Math.round(totalFcrd)) + "kr");
-  te.font = Font.lightSystemFont(13);
-  te.textColor = new Color("#ffffff");
-	
-  ja = listwidget.addStack()
-  te = ja.addText("Savings");
-  te.font = Font.lightSystemFont(13);
-  te.textColor = new Color("#ffffff");
-  ja.addSpacer();
-	te = ja.addText(String(Math.round(totalSavings)) + "kr");
-  te.font = Font.lightSystemFont(13);
-  te.textColor = new Color("#ffffff");
+  await renderSection("bottom");  
 
-	let moms = listwidget.addStack();
+  listwidget.addSpacer(10)
+  let moms = listwidget.addStack();
+  
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");

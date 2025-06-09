@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.29
+let version = 0.30
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -313,15 +313,12 @@ async function fetchRevenue(jwtToken) {
 				totalSavings = savingsRevenues.reduce((sum, value) => sum + value, 0);
 				const dataJSON = JSON.stringify(revenue, null ,2);
 				fm.writeString(Path, dataJSON);
-	   
 			} else {
 				console.error("❌ Fel statuskod:", req.response.statusCode);
 			}
 		} catch (err) {
 			console.error("❌ Fel vid hämtning av revenue:", err);
 		}
-		
-		
 	}
 	
 	if (fm.fileExists(Path)) {
@@ -352,48 +349,7 @@ async function fetchRevenue(jwtToken) {
 }
 
 
-	  
-  const endpointYear = `/ems/revenue?fromDate=${dayOneDayStr}&toDate=${lastDayStr}`;
-  const urlYear = baseURL + endpointYear;
-	const headersYear = {
-		"Authorization": `Bearer ${jwtToken}`,
-	  "Accept": "application/json"
-	};
-	const reqYear = new Request(urlYear);
-	reqYear.method = "GET";
-	reqYear.headers = headersYear;
-	try {
-	  const revenueYear = await reqYear.loadJSON();
-	  if (reqYear.response.statusCode === 200) {
-			// Få ut alla NetRevenue för fcrd
-			fcrdRevenuesYear = revenueYear
-		  .filter(item => item.Service === "fcrd")
-		  .map(item => item.NetRevenue);
-		
-			// Få ut alla NetRevenue för savings
-			savingsRevenuesYear = revenueYear
-			  .filter(item => item.Service === "savings")
-			  .map(item => item.NetRevenue);
-			
-			ffrRevenuesYear = revenueYear
-		  .filter(item => item.Service === "ffr")
-		  .map(item => item.NetRevenue);
-			
-			
-			//revenues = revenue.map(item => item.NetRevenue);
-      totalFcrdYear = fcrdRevenuesYear.reduce((sum, value) => sum + value, 0);
-			totalFfrYear = ffrRevenuesYear.reduce((sum, value) => sum + value, 0);
-			totalSavingsYear = savingsRevenuesYear.reduce((sum, value) => sum + value, 0);
-			
-	    return;
-	  } else {
-	    console.error("❌ Fel statuskod:", req.response.statusCode);
-		}
-	} catch (err) {
-		console.error("❌ Fel vid hämt ning av revenue:", err);
-	}
-	return null;
-}
+	 
 
 async function createVariables() {
   username = settings.username;

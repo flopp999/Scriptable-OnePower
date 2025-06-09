@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.28
+let version = 0.29
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -264,55 +264,95 @@ async function loginAndGetToken() {
 }
 // == Hämta revenue med JWT ==
 async function fetchRevenue(jwtToken) {
-	  // Dagens datum
-	const now = new Date();
-	// Första dagen i månaden
-  const dayOne = new Date(now.getFullYear(), 0,1);
-	const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-	// Sista dagen i månaden
-	const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-	// Formatera som YYYY-MM-DD
-	firstDayStr = `${firstDay.getFullYear()}-${(firstDay.getMonth() + 1).toString().padStart(2, '0')}-01`;
-	lastDayStr = `${lastDay.getFullYear()}-${(lastDay.getMonth() + 1).toString().padStart(2, '0')}-${lastDay.getDate().toString().padStart(2, '0')}`;
-  dayOneDayStr = `${dayOne.getFullYear()}-01-01`;
-  const endpoint = `/ems/revenue?fromDate=${firstDayStr}&toDate=${lastDayStr}`;
-	const url = baseURL + endpoint;
-	const headers = {
-		"Authorization": `Bearer ${jwtToken}`,
-	  "Accept": "application/json"
-	};
-	const req = new Request(url);
-	req.method = "GET";
-	req.headers = headers;
-	try {
-	  const revenue = await req.loadJSON();
-	  if (req.response.statusCode === 200) {
-			// Få ut alla NetRevenue för fcrd
-			fcrdRevenues = revenue
-		  .filter(item => item.Service === "fcrd")
-		  .map(item => item.NetRevenue);
+	Path = fm.joinPath(module.filename, _Revenues.json");
+	DateObj = new Date();
+	
+	async function getData() {
+		// Dagens datum
+		const now = new Date();
+		// Första dagen i månaden
+		const dayOne = new Date(now.getFullYear(), 0,1);
+		const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+		// Sista dagen i månaden
+		const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+		// Formatera som YYYY-MM-DD
+		firstDayStr = `${firstDay.getFullYear()}-${(firstDay.getMonth() + 1).toString().padStart(2, '0')}-01`;
+		lastDayStr = `${lastDay.getFullYear()}-${(lastDay.getMonth() + 1).toString().padStart(2, '0')}-${lastDay.getDate().toString().padStart(2, '0')}`;
+		dayOneDayStr = `${dayOne.getFullYear()}-01-01`;
+		const endpoint = `/ems/revenue?fromDate=${firstDayStr}&toDate=${lastDayStr}`;
+		const url = baseURL + endpoint;
+		const headers = {
+			"Authorization": `Bearer ${jwtToken}`,
+			"Accept": "application/json"
+		};
+		const req = new Request(url);
+		req.method = "GET";
+		req.headers = headers;
+		req.timeoutInterval = 1;
+		try {
+			const revenue = await req.loadJSON();
+			
+			if (req.response.statusCode === 200) {
+				// Få ut alla NetRevenue för fcrd
+				fcrdRevenues = revenue
+				.filter(item => item.Service === "fcrd")
+				.map(item => item.NetRevenue);
 		
-			// Få ut alla NetRevenue för savings
-			savingsRevenues = revenue
-			  .filter(item => item.Service === "savings")
-			  .map(item => item.NetRevenue);
-			// Få ut alla NetRevenue för ffr
-			ffrRevenues = revenue
-		  .filter(item => item.Service === "ffr")
-		  .map(item => item.NetRevenue);
+				// Få ut alla NetRevenue för savings
+				savingsRevenues = revenue
+				.filter(item => item.Service === "savings")
+				.map(item => item.NetRevenue);
+				// Få ut alla NetRevenue för ffr
+				ffrRevenues = revenue
+				.filter(item => item.Service === "ffr")
+				.map(item => item.NetRevenue);
 
 				//revenues = revenue.map(item => item.NetRevenue);
-      totalFcrd = fcrdRevenues.reduce((sum, value) => sum + value, 0);
-			totalFfr = ffrRevenues.reduce((sum, value) => sum + value, 0);
-			totalSavings = savingsRevenues.reduce((sum, value) => sum + value, 0);
+				totalFcrd = fcrdRevenues.reduce((sum, value) => sum + value, 0);
+				totalFfr = ffrRevenues.reduce((sum, value) => sum + value, 0);
+				totalSavings = savingsRevenues.reduce((sum, value) => sum + value, 0);
+				const dataJSON = JSON.stringify(revenue, null ,2);
+				fm.writeString(Path, dataJSON);
 	   
-    } else {
-	    console.error("❌ Fel statuskod:", req.response.statusCode);
+			} else {
+				console.error("❌ Fel statuskod:", req.response.statusCode);
+			}
+		} catch (err) {
+			console.error("❌ Fel vid hämtning av revenue:", err);
 		}
-	} catch (err) {
-		console.error("❌ Fel vid hämtning av revenue:", err);
+		
+		
 	}
-  
+	
+	if (fm.fileExists(Path)) {
+		let modified = fm.modificationDate(Path);
+		let now = new Date();
+		let hoursDiff = (now - modified) / (1000 * 60 * 60);
+		let modifiedDay = modified.getDate();
+		let modifiedMonth = modified.getMonth();
+		let modifiedYear = modified.getFullYear();
+		let yesterday = new Date(now);
+		yesterday.setDate(now.getDate() - 1);
+		let isFromYesterday =
+		modifiedDay === yesterday.getDate() &&
+		modifiedMonth === yesterday.getMonth() &&
+		modifiedYear === yesterday.getFullYear();
+		if (hoursDiff > 6 || isFromYesterday) {
+			await getData();
+		}
+	} else {
+		await getData();
+	}
+	hour = DateObj.getHours();
+	minute = DateObj.getMinutes();
+	let content = fm.readString(Path);
+	response = JSON.parse(content);
+	let Updated = response.updatedAt;
+	updated = "" + hour + minute + "";
+}
+
+
+	  
   const endpointYear = `/ems/revenue?fromDate=${dayOneDayStr}&toDate=${lastDayStr}`;
   const urlYear = baseURL + endpointYear;
 	const headersYear = {

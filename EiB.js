@@ -91,12 +91,12 @@ async function start() {
 
 async function updatecode() {
   try {
-    const req = new Request("https://github.com/flopp999/Scriptable-EiB/releases/latest/download/Version.txt");
+    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/Version.txt");
     req.timeoutInterval = 1;
     const serverVersion = await req.loadString()
     if (version < serverVersion) {
       try {
-        const req = new Request("https://github.com/flopp999/Scriptable-EiB/releases/latest/download/EiB.js");
+        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/EiB.js");
         req.timeoutInterval = 1;
         const response = await req.load();
         const status = req.response.statusCode;
@@ -106,7 +106,7 @@ async function updatecode() {
         const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
 
-        const reqTranslations = new Request("https://github.com/flopp999/Scriptable-EiB/releases/latest/download/Translations.json");
+        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/Translations.json");
         reqTranslations.timeoutInterval = 1;
         const responseTranslations = await reqTranslations.load();
         const statusTranslations = reqTranslations.response.statusCode;
@@ -406,7 +406,7 @@ async function createVariables() {
 
 async function readTranslations() {
   if (!fm.fileExists(filePathTranslations)) {
-    let url = "https://github.com/flopp999/Scriptable-EiB/releases/latest/download/Translations.json";
+    let url = "https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/Translations.json";
     let req = new Request(url);
     req.timeoutInterval = 1;
     let content = await req.loadString();

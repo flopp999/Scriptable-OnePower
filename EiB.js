@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.30
+let version = 0.31
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -264,7 +264,7 @@ async function loginAndGetToken() {
 }
 // == Hämta revenue med JWT ==
 async function fetchRevenue(jwtToken) {
-	Path = fm.joinPath(module.filename, _Revenues.json");
+	Path = fm.joinPath(dir,Script.name() + "_Revenues.json");
 	DateObj = new Date();
 	
 	async function getData() {
@@ -319,6 +319,51 @@ async function fetchRevenue(jwtToken) {
 		} catch (err) {
 			console.error("❌ Fel vid hämtning av revenue:", err);
 		}
+
+const endpointYear = `/ems/revenue?fromDate=${dayOneDayStr}&toDate=${lastDayStr}`;
+		const urlYear = baseURL + endpointYear;
+		const headersYear = {
+			"Authorization": `Bearer ${jwtToken}`,
+			"Accept": "application/json"
+		};
+		const reqYear = new Request(urlYear);
+		reqYear.method = "GET";
+		reqYear.headers = headersYear;
+		reqYear.timeoutInterval = 1;
+
+
+		try {
+			const revenueYear = await reqYear.loadJSON();
+			
+			if (reqYear.response.statusCode === 200) {
+				// Få ut alla NetRevenue för fcrd
+				fcrdRevenuesYear = revenueYear
+				.filter(item => item.Service === "fcrd")
+				.map(item => item.NetRevenue);
+		
+				// Få ut alla NetRevenue för savings
+				savingsRevenuesYear = revenueYear
+				.filter(item => item.Service === "savings")
+				.map(item => item.NetRevenue);
+				// Få ut alla NetRevenue för ffr
+				ffrRevenuesYear = revenueYear
+				.filter(item => item.Service === "ffr")
+				.map(item => item.NetRevenue);
+
+				//revenues = revenue.map(item => item.NetRevenue);
+				totalFcrdYear = fcrdRevenuesYear.reduce((sum, value) => sum + value, 0);
+				totalFfrYear = ffrRevenuesYear.reduce((sum, value) => sum + value, 0);
+				totalSavingsYear = savingsRevenuesYear.reduce((sum, value) => sum + value, 0);
+				const dataJSON = JSON.stringify(revenueYear, null ,2);
+				fm.writeString(Path, dataJSON);
+			} else {
+				console.error("❌ Fel statuskod:", req.response.statusCode);
+			}
+		} catch (err) {
+			console.error("❌ Fel vid hämtning av revenue:", err);
+		}
+
+		
 	}
 	
 	if (fm.fileExists(Path)) {
@@ -344,7 +389,6 @@ async function fetchRevenue(jwtToken) {
 	minute = DateObj.getMinutes();
 	let content = fm.readString(Path);
 	response = JSON.parse(content);
-	let Updated = response.updatedAt;
 	updated = "" + hour + minute + "";
 }
 

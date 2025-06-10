@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.37
+let version = 0.38
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -247,7 +247,7 @@ async function getStatus() {
 			}
 			if (responsestatus[0]["Service"][0] == "off") {
 				modeStatus = t("deactivated")
-			} else if (responsestatus[0]["Service"][0] == "fcrd") || (responsestatus[0]["Service"][0] == "sc") {
+			} else if (responsestatus[0]["Service"][0] == "fcrd" || responsestatus[0]["Service"][0] == "sc") {
 				modeStatus = t("activated")
 			} else {
 				modeStatus = "Unknown"

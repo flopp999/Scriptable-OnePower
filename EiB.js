@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.32
+let version = 0.33
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -194,7 +194,32 @@ async function getDetails() {
       console.error("❌ Fel statuskod:", req.response.statusCode);
     }
   } catch (err) {
-    console.error("❌ Fel vid hämtning av revenue:", err);
+    console.error("❌ Fel vid hämtning av details:", err);
+  }
+  return null;
+}
+
+async function getRpiSerial() {
+  const endpoint = `/ems/energyflow`;
+  const url = baseURL + endpoint;
+  const headers = {
+    "Authorization": `Bearer ${token}`,
+    "Accept": "application/json"
+  };
+  const req = new Request(url);
+  req.method = "GET";
+  req.headers = headers;
+  try {
+    const response = await req.loadJSON();
+		log(response)
+    if (req.response.statusCode === 200) {
+			rpiSerial = response["LoggerGridDatastream"]
+      return;
+    } else {
+      console.error("❌ Fel statuskod:", req.response.statusCode);
+    }
+  } catch (err) {
+    console.error("❌ Fel vid hämtning av rpiserial:", err);
   }
   return null;
 }
@@ -230,7 +255,7 @@ async function getStatus() {
       console.error("❌ Fel statuskod:", req.response.statusCode);
     }
   } catch (err) {
-    console.error("❌ Fel vid hämtning av revenue:", err);
+    console.error("❌ Fel vid hämtning av status:", err);
   }
   return null;
 }
@@ -304,7 +329,7 @@ async function fetchRevenue(jwtToken) {
 				console.error("❌ Fel statuskod:", req.response.statusCode);
 			}
 		} catch (err) {
-			console.error("❌ Fel vid hämtning av revenue:", err);
+			console.error("❌ Fel vid hämtning av month revenue:", err);
 		}
 
 		const endpointYear = `/ems/revenue?fromDate=${dayOneDayStr}&toDate=${lastDayStr}`;
@@ -330,7 +355,7 @@ async function fetchRevenue(jwtToken) {
 				console.error("❌ Fel statuskod:", req.response.statusCode);
 			}
 		} catch (err) {
-			console.error("❌ Fel vid hämtning av revenue:", err);
+			console.error("❌ Fel vid hämtning av year revenue:", err);
 		}
 
 		
@@ -764,6 +789,7 @@ async function createWidget(){
 	token = await loginAndGetToken();
 	await fetchRevenue(token);
 	await getDetails();
+	await getRpiSerial();
 	await getStatus();
 	const date = new Date(firstDayStr);
   monthName = date.toLocaleDateString("sv-SE", { month: "long" });

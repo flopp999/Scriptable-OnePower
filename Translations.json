@@ -7,9 +7,9 @@
     "en": "",
     "sv": ""
   },
-  "after13": {
-    "en": "Available after 13:00",
-    "sv": "Tillgängligt efter 13:00"
+  "savings": {
+    "en": "Savings",
+    "sv": "Besparingar"
   },  
   "bar": {
     "en": "Bar",
@@ -55,9 +55,9 @@
     "en": "Nothing",
     "sv": "Inget"
   },
-  "pricestats": {
-    "en": "Price Stats",
-    "sv": "Prisstatistik"
+  "thisyear": {
+    "en": "This Year",
+    "sv": "Detta året"
   },
   "graph": {
     "en": "Graph",
@@ -79,9 +79,9 @@
     "en": "Do you want the electricity prices in a graph",
     "sv": "Vill du ha elpriserna i en graf"
   },
-  "area": {
-    "en": "Area",
-    "sv": "Område"
+  "mode": {
+    "en": "Mode",
+    "sv": "Driftläge"
   },
   "vat": {
     "en": "VAT",
@@ -123,25 +123,25 @@
     "en": "With VAT",
     "sv": "Med moms"
   },
-  "withoutvat": {
-    "en": "Without VAT",
-    "sv": "Utan moms"
+  "down": {
+    "en": "Down",
+    "sv": "Ner"
   },  
   "doyouwantstatus": {
     "en": "Do you want to show the status",
     "sv": "Vill du visa status"
   },
-  "chooseyourcurrency": {
-    "en": "Choose your currency",
-    "sv": "Välj valuta"
+  "up": {
+    "en": "Up",
+    "sv": "Upp"
   },
-  "choosedataresolution": {
-    "en": "Choose Data Resolution",
-    "sv": "Välj tidsintervall"
+  "discharge": {
+    "en": "Discharge",
+    "sv": "Urladdning"
   },
-  "chooseyourelectricityarea": {
-    "en": "Choose your electricity area",
-    "sv": "Välj ditt elområde"
+  "charge": {
+    "en": "Charge",
+    "sv": "Laddning"
   },
   "image_load_error": {
     "en": "Could not load image",

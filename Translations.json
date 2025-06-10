@@ -3,9 +3,13 @@
     "en": "",
     "sv": ""
   },
-  "": {
-    "en": "",
-    "sv": ""
+  "activated": {
+    "en": "Activated",
+    "sv": "Aktiverad"
+  },
+  "deactivated": {
+    "en": "Deactivated",
+    "sv": "Avaktiverad"
   },
   "savings": {
     "en": "Savings",
@@ -39,9 +43,9 @@
     "en": "at the bottom",
     "sv": "längst ner"
   },
-  "tomorrow": {
-    "en": "Tomorrow",
-    "sv": "Imorgon"
+  "capacity": {
+    "en": "Capacity",
+    "sv": "Kapacitet"
   },
   "today": {
     "en": "Today",

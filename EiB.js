@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.35
+let version = 0.36
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -618,22 +618,22 @@ async function Status(day) {
 	mid.layoutVertically()
 	let right = row.addStack()
 	right.layoutVertically()
-	let whatday = left.addText("Mode: " + service);
+	let whatday = left.addText(t("mode") + ": " + service);
 	whatday.textColor = new Color("#ffffff");
 	whatday.font = Font.lightSystemFont(13);
 	whatday = mid.addText("Capacity: " + String(batteryCapacityKwh) +  "kWh");
 	whatday.textColor = new Color("#ffffff");
 	whatday.font = Font.lightSystemFont(13);
-  whatday = left.addText("Charge: " + String(ChargingMax) + "kW");
+  whatday = left.addText(t("charge") + ": " + String(ChargingMax) + "kW");
   whatday.textColor = new Color("#ffffff");
 	whatday.font = Font.lightSystemFont(13);
-  whatday = mid.addText("Discharge: " + String(DischargingMax) + "kW");
+  whatday = mid.addText(t("discharge") + ": " + String(DischargingMax) + "kW");
   whatday.textColor = new Color("#ffffff");
   whatday.font = Font.lightSystemFont(13);
-	whatday = left.addText("Up: " + String(FpUpInKw) + "kW");
+	whatday = left.addText(t("up") + ": " + String(FpUpInKw) + "kW");
 	whatday.textColor = new Color("#ffffff");
 	whatday.font = Font.lightSystemFont(13);
-	whatday = mid.addText("Down: " + String(FpDownInKw) + "kW");
+	whatday = mid.addText(t("down") + ": " + String(FpDownInKw) + "kW");
 	whatday.textColor = new Color("#ffffff");
 	whatday.font = Font.lightSystemFont(13);
 	let head = listwidget.addStack()
@@ -708,7 +708,6 @@ const now = new Date();
 const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
 // Skapa array från 1 till antal dagar
 const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-
 async function renderSection(position) {
   const value = settings[`showat${position}`];
   if (!value || value === "nothing") return;
@@ -733,7 +732,6 @@ let listwidget = new ListWidget();
 
 async function Revenue() {
 	let ja = listwidget.addStack()
-  
   listwidget.addSpacer(10)
 	let save = listwidget.addStack();
   save.layoutHorizontally()
@@ -760,13 +758,13 @@ async function Revenue() {
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
   //ja = listwidget.addStack()
-  te = saveleft.addText("Savings");
+  te = saveleft.addText(t("savings"));
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
   te = savemid.addText(String(Math.round(totalSavings)) + "kr");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
-	te = saveright.addText("Detta året");
+	te = saveright.addText(t("thisyear"));
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
 	te = saveright.addText("FCR-D");

@@ -92,7 +92,7 @@
     "sv": "Moms"
   },
   "buymeacoffee": {
-    "en": "Would you like to buy me a coffee (€5)",
+    "en": "Would you like to buy me a coffee(€5)",
     "sv": "Vill du skänka mig en kaffe(€5)"
   },
   "changesetup": {
@@ -100,12 +100,12 @@
     "sv": "Vill du ändra sparade inställningar"
   },
   "ofcourse": {
-    "en": "Of course",
-    "sv": "Självklart"
+    "en": "Of course 👍",
+    "sv": "Självklart 👍"
   },
     "noway": {
-    "en": "No way :)",
-    "sv": "Glöm det :)"
+    "en": "No way 😊",
+    "sv": "Glöm det 😊"
   },
     "no": {
     "en": "No",

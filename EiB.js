@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.38
+let version = 0.39
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -618,13 +618,10 @@ async function Status(day) {
 	mid.layoutVertically()
 	let right = row.addStack()
 	right.layoutVertically()
-	let whatday = left.addText(t("mode") + ": " + mode);
+	let whatday = left.addText(t("mode") + ": " + mode + ", " + modeStatus);
 	whatday.textColor = new Color("#ffffff");
 	whatday.font = Font.lightSystemFont(13);
-	whatday = mid.addText("Status: " +  modeStatus);
-	whatday.textColor = new Color("#ffffff");
-	whatday.font = Font.lightSystemFont(13);
-	whatday = right.addText(t("capacity") + ": " + String(batteryCapacityKwh) +  "kWh");
+	whatday = mid.addText(t("capacity") + ": " + String(batteryCapacityKwh) +  "kWh");
 	whatday.textColor = new Color("#ffffff");
 	whatday.font = Font.lightSystemFont(13);
   whatday = left.addText(t("charge") + ": " + String(ChargingMax) + "kW");

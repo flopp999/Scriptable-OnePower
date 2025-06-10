@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.34
+let version = 0.35
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -790,7 +790,7 @@ async function createWidget(){
 	await getDetails();
 	await getRpiSerial();
 	await getStatus();
-	const date = new Date(firstDayStr);
+	const date = new Date();
   monthName = date.toLocaleDateString("sv-SE", { month: "long" });
   monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
   listwidget.backgroundColor = new Color("#000000");

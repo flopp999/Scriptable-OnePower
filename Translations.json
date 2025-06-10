@@ -160,8 +160,8 @@
     "sv": "medel"
   },
   "askforpassword": {
-    "en": "highest",
-    "sv": "Vad är ditt läsenord till EiB"
+    "en": "What is your password for EiB",
+    "sv": "Vad är ditt lösenord till EiB"
   },
   "password": {
     "en": "Password",
@@ -172,7 +172,7 @@
     "sv": "Användarnamn"
   },
   "askforusername": {
-    "en": "What is your username ",
-    "sv": "Vad är ditt användarnamn till EiB "
+    "en": "What is your username for EiB",
+    "sv": "Vad är ditt användarnamn till EiB"
   }
 }

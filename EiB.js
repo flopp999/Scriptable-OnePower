@@ -627,16 +627,15 @@ async function Status(day) {
   whatday = left.addText(t("charge") + ": " + String(ChargingMax) + "kW");
   whatday.textColor = new Color("#ffffff");
 	whatday.font = Font.lightSystemFont(13);
-  whatday = mid.addText(t("discharge") + ": " + String(DischargingMax) + "kW");
+  whatday = mid.addText(t("up") + ": " + String(FpUpInKw) + "kW");
   whatday.textColor = new Color("#ffffff");
   whatday.font = Font.lightSystemFont(13);
-	whatday = left.addText(t("up") + ": " + String(FpUpInKw) + "kW");
+	whatday = left.addText(t("discharge") + ": " + String(DischargingMax) + "kW");
 	whatday.textColor = new Color("#ffffff");
 	whatday.font = Font.lightSystemFont(13);
 	whatday = mid.addText(t("down") + ": " + String(FpDownInKw) + "kW");
 	whatday.textColor = new Color("#ffffff");
 	whatday.font = Font.lightSystemFont(13);
-	let head = listwidget.addStack()
 }
 
 async function Graph(day, graphOption) {
@@ -692,8 +691,6 @@ async function Graph(day, graphOption) {
     }")
     graphtoday.timeoutInterval = 1;
     const GRAPH = await new Request(graphtoday).loadImage()
-    //let emptyrow = listwidget.addStack()
-    //listwidget.addSpacer(5)
     let chart = listwidget.addStack()
     chart.addImage(GRAPH) 
   }

@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.39
+let version = 0.40
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -737,19 +737,21 @@ async function Revenue() {
   save.layoutHorizontally()
   let saveleft = save.addStack()
   saveleft.layoutVertically()
-  save.addSpacer(30)
+  save.addSpacer(20)
   let savemid = save.addStack()
   savemid.layoutVertically()
-  save.addSpacer(30)
+  save.addSpacer(40)
   let saveright = save.addStack()
   saveright.layoutVertically()
-  save.addSpacer(30)
+  save.addSpacer(20)
   let savemost = save.addStack()
   savemost.layoutVertically()
   let te = saveleft.addText(String(monthName))
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff")
-  savemid.addText("")
+  te = savemid.addText(" ")
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
   te = saveleft.addText("FCR-D");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
@@ -773,7 +775,9 @@ async function Revenue() {
   te = saveright.addText(t("savings"));
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
-  savemost.addText("")
+  te = savemost.addText(" ")
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
   te = savemost.addText(String(Math.round(totalFcrdYear)) + "kr");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");

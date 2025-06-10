@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.41
+let version = 0.42
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -613,7 +613,7 @@ async function Status(day) {
 	row.layoutHorizontally()
   let left = row.addStack()
   left.layoutVertically()
-	row.addSpacer(55)
+	row.addSpacer(40)
 	let mid = row.addStack()
 	mid.layoutVertically()
 	let right = row.addStack()
@@ -790,7 +790,11 @@ async function createWidget(){
 	await getRpiSerial();
 	await getStatus();
 	const date = new Date();
-  monthName = date.toLocaleDateString("sv-SE", { month: "long" });
+	if (settings.language == 1) {
+		monthName = date.toLocaleDateString("en-EN", { month: "long" });
+	} else if (settings.language == 3) {
+		monthName = date.toLocaleDateString("sv-SE", { month: "long" });
+	}
   monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
   listwidget.backgroundColor = new Color("#000000");
   await renderSection("top");

@@ -174,7 +174,7 @@ async function readsettings() {
 }
 
 async function getDetails() {
-  const endpoint = `ems/ActivationSchedule`;
+  const endpoint = `/ems/ActivationSchedule`;
   const url = baseURL + endpoint;
   const headers = {
     "Authorization": `Bearer ${token}`,
@@ -209,7 +209,6 @@ async function getRpiSerial() {
   req.headers = headers;
   try {
     const response = await req.loadJSON();
-		log(response)
     if (req.response.statusCode === 200) {
 			const raw = response["LoggerGridDatastream"];
   		// Plocka ut delarna före "_"

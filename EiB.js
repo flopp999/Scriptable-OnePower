@@ -4,10 +4,12 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.36
+let version = 0.37
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
+let mode;
+let modeStatus;
 let rpiSerial;
 let meterId;
 let batteryCapacityKwh;
@@ -234,21 +236,29 @@ async function getStatus() {
   req.method = "GET";
   req.headers = headers;
   try {
-    const status = await req.loadJSON();
+    const responsestatus = await req.loadJSON();
     if (req.response.statusCode === 200) {
-			if (status[0]["Service"][0] == "fcrd") {
-				service = "CO"
-			} else if (status[0]["Service"][0] == "off") {
-				service = "Avaktiverad"
-			} else if (status[0]["Service"][0] == "sc") {
-				service = "SC"
+			if (responsestatus[0]["Pending"][0] == "fcrd") {
+				mode = "CO"
+			} else if (responsestatus[0]["Pending"][0] == "sc") {
+				mode = "SC"
 			} else {
-				service = "Okänt"
+				mode = "Unknown"
 			}
-			FpUpInKw = status[0]["FpUpInKw"]
-			FpDownInKw = status[0]["FpDownInKw"]
-			ChargingMax = status[0]["RelatedMeters"][0]["PeakAcKw"]
-			DischargingMax = status[0]["RelatedMeters"][1]["PeakAcKw"]
+			if (responsestatus[0]["Service"][0] == "off") {
+				modeStatus = t("deactivated")
+			} else if (responsestatus[0]["Service"][0] == "fcrd") || (responsestatus[0]["Service"][0] == "sc") {
+				modeStatus = t("activated")
+			} else {
+				modeStatus = "Unknown"
+			}
+
+			
+			
+			FpUpInKw = responsestatus[0]["FpUpInKw"]
+			FpDownInKw = responsestatus[0]["FpDownInKw"]
+			ChargingMax = responsestatus[0]["RelatedMeters"][0]["PeakAcKw"]
+			DischargingMax = responsestatus[0]["RelatedMeters"][1]["PeakAcKw"]
       return null;
     } else {
       console.error("❌ Fel statuskod:", req.response.statusCode);
@@ -572,16 +582,6 @@ async function askForLanguage() {
   return [1,3][index];
 }
 
-// Include VAT?
-async function askForStatus() {
-  let alert = new Alert();
-  alert.message = t("doyouwantstatus") + "?";
-  alert.addAction(t("yes"));
-  alert.addAction(t("no"));
-  let index = await alert.presentAlert();
-  return [1,0][index];
-}
-
 // Include extra cost?
 async function askForUsername() {
   let alert = new Alert();
@@ -618,10 +618,13 @@ async function Status(day) {
 	mid.layoutVertically()
 	let right = row.addStack()
 	right.layoutVertically()
-	let whatday = left.addText(t("mode") + ": " + service);
+	let whatday = left.addText(t("mode") + ": " + mode);
 	whatday.textColor = new Color("#ffffff");
 	whatday.font = Font.lightSystemFont(13);
-	whatday = mid.addText("Capacity: " + String(batteryCapacityKwh) +  "kWh");
+	whatday = mid.addText("Status: " +  modeStatus);
+	whatday.textColor = new Color("#ffffff");
+	whatday.font = Font.lightSystemFont(13);
+	whatday = right.addText(t("capacity") + ": " + String(batteryCapacityKwh) +  "kWh");
 	whatday.textColor = new Color("#ffffff");
 	whatday.font = Font.lightSystemFont(13);
   whatday = left.addText(t("charge") + ": " + String(ChargingMax) + "kW");
@@ -770,7 +773,7 @@ async function Revenue() {
 	te = saveright.addText("FCR-D");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
-  te = saveright.addText("Savings");
+  te = saveright.addText(t("savings"));
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
   savemost.addText("")

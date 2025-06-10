@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.33
+let version = 0.34
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -174,7 +174,7 @@ async function readsettings() {
 }
 
 async function getDetails() {
-  const endpoint = `/controlpanel/CustomerDetail`;
+  const endpoint = `ems/ActivationSchedule`;
   const url = baseURL + endpoint;
   const headers = {
     "Authorization": `Bearer ${token}`,
@@ -184,12 +184,10 @@ async function getDetails() {
   req.method = "GET";
   req.headers = headers;
   try {
-    const revenue = await req.loadJSON();
+    const response = await req.loadJSON();
     if (req.response.statusCode === 200) {
-			rpiSerial = revenue["Meter"][0]["RpiSerial"]
-			meterId = revenue["Meter"][0]["Id"]
-			batteryCapacityKwh = revenue["Meter"][0]["BatteryCapacityKwh"]
-      return revenue;
+			batteryCapacityKwh = response["SystemSetting"]["BATTERY_CAPACITY"]
+      return null;
     } else {
       console.error("❌ Fel statuskod:", req.response.statusCode);
     }
@@ -213,7 +211,9 @@ async function getRpiSerial() {
     const response = await req.loadJSON();
 		log(response)
     if (req.response.statusCode === 200) {
-			rpiSerial = response["LoggerGridDatastream"]
+			const raw = response["LoggerGridDatastream"];
+  		// Plocka ut delarna före "_"
+  		rpiSerial = raw.map(item => item.split("_")[0]);
       return;
     } else {
       console.error("❌ Fel statuskod:", req.response.statusCode);
@@ -235,27 +235,27 @@ async function getStatus() {
   req.method = "GET";
   req.headers = headers;
   try {
-    const revenue = await req.loadJSON();
+    const status = await req.loadJSON();
     if (req.response.statusCode === 200) {
-			if (revenue[0]["Service"][0] == "fcrd") {
+			if (status[0]["Service"][0] == "fcrd") {
 				service = "CO"
-			} else if (revenue[0]["Service"][0] == "off") {
+			} else if (status[0]["Service"][0] == "off") {
 				service = "Avaktiverad"
-			} else if (revenue[0]["Service"][0] == "sc") {
+			} else if (status[0]["Service"][0] == "sc") {
 				service = "SC"
 			} else {
 				service = "Okänt"
 			}
-			FpUpInKw = revenue[0]["FpUpInKw"]
-			FpDownInKw = revenue[0]["FpDownInKw"]
-			ChargingMax = revenue[0]["RelatedMeters"][0]["PeakAcKw"]
-			DischargingMax = revenue[0]["RelatedMeters"][1]["PeakAcKw"]
-      return;
+			FpUpInKw = status[0]["FpUpInKw"]
+			FpDownInKw = status[0]["FpDownInKw"]
+			ChargingMax = status[0]["RelatedMeters"][0]["PeakAcKw"]
+			DischargingMax = status[0]["RelatedMeters"][1]["PeakAcKw"]
+      return null;
     } else {
       console.error("❌ Fel statuskod:", req.response.statusCode);
     }
   } catch (err) {
-    console.error("❌ Fel vid hämtning av status:", err);
+    console.error("❌ Fel vid hämtning av status", err);
   }
   return null;
 }

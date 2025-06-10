@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.40
+let version = 0.41
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -586,7 +586,7 @@ async function askForLanguage() {
 async function askForUsername() {
   let alert = new Alert();
   alert.title = t("username");
-  alert.message = (t("askforusername"));
+  alert.message = (t("askforusername") + "?");
   alert.addTextField("example@mail.com",settings.username).setEmailAddressKeyboard();
   alert.addAction("OK");
   await alert.present();
@@ -599,7 +599,7 @@ async function askForUsername() {
 async function askForPassword() {
   let alert = new Alert();
   alert.title = t("password");
-  alert.message = (t("askforpassword"));
+  alert.message = (t("askforpassword") + "?");
   alert.addTextField().setDefaultKeyboard();
   alert.addAction("OK");
   await alert.present();

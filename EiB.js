@@ -760,7 +760,7 @@ async function Revenue() {
   save.addSpacer(20)
   let savemid = save.addStack()
   savemid.layoutVertically()
-  save.addSpacer(40)
+  save.addSpacer(30)
   let saveright = save.addStack()
   saveright.layoutVertically()
   save.addSpacer(20)

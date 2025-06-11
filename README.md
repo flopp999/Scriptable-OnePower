@@ -70,5 +70,5 @@ Found a bug or have a feature request?
 ![plot](Scriptable-EiB.png)
 
 ---
-This widget is an independent entity and is not affiliated with or endorsed by CheckWatt AB.
+This widget is an independent entity and is not affiliated with or endorsed by CheckWatt AB.  
 Made with ❤️ by [@flopp999](https://github.com/flopp999)

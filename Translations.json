@@ -3,6 +3,10 @@
     "en": "",
     "sv": ""
   },
+  "peakbought": {
+    "en": "Peak Bought",
+    "sv": "Högsta effekt"
+  },
   "activated": {
     "en": "Activated",
     "sv": "Aktiverad"

@@ -159,7 +159,8 @@ async function readsettings() {
       alert.title = "Support";
       alert.message = t("buymeacoffee") + "?";
       alert.addAction(t("noway"));
-      alert.addCancelAction(t("ofcourse"));
+			alert.addAction("Ko-fi 👍");👍
+      alert.addCancelAction("Buymeacoffe 👍");
       let response = await alert.present();
       if (response === -1) {
         Safari.open("https://buymeacoffee.com/flopp999");
@@ -846,7 +847,8 @@ if (config.runsInWidget) {
     let alert = new Alert();
     alert.title = "Support";
     alert.message = t("buymeacoffee") + "?";
-    alert.addCancelAction(t("ofcourse"));
+    alert.addCancelAction("Buymeacoffee 👍");
+	  alert.addAction("Ko-fi 👍");
     alert.addAction(t("noway"));
     let response = await alert.present();
     if (response === -1) {

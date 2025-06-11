@@ -19,8 +19,6 @@ Like the project? Why not toss a coin to your developer — just €5 keeps the 
 
 ---
 
-
-
 ## 📄 License
 
 **Personal use only.** See [`LICENSE`](LICENSE) for details.

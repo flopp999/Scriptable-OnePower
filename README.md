@@ -14,7 +14,7 @@ Like the project? Why not toss a coin to your developer — just €5 keeps the 
 </a>
 
 <a href="https://www.buymeacoffee.com/flopp999" target="_blank">
-  <img src="https://github.githubassets.com/assets/buy_me_a_coffee-63ed78263f6e.svg" width="32" height="32" alt="Buy me a coffee">https://www.buymeacoffee.com/flopp999
+  <img src="bmc-logo-yellow.png" width="32" height="32" alt="Buy me a coffee">https://www.buymeacoffee.com/flopp999
 </a>  
 
 ---

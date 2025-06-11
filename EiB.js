@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.42
+let version = 0.43
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -13,6 +13,7 @@ let modeStatus;
 let rpiSerial;
 let meterId;
 let batteryCapacityKwh;
+let PeakBought;
 let token;
 let firstDayStr;
 let lastDayStr;
@@ -189,6 +190,30 @@ async function getDetails() {
     const response = await req.loadJSON();
     if (req.response.statusCode === 200) {
 			batteryCapacityKwh = response["SystemSetting"]["BATTERY_CAPACITY"]
+      return null;
+    } else {
+      console.error("❌ Fel statuskod:", req.response.statusCode);
+    }
+  } catch (err) {
+    console.error("❌ Fel vid hämtning av details:", err);
+  }
+  return null;
+}
+
+async function getPeakBought() {
+  const endpoint = `/ems/PeakBoughtMonth?month=2025-06`;
+  const url = baseURL + endpoint;
+  const headers = {
+    "Authorization": `Bearer ${token}`,
+    "Accept": "application/json"
+  };
+  const req = new Request(url);
+  req.method = "GET";
+  req.headers = headers;
+  try {
+    const response = await req.loadJSON();
+    if (req.response.statusCode === 200) {
+			PeakBought = response["HourPeak"]
       return null;
     } else {
       console.error("❌ Fel statuskod:", req.response.statusCode);
@@ -435,9 +460,6 @@ async function fetchRevenue(jwtToken) {
 	
 	updated = "" + hour + minute + "";
 }
-
-
-	 
 
 async function createVariables() {
   username = settings.username;
@@ -705,6 +727,7 @@ const now = new Date();
 const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
 // Skapa array från 1 till antal dagar
 const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
 async function renderSection(position) {
   const value = settings[`showat${position}`];
   if (!value || value === "nothing") return;
@@ -752,15 +775,19 @@ async function Revenue() {
   te = saveleft.addText("FCR-D");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
-  //ja.addSpacer();
 	te = savemid.addText(String(Math.round(totalFcrd)) + "kr");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
-  //ja = listwidget.addStack()
   te = saveleft.addText(t("savings"));
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
+	te = saveleft.addText(t("peakbought"));
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
   te = savemid.addText(String(Math.round(totalSavings)) + "kr");
+  te.font = Font.lightSystemFont(13);
+  te.textColor = new Color("#ffffff");
+	 te = savemid.addText(String(Math.round(Peakbought)) + "kW");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
 	te = saveright.addText(t("thisyear"));
@@ -789,6 +816,8 @@ async function createWidget(){
 	await getDetails();
 	await getRpiSerial();
 	await getStatus();
+	await getPeakBought();
+	
 	const date = new Date();
 	if (settings.language == 1) {
 		monthName = date.toLocaleDateString("en-EN", { month: "long" });

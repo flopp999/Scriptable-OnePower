@@ -6,6 +6,21 @@ New versions of the script will be updated automatically.
 
 ---
 
+## ✨ Support
+
+Like the project? Why not toss a coin to your developer — just €5 keeps the magic going! 💰  
+<a href="https://ko-fi.com/flopp999" target="_blank">
+  <img src="https://github.githubassets.com/assets/ko_fi-53a60c17e75c.svg" width="32" height="32" alt="Buy me a coffee">https://ko-fi.com/flopp999
+</a>
+
+<a href="https://www.buymeacoffee.com/flopp999" target="_blank">
+  <img src="https://github.githubassets.com/assets/buy_me_a_coffee-63ed78263f6e.svg" width="32" height="32" alt="Buy me a coffee">https://www.buymeacoffee.com/flopp999
+</a>  
+
+---
+
+
+
 ## 📄 License
 
 **Personal use only.** See [`LICENSE`](LICENSE) for details.
@@ -23,7 +38,7 @@ Download Scriptable here:
 ## 🔧 How to Install Code
 
 1. Go to the latest version of the script:  
-   👉 [Download EiB.js](https://github.com/flopp999/Scriptable-EiB/releases/latest/download/EiB.js)  
+   [Download EiB.js](https://github.com/flopp999/Scriptable-EiB/releases/latest/download/EiB.js)  
    and copy the entire content.
 2. Open **Scriptable** and tap the **+** icon in the top right.
 3. Paste the script, then tap **Play** (▶️) to run it.
@@ -48,7 +63,7 @@ Want support for another language? [Open an issue](https://github.com/flopp999/S
 ## 📬 Feedback
 
 Found a bug or have a feature request?  
-👉 [Open an issue](https://github.com/flopp999/Scriptable-EiB/issues)
+[Open an issue](https://github.com/flopp999/Scriptable-EiB/issues)
 
 ---
 

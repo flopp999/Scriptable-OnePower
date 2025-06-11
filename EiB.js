@@ -213,7 +213,7 @@ async function getPeakBought() {
   try {
     const response = await req.loadJSON();
     if (req.response.statusCode === 200) {
-			PeakBought = response["HourPeak"]
+			peakBought = response["HourPeak"] / 1000;
       return null;
     } else {
       console.error("❌ Fel statuskod:", req.response.statusCode);
@@ -787,7 +787,7 @@ async function Revenue() {
   te = savemid.addText(String(Math.round(totalSavings)) + "kr");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
-	 te = savemid.addText(String(Math.round(Peakbought)) + "kW");
+	 te = savemid.addText(String(peakBought.toFixed(1)) + "kW");
   te.font = Font.lightSystemFont(13);
   te.textColor = new Color("#ffffff");
 	te = saveright.addText(t("thisyear"));

@@ -165,6 +165,9 @@ async function readsettings() {
       if (response === -1) {
         Safari.open("https://buymeacoffee.com/flopp999");
       }
+			if (response === 1) {
+        Safari.open("https://ko-fi.com/flopp999");
+      }
       throw new Error("Settings file not found");
     }
   } catch (error) {
@@ -853,6 +856,9 @@ if (config.runsInWidget) {
     let response = await alert.present();
     if (response === -1) {
       Safari.open("https://buymeacoffee.com/flopp999");
+    }
+		if (response === 0) {
+        Safari.open("https://ko-fi.com/flopp999");
     }
   }
 }

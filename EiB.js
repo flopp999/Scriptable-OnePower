@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.44
+let version = 0.45
 const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
@@ -50,7 +50,6 @@ const filePathRevenues = fm.joinPath(dir, fileNameRevenues);
 const filePathRevenuesYear = fm.joinPath(dir, fileNameRevenuesYear);
 let height = 1150;
 let width = 1300;
-let keys = [];
 
 if (!config.runsInWidget){
   await updatecode();
@@ -63,13 +62,6 @@ if (!config.runsInWidget){
 
 if (config.runsInWidget){
  await readsettings();
-  if (keys.length < 2 || keys == undefined) {
-    let widget = new ListWidget();
-    widget.addText("You need to run \"" + Script.name() + "\" in the app");
-    Script.setWidget(widget);
-    Script.complete();
-    return;
-  }
 }
 if (config.runsInWidget){
   await updatecode();
@@ -142,13 +134,36 @@ async function readsettings() {
     if (fm.fileExists(filePathSettings)) {
       let raw = fm.readString(filePathSettings);
       settings = JSON.parse(raw);
+			if (!settings.graphOption || settings.graphOption.length === 0) {
+  			settings.graphOption = {
+    		top: "bar",
+    		middle: "bar",
+    		bottom: "bar"
+  			};
+			}
+			if (!settings.username || settings.username.length === 0) {
+  			settings.username = "username"
+			}
+			if (!settings.password || settings.password.length === 0) {
+  			settings.password = "password"
+			}
+			if (!settings.language || settings.language.length === 0) {
+  			settings.language = 1
+			}
+			if (!settings.showattop || settings.showattop.length === 0) {
+  			settings.showattop = "graph, thismonth"
+			}
+			if (!settings.showatmiddle || settings.showatmiddle.length === 0) {
+  			settings.showatmiddle = "status, thismonth"
+			}
+			if (!settings.showatbottom || settings.showatbottom.length === 0) {
+  			settings.showatbottom = "revenue, thismonth"
+			}
+ 			if (!settings.height || settings.height.length === 0) {
+  			settings.height = 750
+			}
       langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
       await readTranslations();
-      keys = Object.keys(settings);
-      if (keys.length < 2) {
-        throw new Error("Settings file is incomplete or corrupted");
-        return;
-      }
     } else {
       if (config.runsInWidget) {
         return;
@@ -159,7 +174,7 @@ async function readsettings() {
       alert.title = "Support";
       alert.message = t("buymeacoffee") + "?";
       alert.addAction(t("noway"));
-			alert.addAction("Ko-fi 👍");👍
+			alert.addAction("Ko-fi 👍");
       alert.addCancelAction("Buymeacoffe 👍");
       let response = await alert.present();
       if (response === -1) {
@@ -737,6 +752,7 @@ async function renderSection(position) {
   if (!value || value === "nothing") return;
 
   const [type, day] = value.split(",").map(s => s.trim());
+	
   const graphOption = settings.graphOption[position]
   switch (type) {
     case "status":

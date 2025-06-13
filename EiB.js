@@ -13,7 +13,7 @@ let modeStatus;
 let rpiSerial;
 let meterId;
 let batteryCapacityKwh;
-let PeakBought;
+let peakBought;
 let token;
 let firstDayStr;
 let lastDayStr;
@@ -139,7 +139,7 @@ async function readsettings() {
     		top: "bar",
     		middle: "bar",
     		bottom: "bar"
-  			};
+  			}
 			}
 			if (!settings.username || settings.username.length === 0) {
   			settings.username = "username"
@@ -174,8 +174,8 @@ async function readsettings() {
       alert.title = "Support";
       alert.message = t("buymeacoffee") + "?";
       alert.addAction(t("noway"));
-			alert.addAction("Ko-fi 👍");
-      alert.addCancelAction("Buymeacoffe 👍");
+			alert.addAction("Ko-fi");
+      alert.addCancelAction("Buymeacoffe");
       let response = await alert.present();
       if (response === -1) {
         Safari.open("https://buymeacoffee.com/flopp999");

@@ -1,7 +1,7 @@
-# ⚡️ Scriptable EiB Widget
+# ⚡️ Growatt Widget
 
-A simple Scriptable widget that displays data from **Energy In Balance** directly on your iPhone or iPad.  
-Data is fetched directly from https://energyinbalance.se/  
+A simple Scriptable widget that displays data from **Growatt** directly on your iPhone or iPad.  
+Data is fetched directly from https://growatt.com/  
 New versions of the script will be updated automatically.  
 
 ---
@@ -36,7 +36,7 @@ Download Scriptable here:
 ## 🔧 How to Install Code
 
 1. Go to the latest version of the script:  
-   [Download EiB.js](https://github.com/flopp999/Scriptable-EiB/releases/latest/download/EiB.js)  
+   [Download Growatt.js](https://github.com/flopp999/Scriptable-Growatt/releases/latest/download/Growatt.js)  
    and copy the entire content.
 2. Open **Scriptable** and tap the **+** icon in the top right.
 3. Paste the script, then tap **Play** (▶️) to run it.
@@ -47,7 +47,7 @@ Download Scriptable here:
 - ✅ English  
 - ✅ Swedish  
 
-Want support for another language? [Open an issue](https://github.com/flopp999/Scriptable-EiB/issues) and I’ll add it!
+Want support for another language? [Open an issue](https://github.com/flopp999/Scriptable-Growatt/issues) and I’ll add it!
 
 ---
 
@@ -61,14 +61,14 @@ Want support for another language? [Open an issue](https://github.com/flopp999/S
 ## 📬 Feedback
 
 Found a bug or have a feature request?  
-[Open an issue](https://github.com/flopp999/Scriptable-EiB/issues)
+[Open an issue](https://github.com/flopp999/Scriptable-Growatt/issues)
 
 ---
 
 ## 🧩 Widget Guide
 
-![plot](Scriptable-EiB.png)
+![plot](Scriptable-Growatt.png)
 
 ---
-This widget is an independent entity and is not affiliated with or endorsed by CheckWatt AB.  
+This widget is an independent entity and is not affiliated with or endorsed by SHENZHEN GROWATT NEW ENERGY Co., Ltd.  
 Made with ❤️ by [@flopp999](https://github.com/flopp999)

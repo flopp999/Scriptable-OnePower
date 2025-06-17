@@ -5,7 +5,7 @@
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
 let version = 0.45
-const baseURL = "https://api.checkwatt.se";
+//const baseURL = "https://api.checkwatt.se";
 let password;
 let username;
 let mode;

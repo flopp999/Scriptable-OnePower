@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.12
+let version = 0.13
 let token;
 let deviceSn;
 let epv1 = 23
@@ -132,6 +132,12 @@ async function readsettings() {
 			if (!settings.deviceSn || settings.deviceSn.length === 0) {
   			settings.deviceSn = "deviceSn"
 			}
+			if (!settings.updatehour || settings.updatehour.length === 0) {
+  			settings.updatehour = "0"
+			}
+			if (!settings.updateminute || settings.updateminute.length === 0) {
+  			settings.updateminute = "01"
+			}
 			if (!settings.language || settings.language.length === 0) {
   			settings.language = 1
 			}
@@ -232,7 +238,9 @@ async function fetchData(jwtToken) {
 				const dataJSON = JSON.stringify(response, null ,2);
 				fm.writeString(filePathData, dataJSON);
 		  	console.log("Svar från Growatt:", response);
-		    
+		    settings.hour = DateObj.getHours();
+				settings.minute = DateObj.getMinutes();
+				fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
 			} else {
 				console.error("❌ Fel statuskod:", req.response.statusCode);
 			}
@@ -260,8 +268,8 @@ async function fetchData(jwtToken) {
 	} else {
 		await getData();
 	}
-	hour = DateObj.getHours();
-	minute = DateObj.getMinutes();
+	//hour = DateObj.getHours();
+	//minute = DateObj.getMinutes();
 	let content = fm.readString(filePathData);
 	data = JSON.parse(content);
 
@@ -281,6 +289,8 @@ async function fetchData(jwtToken) {
 async function createVariables() {
   token = settings.token;
   deviceSn = settings.deviceSn;
+	hour = settings.hour;
+	minute = settings.minute;
 }
 
 async function readTranslations() {
@@ -497,9 +507,9 @@ exportrow.layoutVertically()
 //let batterydischargerow = widget.addStack()
 first.addSpacer()
 let fm = FileManager.iCloud()
-let exportpath = fm.joinPath(fm.documentsDirectory(), "export.png")
+let exportpath = fm.joinPath(fm.documentsDirectory(), "export-color.png")
 exportimage = await fm.readImage(exportpath)
-let importpath = fm.joinPath(fm.documentsDirectory(), "import.png")
+let importpath = fm.joinPath(fm.documentsDirectory(), "import-color.png")
 importimage = await fm.readImage(importpath)
 let solarpath = fm.joinPath(fm.documentsDirectory(), "solar-color.png")
 solarimage = await fm.readImage(solarpath)
@@ -533,13 +543,13 @@ ll.imageSize = new Size(40, 40); // Extra kontroll på bildstorlek
 exportrow.addSpacer()
 l=exportrow.addImage(batterysocimage);
 l.imageSize = new Size(40, 40); // Extra kontroll på bildstorlek
-exportrow.addSpacer()
+//exportrow.addSpacer()
 exportrowr.addSpacer(10)
 
 let exportvalue = exportrowr.addStack()
 exportvalue.layoutVertically()
 
-exportvalue.addSpacer(6)
+exportvalue.addSpacer(15)
 let solarkwhtext = exportvalue.addText(Math.round(solarkwh) + " kWh");
 exportvalue.addSpacer(23)
 let homewhtext = exportvalue.addText(Math.round(homekwh) + " kWh");
@@ -572,8 +582,8 @@ batterysoctext.textColor = new Color("#ffffff");
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
 	moms.addSpacer();
-  momstext = moms.addText("updated " + hour ? ":" + minute);
-  momstext.font = Font.lightSystemFont(10);
+  momstext = moms.addText("updated " + hour + ":" + minute);
+  momstext.font = Font.lightSystemFont(0);
   momstext.textColor = new Color("#ffffff");
   return listwidget;
 }

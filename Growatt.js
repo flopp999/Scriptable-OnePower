@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.1
+let version = 0.11
 let token;
 let deviceSn;
 let epv1 = 23
@@ -17,14 +17,7 @@ let importkwh = 1
 let batterychargekwh = 5
 let batterydischargekwh = 7
 // === API-anrop ===
-const url = "https://openapi.growatt.com/v1/device/tlx/tlx_last_data";
-let req = new Request(url);
-req.method = "POST";
-req.headers = {
-  "Content-Type": "application/x-www-form-urlencoded",
-  "token": token
-};
-req.body = `tlx_sn=${encodeURIComponent(deviceSn)}`;
+
 //const baseURL = "https://api.checkwatt.se";
 let batteryCapacityKwh;
 let widget;
@@ -224,6 +217,14 @@ async function fetchData(jwtToken) {
 	Path = filePathData
 	DateObj = new Date();
 	async function getData() {
+		const url = "https://openapi.growatt.com/v1/device/tlx/tlx_last_data";
+		let req = new Request(url);
+		req.method = "POST";
+		req.headers = {
+		  "Content-Type": "application/x-www-form-urlencoded",
+		  "token": token
+		};
+		req.body = `tlx_sn=${encodeURIComponent(deviceSn)}`;
 		try {
 			req.timeoutInterval = 1;
 	  	const response = await req.loadJSON();
@@ -279,7 +280,7 @@ async function fetchData(jwtToken) {
 
 async function createVariables() {
   token = settings.token;
-  deviceSn = settings.deviceSN;
+  deviceSn = settings.deviceSn;
 }
 
 async function readTranslations() {
@@ -481,6 +482,78 @@ async function createWidget(){
 	//token = set loginAndGetToken();
 	await fetchData(token);
 	const date = new Date();
+	let solarkwh = epv1+epv2
+//let widget = new ListWidget();
+let first = listwidget.addStack()
+first.layoutHorizontally()
+first.addSpacer()
+//let solarrow = widget.addStack();
+//let importrow = widget.addStack()
+let exportrowr = first.addStack()
+let exportrow=exportrowr.addStack()
+exportrow.layoutVertically()
+//let homerow = widget.addStack()
+//let batterychargerow = widget.addStack()
+//let batterydischargerow = widget.addStack()
+first.addSpacer()
+let fm = FileManager.iCloud()
+let exportpath = fm.joinPath(fm.documentsDirectory(), "export.png")
+exportimage = await fm.readImage(exportpath)
+let importpath = fm.joinPath(fm.documentsDirectory(), "import.png")
+importimage = await fm.readImage(importpath)
+let solarpath = fm.joinPath(fm.documentsDirectory(), "solar-color.png")
+solarimage = await fm.readImage(solarpath)
+let homepath = fm.joinPath(fm.documentsDirectory(), "home-color.png")
+homeimage = await fm.readImage(homepath)
+let batterychargepath = fm.joinPath(fm.documentsDirectory(), "batterycharge-color.png")
+batterychargeimage = await fm.readImage(batterychargepath)
+let batterydischargepath = fm.joinPath(fm.documentsDirectory(), "batterydischarge-color.png")
+batterydischargeimage = await fm.readImage(batterydischargepath)
+let batterysocpath = fm.joinPath(fm.documentsDirectory(), "batterysoc-color.png")
+batterysocimage = await fm.readImage(batterysocpath)
+
+exportrow.addSpacer()
+kk=exportrow.addImage(solarimage);
+kk.imageSize = new Size(40, 40); // Extra kontroll på bildstorlek
+exportrow.addSpacer()
+ss=exportrow.addImage(homeimage);
+ss.imageSize = new Size(40, 40); // Extra kontroll på bildstorlek
+exportrow.addSpacer()
+ii=exportrow.addImage(exportimage);
+ii.imageSize = new Size(40, 40); // Extra kontroll på bildstorlek
+exportrow.addSpacer()
+pp=exportrow.addImage(importimage);
+pp.imageSize = new Size(40, 40); // Extra kontroll på bildstorlek
+exportrow.addSpacer()
+de=exportrow.addImage(batterychargeimage);
+de.imageSize = new Size(40, 40); // Extra kontroll på bildstorlek
+exportrow.addSpacer()
+ll=exportrow.addImage(batterydischargeimage);
+ll.imageSize = new Size(40, 40); // Extra kontroll på bildstorlek
+exportrow.addSpacer()
+l=exportrow.addImage(batterysocimage);
+l.imageSize = new Size(40, 40); // Extra kontroll på bildstorlek
+exportrow.addSpacer()
+exportrowr.addSpacer(18)
+
+let exportvalue = exportrowr.addStack()
+exportvalue.layoutVertically()
+
+exportvalue.addSpacer(15)
+exportvalue.addText(Math.round(solarkwh) + "\tkWh");
+exportvalue.addSpacer(23)
+exportvalue.addText(Math.round(homekwh) + "\tkWh");
+exportvalue.addSpacer(23)
+exportvalue.addText(Math.round(exportkwh) + "\tkWh");
+exportvalue.addSpacer(23)
+exportvalue.addText(Math.round(importkwh) + "\tkWh");
+exportvalue.addSpacer(23)
+exportvalue.addText(Math.round(batterychargekwh) + "\tkWh");
+exportvalue.addSpacer(23)
+exportvalue.addText(Math.round(batterydischargekwh) + "\tkWh");
+exportvalue.addSpacer(23)
+exportvalue.addText(Math.round(batterysoc) + "%");
+
   listwidget.backgroundColor = new Color("#000000");
   await renderSection("top");
   //await renderSection("middle");

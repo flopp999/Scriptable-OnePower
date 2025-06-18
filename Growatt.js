@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.14
+let version = 0.15
 let token;
 let deviceSn;
 let epv1 = 23
@@ -49,7 +49,6 @@ if (!config.runsInWidget){
   await readsettings();
   await createVariables();
   //await start();
-  await createVariables();
 }
 
 if (config.runsInWidget){
@@ -582,7 +581,7 @@ batterysoctext.textColor = new Color("#ffffff");
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
 	moms.addSpacer();
-  momstext = moms.addText("updated " + hour + ":" + minute);
+  momstext = moms.addText("updated " + settings.hour + ":" + settings.minute);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   return listwidget;

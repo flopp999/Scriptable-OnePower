@@ -4,14 +4,28 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.45
+let version = 0.1
+const token = "";    // <-- Fyll i ditt token här
+const deviceSn = "";            // Serienummer på enheten
+let epv1 = 23
+let epv2 = 18
+
+let homekwh = 23;
+let batterysoc = 100
+let exportkwh = 33
+let importkwh = 1
+let batterychargekwh = 5
+let batterydischargekwh = 7
+// === API-anrop ===
+const url = "https://openapi.growatt.com/v1/device/tlx/tlx_last_data";
+let req = new Request(url);
+req.method = "POST";
+req.headers = {
+  "Content-Type": "application/x-www-form-urlencoded",
+  "token": token
+};
+req.body = `tlx_sn=${encodeURIComponent(deviceSn)}`;
 //const baseURL = "https://api.checkwatt.se";
-let password;
-let username;
-let mode;
-let modeStatus;
-let rpiSerial;
-let meterId;
 let batteryCapacityKwh;
 let peakBought;
 let token;
@@ -30,26 +44,17 @@ let minute;
 let translationData;
 let monthName;
 let currentLang;
-let fcrdRevenues;
-let fcrdRevenuesYear;
-let ffrRevenues;
-let ffrRevenuesYear;
-let savingsRevenues;
-let savingsRevenuesYear;
-let totalSavings;
-let totalSavingsYear;
+
 const fileNameSettings = Script.name() + "_Settings.json";
 const fileNameTranslations = Script.name() + "_Translations.json";
-const fileNameRevenues = Script.name() + "_Revenues.json";
-const fileNameRevenuesYear = Script.name() + "_RevenuesYear.json";
+const fileNameData = Script.name() + "_Data.json";
+const fileNameDataYear = Script.name() + "_DataYear.json";
 const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
 const filePathSettings = fm.joinPath(dir, fileNameSettings);
 const filePathTranslations = fm.joinPath(dir, fileNameTranslations);
-const filePathRevenues = fm.joinPath(dir, fileNameRevenues);
-const filePathRevenuesYear = fm.joinPath(dir, fileNameRevenuesYear);
-let height = 1150;
-let width = 1300;
+const filePathData = fm.joinPath(dir, fileNameData);
+const filePathdataYear = fm.joinPath(dir, fileNameDataYear);
 
 if (!config.runsInWidget){
   await updatecode();
@@ -90,12 +95,12 @@ async function start() {
 
 async function updatecode() {
   try {
-    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/Version.txt");
+    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Version.txt");
     req.timeoutInterval = 1;
     const serverVersion = await req.loadString()
     if (version < serverVersion) {
       try {
-        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/EiB.js");
+        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Growatt.js");
         req.timeoutInterval = 1;
         const response = await req.load();
         const status = req.response.statusCode;
@@ -105,7 +110,7 @@ async function updatecode() {
         const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
 
-        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/Translations.json");
+        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Translations.json");
         reqTranslations.timeoutInterval = 1;
         const responseTranslations = await reqTranslations.load();
         const statusTranslations = reqTranslations.response.statusCode;
@@ -134,33 +139,14 @@ async function readsettings() {
     if (fm.fileExists(filePathSettings)) {
       let raw = fm.readString(filePathSettings);
       settings = JSON.parse(raw);
-			if (!settings.graphOption || settings.graphOption.length === 0) {
-  			settings.graphOption = {
-    		top: "bar",
-    		middle: "bar",
-    		bottom: "bar"
-  			}
+			if (!settings.token || settings.token.length === 0) {
+  			settings.token = "token"
 			}
-			if (!settings.username || settings.username.length === 0) {
-  			settings.username = "username"
-			}
-			if (!settings.password || settings.password.length === 0) {
-  			settings.password = "password"
+			if (!settings.deviceSn || settings.deviceSn.length === 0) {
+  			settings.deviceSn = "deviceSn"
 			}
 			if (!settings.language || settings.language.length === 0) {
   			settings.language = 1
-			}
-			if (!settings.showattop || settings.showattop.length === 0) {
-  			settings.showattop = "graph, thismonth"
-			}
-			if (!settings.showatmiddle || settings.showatmiddle.length === 0) {
-  			settings.showatmiddle = "status, thismonth"
-			}
-			if (!settings.showatbottom || settings.showatbottom.length === 0) {
-  			settings.showatbottom = "revenue, thismonth"
-			}
- 			if (!settings.height || settings.height.length === 0) {
-  			settings.height = 750
 			}
       langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
       await readTranslations();
@@ -193,80 +179,6 @@ async function readsettings() {
     settings = await ask();
     fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
   }
-}
-
-async function getDetails() {
-  const endpoint = `/ems/ActivationSchedule`;
-  const url = baseURL + endpoint;
-  const headers = {
-    "Authorization": `Bearer ${token}`,
-    "Accept": "application/json"
-  };
-  const req = new Request(url);
-  req.method = "GET";
-  req.headers = headers;
-  try {
-    const response = await req.loadJSON();
-    if (req.response.statusCode === 200) {
-			batteryCapacityKwh = response["SystemSetting"]["BATTERY_CAPACITY"]
-      return null;
-    } else {
-      console.error("❌ Fel statuskod:", req.response.statusCode);
-    }
-  } catch (err) {
-    console.error("❌ Fel vid hämtning av details:", err);
-  }
-  return null;
-}
-
-async function getPeakBought() {
-  const endpoint = `/ems/PeakBoughtMonth?month=2025-06`;
-  const url = baseURL + endpoint;
-  const headers = {
-    "Authorization": `Bearer ${token}`,
-    "Accept": "application/json"
-  };
-  const req = new Request(url);
-  req.method = "GET";
-  req.headers = headers;
-  try {
-    const response = await req.loadJSON();
-    if (req.response.statusCode === 200) {
-			peakBought = response["HourPeak"] / 1000;
-      return null;
-    } else {
-      console.error("❌ Fel statuskod:", req.response.statusCode);
-    }
-  } catch (err) {
-    console.error("❌ Fel vid hämtning av details:", err);
-  }
-  return null;
-}
-
-async function getRpiSerial() {
-  const endpoint = `/ems/energyflow`;
-  const url = baseURL + endpoint;
-  const headers = {
-    "Authorization": `Bearer ${token}`,
-    "Accept": "application/json"
-  };
-  const req = new Request(url);
-  req.method = "GET";
-  req.headers = headers;
-  try {
-    const response = await req.loadJSON();
-    if (req.response.statusCode === 200) {
-			const raw = response["LoggerGridDatastream"];
-  		// Plocka ut delarna före "_"
-  		rpiSerial = raw.map(item => item.split("_")[0]);
-      return;
-    } else {
-      console.error("❌ Fel statuskod:", req.response.statusCode);
-    }
-  } catch (err) {
-    console.error("❌ Fel vid hämtning av rpiserial:", err);
-  }
-  return null;
 }
 
 async function getStatus() {
@@ -313,109 +225,29 @@ async function getStatus() {
   return null;
 }
 
-// == Login: Basic Auth och hämta JWT ==
-async function loginAndGetToken() {
-  const credentials = `${username}:${password}`;
-  const encoded = Data.fromString(credentials).toBase64String();
-  const endpoint = "/user/Login?audience=eib";
-  const url = baseURL + endpoint;
-  const headers = {
-  	"Authorization": `Basic ${encoded}`,
-  	"Accept": "application/json",
-  	"Content-Type": "application/json",
-	};
-
-  const payload = {
-    OneTimePassword: ""
-  };
-
-  const req = new Request(url);
-  req.method = "POST";
-  req.headers = headers;
-  req.body = JSON.stringify(payload);
-
-  try {
-    const res = await req.loadJSON();
-		const jwt = res.JwtToken;
-    if (!jwt) throw new Error("Inget JWT-token returnerat");
-    return jwt;
-  } catch (error) {
-    console.error("❌ Misslyckades logga in:", error);
-    return null;
-  }
-}
 // == Hämta revenue med JWT ==
-async function fetchRevenue(jwtToken) {
-	Path = filePathRevenues
+async function fetchData(jwtToken) {
+	Path = filePathData
 	DateObj = new Date();
-	
-	async function getRevenues() {
-		// Dagens datum
-		const now = new Date();
-		// Första dagen i månaden
-		const dayOne = new Date(now.getFullYear(), 0,1);
-		const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-		// Sista dagen i månaden
-		const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-		// Formatera som YYYY-MM-DD
-		firstDayStr = `${firstDay.getFullYear()}-${(firstDay.getMonth() + 1).toString().padStart(2, '0')}-01`;
-		lastDayStr = `${lastDay.getFullYear()}-${(lastDay.getMonth() + 1).toString().padStart(2, '0')}-${lastDay.getDate().toString().padStart(2, '0')}`;
-		dayOneDayStr = `${dayOne.getFullYear()}-01-01`;
-		const endpoint = `/ems/revenue?fromDate=${firstDayStr}&toDate=${lastDayStr}`;
-		const url = baseURL + endpoint;
-		const headers = {
-			"Authorization": `Bearer ${jwtToken}`,
-			"Accept": "application/json"
-		};
-		const req = new Request(url);
-		req.method = "GET";
-		req.headers = headers;
-		req.timeoutInterval = 1;
+	async function getData() {
 		try {
-			const revenue = await req.loadJSON();
-			
+			req.timeoutInterval = 1;
+	  	const response = await req.loadJSON();
 			if (req.response.statusCode === 200) {
-				
-				const dataJSON = JSON.stringify(revenue, null ,2);
-				fm.writeString(filePathRevenues, dataJSON);
+				const dataJSON = JSON.stringify(response, null ,2);
+				fm.writeString(filePathData, dataJSON);
+		  	console.log("Svar från Growatt:", response);
+		    
 			} else {
 				console.error("❌ Fel statuskod:", req.response.statusCode);
 			}
 		} catch (err) {
-			console.error("❌ Fel vid hämtning av month revenue:", err);
+	  	console.error("Fel vid API-anrop:", err);
 		}
-
-		const endpointYear = `/ems/revenue?fromDate=${dayOneDayStr}&toDate=${lastDayStr}`;
-		const urlYear = baseURL + endpointYear;
-		const headersYear = {
-			"Authorization": `Bearer ${jwtToken}`,
-			"Accept": "application/json"
-		};
-		const reqYear = new Request(urlYear);
-		reqYear.method = "GET";
-		reqYear.headers = headersYear;
-		reqYear.timeoutInterval = 1;
-
-
-		try {
-			const revenueYear = await reqYear.loadJSON();
-			
-			if (reqYear.response.statusCode === 200) {
-				
-				const dataJSON = JSON.stringify(revenueYear, null ,2);
-				fm.writeString(filePathRevenuesYear, dataJSON);
-			} else {
-				console.error("❌ Fel statuskod:", req.response.statusCode);
-			}
-		} catch (err) {
-			console.error("❌ Fel vid hämtning av year revenue:", err);
-		}
-
-		
 	}
 	
-	if (fm.fileExists(filePathRevenues)) {
-		let modified = fm.modificationDate(filePathRevenues);
+	if (fm.fileExists(filePathData)) {
+		let modified = fm.modificationDate(filePathData);
 		let now = new Date();
 		let hoursDiff = (now - modified) / (1000 * 60 * 60);
 		let modifiedDay = modified.getDate();
@@ -428,70 +260,37 @@ async function fetchRevenue(jwtToken) {
 		modifiedMonth === yesterday.getMonth() &&
 		modifiedYear === yesterday.getFullYear();
 		if (hoursDiff > 6 || isFromYesterday) {
-			await getRevenues();
+			await getData();
 		}
 	} else {
-		await getRevenues();
+		await getData();
 	}
 	hour = DateObj.getHours();
 	minute = DateObj.getMinutes();
-	let content = fm.readString(filePathRevenues);
-	revenue = JSON.parse(content);
-	// Få ut alla NetRevenue för fcrd
-	fcrdRevenues = revenue
-	.filter(item => item.Service === "fcrd")
-	.map(item => item.NetRevenue);
+	let content = fm.readString(filePathData);
+	data = JSON.parse(content);
 
-	// Få ut alla NetRevenue för savings
-	savingsRevenues = revenue
-	.filter(item => item.Service === "savings")
-	.map(item => item.NetRevenue);
-	// Få ut alla NetRevenue för ffr
-	ffrRevenues = revenue
-	.filter(item => item.Service === "ffr")
-	.map(item => item.NetRevenue);
 
-	//revenues = revenue.map(item => item.NetRevenue);
-	totalFcrd = fcrdRevenues.reduce((sum, value) => sum + value, 0);
-	totalFfr = ffrRevenues.reduce((sum, value) => sum + value, 0);
-	totalSavings = savingsRevenues.reduce((sum, value) => sum + value, 0);
-	content = fm.readString(filePathRevenuesYear);
-	revenueYear = JSON.parse(content);
-	// Få ut alla NetRevenue för fcrd
-				fcrdRevenuesYear = revenueYear
-				.filter(item => item.Service === "fcrd")
-				.map(item => item.NetRevenue);
-		
-				// Få ut alla NetRevenue för savings
-				savingsRevenuesYear = revenueYear
-				.filter(item => item.Service === "savings")
-				.map(item => item.NetRevenue);
-				// Få ut alla NetRevenue för ffr
-				ffrRevenuesYear = revenueYear
-				.filter(item => item.Service === "ffr")
-				.map(item => item.NetRevenue);
+	epv1 = data["data"]["epv1Today"];
+		    epv2 = data["data"]["epv2Today"];
+		    batterysoc = data["data"]["bmsSoc"];
+		    homekwh = data["data"]["elocalLoadToday"];
+		    exportkwh = data["data"]["etoGridToday"];
+		    //importkwh = data["data"]["elocalLoadToday"];
+		    batterychargekwh = data["data"]["echargeToday"];
+		    batterydischargekwh = data["data"]["edischargeToday"];
 
-				//revenues = revenue.map(item => item.NetRevenue);
-				totalFcrdYear = fcrdRevenuesYear.reduce((sum, value) => sum + value, 0);
-				totalFfrYear = ffrRevenuesYear.reduce((sum, value) => sum + value, 0);
-				totalSavingsYear = savingsRevenuesYear.reduce((sum, value) => sum + value, 0);
-
-	
 	updated = "" + hour + minute + "";
 }
 
 async function createVariables() {
-  username = settings.username;
-  password = settings.password;
-  service = settings.service;
-  rpiSerial = settings.rpiserial;
-  batteryCapacityKwh = settings.batterycapacitykwh;
-  meterId = settings.meterid;
+  token = settings.token;
+  deviceSn = settings.deviceSN;
 }
 
 async function readTranslations() {
   if (!fm.fileExists(filePathTranslations)) {
-    let url = "https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/Translations.json";
+    let url = "https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Translations.json";
     let req = new Request(url);
     req.timeoutInterval = 1;
     let content = await req.loadString();
@@ -516,99 +315,10 @@ function t(key) {
 }
 
 async function ask() {
-  settings.username = await askForUsername();
-  settings.password = await askForPassword();
-  settings.showattop = "graph, thismonth"
-  settings.showatmiddle = "status, thismonth"
-	settings.showatbottom = "revenue, thismonth"
-  settings.graphOption = {"top": "bar"}
-  settings.height = 750
+  settings.token = await askForToken();
+  settings.deviceSn = await askForDeviceSn();
   return settings
 }
-
-async function askForAllShowPositions() {
-  const options = ["graph", "status", "nothing"];
-  const days = ["thismonth"];
-  const graphTypes = ["bar"];
-  const chosenCombinations = [];
-  const positions = ["top", "middle", "bottom"];
-  const graphOption = {};
-  for (let position of positions) {
-    const usedCount = (type) =>
-      chosenCombinations.filter(c => c && c.type === type).length;
-
-    const usedGraph = usedCount("graph");
-    const usedStatus = usedCount("status");
-
-    let filteredOptions = options.filter(type => {
-      if (type === "graph" && usedGraph >= 2) return false;
-      if (type === "status" && usedStatus >= 2) return false;
-      if ((usedGraph + usedStatus) >= 3 && (type === "graph" || type === "status")) return false;
-      return true;
-    });
-
-    const alert = new Alert();
-    alert.message = `${t("showwhat")} ${t(position)}?`;
-    filteredOptions.forEach(o => alert.addAction(t(o)));
-    const index = await alert.presentAlert();
-    const choice = filteredOptions[index];
-
-    let day = "";
-    if (choice === "graph") {
-      const graphTypeAlert = new Alert();
-      graphTypeAlert.title = t(position).charAt(0).toUpperCase() + t(position).slice(1);
-      graphTypeAlert.message = t("choosegraphtype");
-      graphTypes.forEach(g => graphTypeAlert.addAction(t(g)));
-      const gIndex = await graphTypeAlert.presentAlert();
-      const selectedGraphType = graphTypes[gIndex];
-      graphOption[position] = selectedGraphType;
-    }
-    if (choice !== "nothing") {
-      const usedDaysForType = chosenCombinations
-        .filter(c => c.type === choice)
-        .map(c => c.day);
-      const availableDays = days.filter(d => !usedDaysForType.includes(d));
-      const dayAlert = new Alert();
-      dayAlert.title = t(position).charAt(0).toUpperCase() + t(position).slice(1);
-      dayAlert.message = t("showday") + "?";
-      availableDays.forEach(d => dayAlert.addAction(t(d)));
-      const dayIndex = await dayAlert.presentAlert();
-      day = availableDays[dayIndex];
-    }
-
-    chosenCombinations.push({ position, type: choice, day });
-    settings[`showat${position}`] = `${choice}, ${day}`;
-  }
-  settings.graphOption = graphOption;
-  
-  fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
-  const totalGraph = chosenCombinations.filter(c => c.type === "graph").length;
-  const totalStatus = chosenCombinations.filter(c => c.type === "status").length;
-  const totalPriceStats = chosenCombinations.filter(c => c.type === "pricestats").length;
-  const heightMap = {
-    "1-0-0": 1000,
-    "0-1-0": 800,
-    "0-0-1": 800,
-  
-    "1-1-0": 750,
-    "1-0-1": 1130,
-    "0-1-1": 900,
-    "2-0-0": 550,
-    "0-2-0": 600,
-  
-    "1-1-1": 730,
-    "2-1-0": 380,
-    "1-2-0": 540,
-    "2-0-1": 470,
-    "0-2-1": 580,
-    "1-0-2": 1050,
-    "0-1-2": 900,
-  };
-  
-  const key = `${totalGraph}-${totalStatus}-${totalPriceStats}`;
-  settings.height = heightMap[key] ?? 1150;
-  return settings;
-  }
 
 // Select resolution
 async function askForLanguage() {
@@ -624,28 +334,28 @@ async function askForLanguage() {
 }
 
 // Include extra cost?
-async function askForUsername() {
+async function askForToken() {
   let alert = new Alert();
-  alert.title = t("username");
-  alert.message = (t("askforusername") + "?");
-  alert.addTextField("example@mail.com",settings.username).setEmailAddressKeyboard();
+  alert.title = "Token");
+  alert.message = (t("askfortoken") + "?");
+  alert.addTextField("abc123abc123abc123",settings.token).setDefaultKeyboard();
   alert.addAction("OK");
   await alert.present();
   let input = alert.textFieldValue(0);
-  username = input
+  token = input
   return input;
 }
 
 // Include extra cost?
-async function askForPassword() {
+async function askForDeviceSn() {
   let alert = new Alert();
-  alert.title = t("password");
-  alert.message = (t("askforpassword") + "?");
+  alert.title = ("Serial number");
+  alert.message = (t("askfordevicesn") + "?");
   alert.addTextField().setDefaultKeyboard();
   alert.addAction("OK");
   await alert.present();
   let input = alert.textFieldValue(0);
-  password = input;
+  deviceSn = input;
   return input;
 }
 
@@ -679,64 +389,7 @@ async function Status(day) {
 	whatday.font = Font.lightSystemFont(13);
 }
 
-async function Graph(day, graphOption) {
-//chart
-  if (60 == 60) {
-    let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+settings.height+"&c="
-    graphtoday += encodeURI("{\
-      data: { \
-        labels: ["+daysArray+"],\
-        datasets: [\
-          {\
-            data: ["+fcrdRevenues+"],\
-            type: '"+graphOption+"',\
-            fill: false,\
-            borderColor: 'rgb(221,204,119)',\
-            borderWidth: 20, \
-            pointRadius: 0\
-          },\
-					{\
-            data: ["+savingsRevenues+"],\
-            type: '"+graphOption+"',\
-            fill: false,\
-            borderColor: 'rgb(128,153,82)',\
-            borderWidth: 20, \
-            pointRadius: 0\
-          },\
-        ]\
-      },\
-        options:\
-          {\
-						title: {\
-							display: true,\
-							fontSize: 40,\
-							fontColor: 'white',\
-							text: '"+monthName+"'\
-						},\
-            legend:\
-            {\
-              display: false\
-            },\
-            scales:\
-            {\
-              xAxes: [{\
-								stacked: true,\
-                offset:true,\
-                ticks:{fontSize:30,fontColor:'white'}\
-              }],\
-              yAxes: [{\
-                stacked:true, gridLines: {color:'white'},ticks:{stepSize:10,beginAtZero:true,fontSize:30,fontColor:'white'}\
-              }]\
-            }\
-          }\
-    }")
-    graphtoday.timeoutInterval = 1;
-    const GRAPH = await new Request(graphtoday).loadImage()
-    let chart = listwidget.addStack()
-    chart.addImage(GRAPH) 
-  }
-  listwidget.addSpacer(5);
-}
+
 
 const smallFont = 10;
 const mediumFont = 12;
@@ -831,24 +484,13 @@ async function Revenue() {
 }
 
 async function createWidget(){
-	token = await loginAndGetToken();
-	await fetchRevenue(token);
-	await getDetails();
-	await getRpiSerial();
-	await getStatus();
-	await getPeakBought();
-	
+	//token = set loginAndGetToken();
+	await fetchData(token);
 	const date = new Date();
-	if (settings.language == 1) {
-		monthName = date.toLocaleDateString("en-EN", { month: "long" });
-	} else if (settings.language == 3) {
-		monthName = date.toLocaleDateString("sv-SE", { month: "long" });
-	}
-  monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
   listwidget.backgroundColor = new Color("#000000");
   await renderSection("top");
-  await renderSection("middle");
-  await renderSection("bottom");  
+  //await renderSection("middle");
+  //await renderSection("bottom");  
   listwidget.addSpacer(10)
   let moms = listwidget.addStack();
   momstext = moms.addText("v. " + version);

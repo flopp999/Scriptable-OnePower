@@ -36,7 +36,7 @@ Download Scriptable here:
 ## 🔧 How to Install Code
 
 1. Go to the latest version of the script:  
-   [Download Growatt.js](https://github.com/flopp999/Scriptable-Growatt/releases/latest/download/Growatt.js)  
+   [Download Growatt.js](https://github.com/flopp999/Scriptable-Growatt/releases/latest/download/G.scriptable)  
    and copy the entire content.
 2. Open **Scriptable** and tap the **+** icon in the top right.
 3. Paste the script, then tap **Play** (▶️) to run it.

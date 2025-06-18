@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.11
+let version = 0.12
 let token;
 let deviceSn;
 let epv1 = 23
@@ -534,36 +534,48 @@ exportrow.addSpacer()
 l=exportrow.addImage(batterysocimage);
 l.imageSize = new Size(40, 40); // Extra kontroll på bildstorlek
 exportrow.addSpacer()
-exportrowr.addSpacer(18)
+exportrowr.addSpacer(10)
 
 let exportvalue = exportrowr.addStack()
 exportvalue.layoutVertically()
 
-exportvalue.addSpacer(15)
-exportvalue.addText(Math.round(solarkwh) + "\tkWh");
+exportvalue.addSpacer(6)
+let solarkwhtext = exportvalue.addText(Math.round(solarkwh) + " kWh");
 exportvalue.addSpacer(23)
-exportvalue.addText(Math.round(homekwh) + "\tkWh");
+let homewhtext = exportvalue.addText(Math.round(homekwh) + " kWh");
 exportvalue.addSpacer(23)
-exportvalue.addText(Math.round(exportkwh) + "\tkWh");
+let exportkwhtext = exportvalue.addText(Math.round(exportkwh) + " kWh");
 exportvalue.addSpacer(23)
-exportvalue.addText(Math.round(importkwh) + "\tkWh");
+let importkwhtext = exportvalue.addText(Math.round(importkwh) + " kWh");
 exportvalue.addSpacer(23)
-exportvalue.addText(Math.round(batterychargekwh) + "\tkWh");
+let batterychargekwhtext = exportvalue.addText(Math.round(batterychargekwh) + " kWh");
 exportvalue.addSpacer(23)
-exportvalue.addText(Math.round(batterydischargekwh) + "\tkWh");
+let batterydischargekwhtext = exportvalue.addText(Math.round(batterydischargekwh) + " kWh");
 exportvalue.addSpacer(23)
-exportvalue.addText(Math.round(batterysoc) + "%");
+let batterysoctext = exportvalue.addText(Math.round(batterysoc) + " %");
 
+solarkwhtext.textColor = new Color("#ffffff");
+homewhtext.textColor = new Color("#ffffff");
+exportkwhtext.textColor = new Color("#ffffff");
+importkwhtext.textColor = new Color("#ffffff");
+batterychargekwhtext.textColor = new Color("#ffffff");
+batterydischargekwhtext.textColor = new Color("#ffffff");
+batterysoctext.textColor = new Color("#ffffff");
+	
   listwidget.backgroundColor = new Color("#000000");
   await renderSection("top");
   //await renderSection("middle");
   //await renderSection("bottom");  
-  listwidget.addSpacer(10)
+  listwidget.addSpacer(10);
   let moms = listwidget.addStack();
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
-  return listwidget
+	moms.addSpacer();
+  momstext = moms.addText("updated " + hour ? ":" + minute);
+  momstext.font = Font.lightSystemFont(10);
+  momstext.textColor = new Color("#ffffff");
+  return listwidget;
 }
 
 widget = await createWidget();

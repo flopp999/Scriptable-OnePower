@@ -3,13 +3,13 @@
     "en": "",
     "sv": ""
   },
-  "peakbought": {
-    "en": "Peak Power",
-    "sv": "Högsta effekt"
+  "askfortoken": {
+    "en": "Enter the token created on the Growatt website",
+    "sv": "Ange token som skapats på Growatts webbplats"
   },
-  "activated": {
-    "en": "Activated",
-    "sv": "Aktiverad"
+  "askfordevicesn": {
+    "en": "Enter the serial number of your inverter",
+    "sv": "Ange serienumret för din växelriktare"
   },
   "deactivated": {
     "en": "Deactivated",

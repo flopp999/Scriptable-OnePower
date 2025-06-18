@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.15
+let version = 0.16
 let token;
 let deviceSn;
 let epv1 = 23
@@ -237,8 +237,8 @@ async function fetchData(jwtToken) {
 				const dataJSON = JSON.stringify(response, null ,2);
 				fm.writeString(filePathData, dataJSON);
 		  	console.log("Svar från Growatt:", response);
-		    settings.updatehour = DateObj.getHours();
-				settings.updateminute = DateObj.getMinutes();
+		    settings.updatehour = String(DateObj.getHours()).padStart(2,"0");
+				settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");
 				fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
 			} else {
 				console.error("❌ Fel statuskod:", req.response.statusCode);
@@ -251,17 +251,8 @@ async function fetchData(jwtToken) {
 	if (fm.fileExists(filePathData)) {
 		let modified = fm.modificationDate(filePathData);
 		let now = new Date();
-		let hoursDiff = (now - modified) / (1000 * 60 * 60);
-		let modifiedDay = modified.getDate();
-		let modifiedMonth = modified.getMonth();
-		let modifiedYear = modified.getFullYear();
-		let yesterday = new Date(now);
-		yesterday.setDate(now.getDate() - 1);
-		let isFromYesterday =
-		modifiedDay === yesterday.getDate() &&
-		modifiedMonth === yesterday.getMonth() &&
-		modifiedYear === yesterday.getFullYear();
-		if (hoursDiff > 6 || isFromYesterday) {
+		let minutesDiff = (now - modified) / (1000 * 60);
+		if ( minutesDiff > 10 ) {
 			await getData();
 		}
 	} else {

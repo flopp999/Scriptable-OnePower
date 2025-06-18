@@ -572,7 +572,7 @@ batterysoctext.textColor = new Color("#ffffff");
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
 	moms.addSpacer();
-  momstext = moms.addText("updated " + settings.hour + ":" + settings.minute);
+  momstext = moms.addText("updated " + settings.updatehour + ":" + settings.updateminute);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   return listwidget;

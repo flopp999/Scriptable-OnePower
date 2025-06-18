@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.13
+let version = 0.14
 let token;
 let deviceSn;
 let epv1 = 23
@@ -238,8 +238,8 @@ async function fetchData(jwtToken) {
 				const dataJSON = JSON.stringify(response, null ,2);
 				fm.writeString(filePathData, dataJSON);
 		  	console.log("Svar från Growatt:", response);
-		    settings.hour = DateObj.getHours();
-				settings.minute = DateObj.getMinutes();
+		    settings.updatehour = DateObj.getHours();
+				settings.updateminute = DateObj.getMinutes();
 				fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
 			} else {
 				console.error("❌ Fel statuskod:", req.response.statusCode);
@@ -289,8 +289,8 @@ async function fetchData(jwtToken) {
 async function createVariables() {
   token = settings.token;
   deviceSn = settings.deviceSn;
-	hour = settings.hour;
-	minute = settings.minute;
+	hour = settings.updatehour;
+	minute = settings.updateminute;
 }
 
 async function readTranslations() {
@@ -576,14 +576,14 @@ batterysoctext.textColor = new Color("#ffffff");
   await renderSection("top");
   //await renderSection("middle");
   //await renderSection("bottom");  
-  listwidget.addSpacer(10);
+  listwidget.addSpacer(0);
   let moms = listwidget.addStack();
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
 	moms.addSpacer();
   momstext = moms.addText("updated " + hour + ":" + minute);
-  momstext.font = Font.lightSystemFont(0);
+  momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   return listwidget;
 }

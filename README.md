@@ -39,8 +39,9 @@ Download Scriptable here:
    [Download G.scriptable](https://github.com/flopp999/Scriptable-Growatt/releases/latest/download/G.scriptable)  
    and open the file, then choose to share it, with Scriptable.
 2. **Scriptable** should now open.
-3. Tap **Play** (▶️) to run it.
-4. Follow the setup instructions shown on screen.
+3. Tap **➕Add to My Scripts**.
+4. Tap **Play** (▶️) to run it.
+5. Follow the setup instructions shown on screen.
 
 ## 🌐 Language Support
 

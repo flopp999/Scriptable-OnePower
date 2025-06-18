@@ -5,8 +5,8 @@
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
 let version = 0.1
-const token = "";    // <-- Fyll i ditt token här
-const deviceSn = "";            // Serienummer på enheten
+let token;
+let deviceSn;
 let epv1 = 23
 let epv2 = 18
 
@@ -27,12 +27,6 @@ req.headers = {
 req.body = `tlx_sn=${encodeURIComponent(deviceSn)}`;
 //const baseURL = "https://api.checkwatt.se";
 let batteryCapacityKwh;
-let peakBought;
-let token;
-let firstDayStr;
-let lastDayStr;
-let revenues;
-let total;
 let widget;
 let day;
 let date;
@@ -336,7 +330,7 @@ async function askForLanguage() {
 // Include extra cost?
 async function askForToken() {
   let alert = new Alert();
-  alert.title = "Token");
+  alert.title = "Token";
   alert.message = (t("askfortoken") + "?");
   alert.addTextField("abc123abc123abc123",settings.token).setDefaultKeyboard();
   alert.addAction("OK");

@@ -6,13 +6,15 @@ New versions of the script will be updated automatically.
 
 ---
 
-## ✨ Support
+## 💖 Support the Developer
 
-Like the project? Why not toss a coin to your developer — just €5 keeps the magic going! 💰  
+This widget is free to use, but if you find it helpful and want to support its continued development, you're welcome to make a small donation.
+There’s absolutely no obligation — but every coffee helps! ☕
+
 <a href="https://ko-fi.com/flopp999" target="_blank">
   <img src="https://github.githubassets.com/assets/ko_fi-53a60c17e75c.svg" width="32" height="32" alt="Buy me a coffee">https://ko-fi.com/flopp999
 </a>
-
+<br>
 <a href="https://www.buymeacoffee.com/flopp999" target="_blank">
   <img src="bmc-logo-yellow.png" width="32" height="32" alt="Buy me a coffee">https://www.buymeacoffee.com/flopp999
 </a>  
@@ -23,25 +25,38 @@ Like the project? Why not toss a coin to your developer — just €5 keeps the 
 
 **Personal use only.** See [`LICENSE`](LICENSE) for details.
 
+---
+
 ## ⚠️ Requirements
 
 - iPhone or iPad  
 - Scriptable app (free from the App Store)
+
+---
 
 ## 📲 Install Scriptable
 
 Download Scriptable here:  
 [https://apps.apple.com/ca/app/scriptable/id1405459188](https://apps.apple.com/ca/app/scriptable/id1405459188)
 
+---
+
 ## 🔧 How to Install Code
 
-1. Go to the latest version of the script:  
-   [Download G.scriptable](https://github.com/flopp999/Scriptable-Growatt/releases/latest/download/G.scriptable)  
-   and open the file, then choose to share it, with Scriptable.
-2. **Scriptable** should now open.
-3. Tap **➕Add to My Scripts**.
-4. Tap **Play** (▶️) to run it.
-5. Follow the setup instructions shown on screen.
+1. Open the link on your iPhone (not on a computer):
+👉 [Download G.scriptable](https://github.com/flopp999/Scriptable-Growatt/releases/latest/download/G.scriptable)
+
+2. Once the file opens, tap the Share icon (bottom of the screen).
+
+3. In the share menu, select Scriptable.
+
+4. The Scriptable app will open automatically. Tap **➕ Add to My Scripts** to save the script.
+
+5. Tap ▶️ Play to run the script.
+
+6. Follow the on-screen setup instructions.
+
+📝 Note: You must download and open the file on your iPhone for Scriptable to handle it correctly.
 
 ## 🌐 Language Support
 

@@ -16,8 +16,8 @@ There’s absolutely no obligation — but every coffee helps! ☕
 </a>
 <br>
 <a href="https://www.buymeacoffee.com/flopp999" target="_blank">
-  <img src="bmc-logo-yellow.png" width="32" height="32" alt="Buy me a coffee">https://www.buymeacoffee.com/flopp999
-</a>  
+  <img src="https://cdn.buymeacoffee.com/static/prod/9.7.2/build/assets/apple-icon-57x57-36252584.png" width="32" height="32" alt="Buy me a coffee">https://www.buymeacoffee.com/flopp999
+</a>   
 
 ---
 

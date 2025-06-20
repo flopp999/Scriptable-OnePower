@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.16
+let version = 0.1
 let token;
 let deviceSn;
 let epv1 = 23
@@ -17,8 +17,6 @@ let importkwh = 1
 let batterychargekwh = 5
 let batterydischargekwh = 7
 // === API-anrop ===
-
-//const baseURL = "https://api.checkwatt.se";
 let batteryCapacityKwh;
 let widget;
 let day;
@@ -35,13 +33,11 @@ let currentLang;
 const fileNameSettings = Script.name() + "_Settings.json";
 const fileNameTranslations = Script.name() + "_Translations.json";
 const fileNameData = Script.name() + "_Data.json";
-const fileNameDataYear = Script.name() + "_DataYear.json";
 const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
 const filePathSettings = fm.joinPath(dir, fileNameSettings);
 const filePathTranslations = fm.joinPath(dir, fileNameTranslations);
 const filePathData = fm.joinPath(dir, fileNameData);
-const filePathdataYear = fm.joinPath(dir, fileNameDataYear);
 
 if (!config.runsInWidget){
   await updatecode();
@@ -81,12 +77,12 @@ async function start() {
 
 async function updatecode() {
   try {
-    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Version.txt");
+    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Version.txt");
     req.timeoutInterval = 1;
     const serverVersion = await req.loadString()
     if (version < serverVersion) {
       try {
-        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Growatt.js");
+        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/OnePower.js");
         req.timeoutInterval = 1;
         const response = await req.load();
         const status = req.response.statusCode;
@@ -96,7 +92,7 @@ async function updatecode() {
         const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
 
-        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Translations.json");
+        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Translations.json");
         reqTranslations.timeoutInterval = 1;
         const responseTranslations = await reqTranslations.load();
         const statusTranslations = reqTranslations.response.statusCode;
@@ -285,7 +281,7 @@ async function createVariables() {
 
 async function readTranslations() {
   if (!fm.fileExists(filePathTranslations)) {
-    let url = "https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Translations.json";
+    let url = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Translations.json";
     let req = new Request(url);
     req.timeoutInterval = 1;
     let content = await req.loadString();

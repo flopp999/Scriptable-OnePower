@@ -85,7 +85,6 @@ if (!config.runsInWidget){
   await readTranslations();
   await readsettings();
   await createVariables();
-  await start();
   await createVariables();
 }
 
@@ -102,32 +101,6 @@ if (config.runsInWidget){
 if (config.runsInWidget){
   await updatecode();
   await createVariables();
-}
-
-async function start() {
-  const [topType, topDay] = settings.showattop.split(",").map(s => s.trim());
-  const [middleType, middleDay] = settings.showatmiddle.split(",").map(s => s.trim());
-  const [bottomType, bottomDay] = settings.showatbottom.split(",").map(s => s.trim());
-  let alert = new Alert();
-  let vatText = includevat == 1 ? t("yes") : t("no")
-  alert.message = 
-    t("changesetup") + "?\n" +
-    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(topType) + (topDay ? ", " + t(topDay) : "") + "\n" +
-    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(middleType) + (middleDay ? ", " + t(middleDay) : "") + "\n" +
-    t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "") + "\n" +
-    t("area") + ": " + area + "\n" +
-    "Extras: " + extras + "\n" +
-    t("withvat") + ": " + vatText + "\n";
-  if (includevat == 1) {
-    alert.message += t("vat") + ": " + vat;
-  }
-  alert.addAction(t("yes"));
-  alert.addAction(t("no"));
-  let index = await alert.presentAlert();
-  if (index === 0) {
-    settings = await ask();
-    fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
-  }
 }
 
 async function updatecode() {
@@ -911,67 +884,6 @@ if (config.runsInWidget) {
     if (response === -1) {
       Safari.open("https://buymeacoffee.com/flopp999");
     }
-  }
-}
-
-async function start() {
-  const [topType, topDay] = settings.showattop.split(",").map(s => s.trim());
-  const [middleType, middleDay] = settings.showatmiddle.split(",").map(s => s.trim());
- // const [bottomType, bottomDay] = settings.showatbottom.split(",").map(s => s.trim());
-  let alert = new Alert();
-  //let vatText = includevat == 1 ? t("yes") : t("no")
-  alert.message = 
-    t("changesetup") + "?\n" +
-    t("top").charAt(0).toUpperCase() + t("top").slice(1) + ":\n" + t(topType) + (topDay ? ", " + t(topDay) : "") + "\n" +
-    t("middle").charAt(0).toUpperCase() + t("middle").slice(1) + ":\n" + t(middleType) + (middleDay ? ", " + t(middleDay) : "")
-    //t("bottom").charAt(0).toUpperCase() + t("bottom").slice(1) + ":\n" + t(bottomType) + (bottomDay ? ", " + t(bottomDay) : "")
-  alert.addAction(t("yes"));
-  alert.addAction(t("no"));
-  let index = await alert.presentAlert();
-  if (index === 0) {
-    settings = await ask();
-    fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
-  }
-}
-
-async function updatecode() {
-  try {
-    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Version.txt");
-    req.timeoutInterval = 1;
-    const serverVersion = await req.loadString()
-    if (version < serverVersion) {
-      try {
-        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/OnePower.js");
-        req.timeoutInterval = 1;
-        const response = await req.load();
-        const status = req.response.statusCode;
-        if (status !== 200) {
-          throw new Error(`Error: HTTP ${status}`);
-        }
-        const codeString = response.toRawString();
-        fm.writeString(module.filename, codeString);
-
-        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Translations.json");
-        reqTranslations.timeoutInterval = 1;
-        const responseTranslations = await reqTranslations.load();
-        const statusTranslations = reqTranslations.response.statusCode;
-        if (statusTranslations !== 200) {
-          throw new Error(`Error: HTTP ${statusTranslations}`);
-        }
-        const codeStringTranslations = responseTranslations.toRawString();
-        fm.writeString(filePathTranslations, codeStringTranslations);
-        //fm.remove(filePathSettings);
-        let updateNotify = new Notification();
-        updateNotify.title = Script.name();
-        updateNotify.body = "New version installed, " + serverVersion;
-        updateNotify.sound = "default";
-        await updateNotify.schedule();
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  } catch (error) {
-    console.error("The update failed. Please try again later." + error);
   }
 }
 

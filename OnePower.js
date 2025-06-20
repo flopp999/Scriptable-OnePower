@@ -105,12 +105,12 @@ if (config.runsInWidget){
 
 async function updatecode() {
   try {
-    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Version.txt");
+    const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Version.txt");
     req.timeoutInterval = 1;
     const serverVersion = await req.loadString()
     if (version < serverVersion) {
       try {
-        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-NordPool/main/Nordpool.js");
+        const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/OnePower.js");
         req.timeoutInterval = 1;
         const response = await req.load();
         const status = req.response.statusCode;

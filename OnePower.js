@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.11
+let version = 0.12
 let allValues = [];
 let widget;
 let daybefore;
@@ -732,7 +732,7 @@ async function createWidget(){
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
-  moms.addSpacer(55);
+  moms.addSpacer(50);
   momstext = moms.addText(t("updated") + String(updatehour) + ":" + String(updateminute));
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");

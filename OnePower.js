@@ -1,8 +1,5 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
-// icon-color: light-gray; icon-glyph: magic;
-// Variables used by Scriptable.
-// These must be at the very top of the file. Do not edit.
 // icon-color: blue; icon-glyph: magic;
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999

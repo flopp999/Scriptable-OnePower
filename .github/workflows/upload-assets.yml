@@ -17,16 +17,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Replace hardcoded URL in EiB.js
+      - name: Replace hardcoded URL in OnePower.js
         run: |
-          sed -i 's#https://raw.githubusercontent.com/flopp999/Scriptable-EiB/main/#https://github.com/flopp999/Scriptable-EiB/releases/latest/download/#g' EiB.js
-          sed -i 's#FileManager\.iCloud()#FileManager.local()#g' EiB.js
+          sed -i 's#https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/#https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/#g' OnePower.js
+          sed -i 's#FileManager\.iCloud()#FileManager.local()#g' OnePower.js
 
       - name: Upload assets to release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            EiB.js
+            OnePower.js
             Translations.json
             Version.txt
         env:

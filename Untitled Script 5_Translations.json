@@ -1,0 +1,182 @@
+{
+  "": {
+    "en": "",
+    "sv": ""
+  },
+  "askfortoken": {
+    "en": "Enter the token created on the Growatt website",
+    "sv": "Ange token som skapats på Growatts webbplats"
+  },
+  "askfordevicesn": {
+    "en": "Enter the serial number of your inverter",
+    "sv": "Ange serienumret för din växelriktare"
+  },
+  "deactivated": {
+    "en": "Deactivated",
+    "sv": "Avaktiverad"
+  },
+  "exclvat": {
+    "en": "Without VAT",
+    "sv": "Utan moms"
+  },  
+  "inclvat": {
+    "en": "With VAT",
+    "sv": "Med moms"
+  },
+  "line": {
+    "en": "Line",
+    "sv": "Linje"
+  },
+  "choosegraphtype": {
+    "en": "Select chart type",
+    "sv": "Välj typ av graf"
+  },
+  "now": {
+    "en": "now",
+    "sv": "nu"
+  },
+  "top": {
+    "en": "at the top",
+    "sv": "högst upp"
+  },
+  "middle": {
+    "en": "in the middle",
+    "sv": "i mitten"
+  },
+  "highest": {
+    "en": "highest",
+    "sv": "högsta"
+  },
+  "updated": {
+    "en": "Updated ",
+    "sv": "Uppdaterad "
+  },
+  "today": {
+    "en": "Today",
+    "sv": "Idag"
+  },
+  "showday": {
+    "en": "Electricity price for",
+    "sv": "Elpris för"
+  },
+  "nothing": {
+    "en": "Nothing",
+    "sv": "Inget"
+  },
+  "thisyear": {
+    "en": "This Year",
+    "sv": "Detta året"
+  },
+  "graph": {
+    "en": "Graph",
+    "sv": "Graf"
+  },
+  "table": {
+    "en": "Table",
+    "sv": "Tabell"
+  },
+  "showwhat": {
+    "en": "What should the widget show",
+    "sv": "Vad ska widgeten visa"
+  },
+  "showtable": {
+    "en": "Do you want the electricity prices in a table",
+    "sv": "Vill du ha elpriserna i en tabell"
+  },
+  "showgraph": {
+    "en": "Do you want the electricity prices in a graph",
+    "sv": "Vill du ha elpriserna i en graf"
+  },
+  "mode": {
+    "en": "Mode",
+    "sv": "Driftläge"
+  },
+  "vat": {
+    "en": "VAT",
+    "sv": "Moms"
+  },
+  "buymeacoffee": {
+    "en": "Would you like to buy me a coffee(€5)",
+    "sv": "Vill du skänka mig en kaffe(€5)"
+  },
+  "changesetup": {
+    "en": "Do you want to change the setup",
+    "sv": "Vill du ändra sparade inställningar"
+  },
+  "ofcourse": {
+    "en": "Of course 👍",
+    "sv": "Självklart 👍"
+  },
+    "noway": {
+    "en": "No way 😊",
+    "sv": "Glöm det 😊"
+  },
+    "no": {
+    "en": "No",
+    "sv": "Nej"
+  },
+    "yes": {
+    "en": "Yes",
+    "sv": "Ja"
+  },
+    "thismonth": {
+    "en": "This month",
+    "sv": "Denna månaden"
+  },
+    "extraelectricitycost": {
+    "en": "Extra Electricity Cost",
+    "sv": "Extra elkostnader"
+  },
+  "withvat": {
+    "en": "With VAT",
+    "sv": "Med moms"
+  },
+  "down": {
+    "en": "Down",
+    "sv": "Ner"
+  },  
+  "doyouwantstatus": {
+    "en": "Do you want to show the status",
+    "sv": "Vill du visa status"
+  },
+  "up": {
+    "en": "Up",
+    "sv": "Upp"
+  },
+  "discharge": {
+    "en": "Discharge",
+    "sv": "Urladdning"
+  },
+  "charge": {
+    "en": "Charge",
+    "sv": "Laddning"
+  },
+  "image_load_error": {
+    "en": "Could not load image",
+    "sv": "Kunde inte ladda bilden"
+  },
+  "lowest": {
+    "en": "lowest",
+    "sv": "lägsta"
+  },
+  "average": {
+    "en": "average",
+    "sv": "medel"
+  },
+  "askforpassword": {
+    "en": "What is your password for EiB",
+    "sv": "Vad är ditt lösenord till EiB"
+  },
+  "password": {
+    "en": "Password",
+    "sv": "Lösenord"
+  },
+  "username": {
+    "en": "Username",
+    "sv": "Användarnamn"
+  },
+  "askforusername": {
+    "en": "What is your username for EiB",
+    "sv": "Vad är ditt användarnamn till EiB"
+  }
+}

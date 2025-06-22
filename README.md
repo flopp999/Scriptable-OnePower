@@ -1,4 +1,4 @@
-# ⚡️ Growatt Widget
+# ⚡️ OenPower Widget
 
 A simple Scriptable widget that displays data from **Growatt** directly on your iPhone or iPad.  
 Data is fetched directly from https://openapi.growatt.com/  
@@ -44,7 +44,7 @@ Download Scriptable here:
 ## 🔧 How to Install Code
 
 1. Open the link on your iPhone (not on a computer):
-👉 [Download G.scriptable](https://github.com/flopp999/Scriptable-Growatt/releases/latest/download/G.scriptable)
+👉 [Download G.scriptable](https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/G.scriptable)
 
 2. Once the file opens, tap the Share icon (bottom of the screen).
 
@@ -63,7 +63,7 @@ Download Scriptable here:
 - ✅ English  
 - ✅ Swedish  
 
-Want support for another language? [Open an issue](https://github.com/flopp999/Scriptable-Growatt/issues) and I’ll add it!
+Want support for another language? [Open an issue](https://github.com/flopp999/Scriptable-OnePower/issues) and I’ll add it!
 
 ---
 
@@ -77,7 +77,7 @@ Want support for another language? [Open an issue](https://github.com/flopp999/S
 ## 📬 Feedback
 
 Found a bug or have a feature request?  
-[Open an issue](https://github.com/flopp999/Scriptable-Growatt/issues)
+[Open an issue](https://github.com/flopp999/Scriptable-OnePower/issues)
 
 ---
 

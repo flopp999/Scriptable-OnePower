@@ -812,7 +812,7 @@ if (loadpercent < 20) {
 } else if (loadpercent < 40) {
   homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentorange.png")
 } else if (loadpercent < 70) {
-  homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentyelloe.png")
+  homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentyellow.png")
 } else {
   homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentgreen.png")
 }

@@ -122,7 +122,7 @@ async function updatecode() {
 	    console.error(`❌ Fel vid nedladdning av ${filename}:`, error)
 	  }
 	}
-lä
+
         //fm.remove(filePathSettings);
         let updateNotify = new Notification();
         updateNotify.title = Script.name();
@@ -819,9 +819,9 @@ if (loadpercent < 20) {
 
 //let homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentgreen.png")
 homepercentimage = await fm.readImage(homepercentpath)
-let batterychargepath = fm.joinPath(fm.documentsDirectory(), "batterydischarge.png")
+let batterychargepath = fm.joinPath(fm.documentsDirectory(), "discharge.png")
 batterychargeimage = await fm.readImage(batterychargepath)
-let batterydischargepath = fm.joinPath(fm.documentsDirectory(), "batterycharge.png")
+let batterydischargepath = fm.joinPath(fm.documentsDirectory(), "charge.png")
 batterydischargeimage = await fm.readImage(batterydischargepath)
 let batterysocpath
 if (batterysoc < 20) {

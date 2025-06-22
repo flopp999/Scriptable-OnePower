@@ -90,16 +90,57 @@ async function updatecode() {
         const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
 
-        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Translations.json");
-        reqTranslations.timeoutInterval = 1;
-        const responseTranslations = await reqTranslations.load();
-        const statusTranslations = reqTranslations.response.statusCode;
-        if (statusTranslations !== 200) {
-          throw new Error(`Error: HTTP ${statusTranslations}`);
-        }
-        const codeStringTranslations = responseTranslations.toRawString();
-        fm.writeString(filePathTranslations, codeStringTranslations);
-        fm.remove(filePathSettings);
+	const baseUrl = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/"
+	
+	// 📂 Filer att hämta – json + bilder
+	const filesToDownload = [
+	  "Translations.json",
+	  "batterysocgreen.png",
+	  "batterysocorange.png",
+	  "batterysocred.png",
+	  "batterysocyellow.png",
+	  "charge.png",
+	  "discharge.png",
+	  "export.png",
+	  "home.png",
+	  "homepercentgreen.png",
+	  "homepercentorange.png",
+	  "homepercentred.png",
+	  "homepercentyellow.png",
+	  "import.png",
+	  "logo.png",
+	  "sun.png"
+	]
+	
+	// 🔁 Ladda ner varje fil
+	for (let filename of filesToDownload) {
+	  const url = baseUrl + filename
+	  const filePath = fm.joinPath(dir, filename)
+	
+	  try {
+	    const req = new Request(url)
+	    req.timeoutInterval = 5
+	
+	    if (filename.endsWith(".json")) {
+	      const response = await req.load()
+	      const status = req.response.statusCode
+	      if (status !== 200) throw new Error(`HTTP ${status}`)
+	      const text = response.toRawString()
+	      fm.writeString(filePath, text)
+	      console.log(`✅ ${filename} (JSON) nedladdad`)
+	    } else if (filename.endsWith(".png")) {
+	      const image = await req.loadImage()
+	      fm.writeImage(filePath, image)
+	      console.log(`✅ ${filename} (bild) nedladdad`)
+	    } else {
+	      console.warn(`⚠️ Okänt filformat: ${filename} – hoppas det funkar!`)
+	    }
+	  } catch (error) {
+	    console.error(`❌ Fel vid nedladdning av ${filename}:`, error)
+	  }
+	}
+
+        //fm.remove(filePathSettings);
         let updateNotify = new Notification();
         updateNotify.title = Script.name();
         updateNotify.body = "New version installed, " + serverVersion;

@@ -1,4 +1,4 @@
-# ⚡️ OenPower Widget
+# ⚡️ OnePower Widget
 
 A simple Scriptable widget that displays data from **Growatt** directly on your iPhone or iPad.  
 Data is fetched directly from https://openapi.growatt.com/  

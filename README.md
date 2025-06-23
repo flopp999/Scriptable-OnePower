@@ -83,8 +83,8 @@ Found a bug or have a feature request?
 
 ## 🧩 Widget Guide
 
-![plot](Scriptable-Growatt.png)
+![plot](Scriptable-OnePower.png)
 
 ---
-This widget is an independent entity and is not affiliated with or endorsed by SHENZHEN GROWATT NEW ENERGY Co., Ltd.  
+This widget is an independent entity and is not affiliated with or endorsed by SHENZHEN GROWATT NEW ENERGY Co., Ltd. or Nord Pool
 Made with ❤️ by [@flopp999](https://github.com/flopp999)

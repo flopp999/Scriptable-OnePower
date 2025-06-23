@@ -249,7 +249,7 @@ async function createVariables() {
 
 async function readTranslations() {
   if (!fm.fileExists(filePathTranslations)) {
-    let url = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/assets/Translations.json";
+    let url = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Translations.json";
     let req = new Request(url);
     req.timeoutInterval = 1;
     let content = await req.loadString();

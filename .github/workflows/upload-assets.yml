@@ -17,16 +17,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Replace URLs in OnePower.js except baseUrl line
+      - name: Replace URLs in OnePower.js except lines with /assets/
         run: |
           awk '
-            /const baseUrl = "https:\/\/raw\.githubusercontent\.com\/flopp999\/Scriptable-OnePower\/main\/assets\// {
-              # Om det är just baseUrl-raden, skriv ut den oförändrad
+            /\/assets\// {
+              # Om raden innehåller "/assets/", hoppa över ändringar
               print
               next
             }
             {
-              # Ersätt URL på övriga rader
+              # Ersätt URL
               gsub(/https:\/\/raw\.githubusercontent\.com\/flopp999\/Scriptable-OnePower\/main\//,
                    "https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/")
               # Ersätt FileManager

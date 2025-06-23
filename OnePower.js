@@ -105,7 +105,7 @@ async function updatecode() {
         const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
 				
-        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Translations.json");
+        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Translations.json");
         reqTranslations.timeoutInterval = 1;
         const responseTranslations = await reqTranslations.load();
         const statusTranslations = reqTranslations.response.statusCode;

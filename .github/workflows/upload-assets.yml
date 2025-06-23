@@ -17,10 +17,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Replace hardcoded URL in OnePower.js
+      - name: Replace URLs in OnePower.js except baseUrl line
         run: |
-          sed -i 's#https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/#https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/#g' OnePower.js
-          sed -i 's#FileManager\.iCloud()#FileManager.local()#g' OnePower.js
+          awk '
+            # Om raden inte innehåller baseUrl, gör URL-ersättning
+            !/const baseUrl = "https:\/\/raw\.githubusercontent\.com\/flopp999\/Scriptable-OnePower\/main\/assets\// {
+              gsub(/https:\/\/raw\.githubusercontent\.com\/flopp999\/Scriptable-OnePower\/main\//,
+                   "https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/")
+            }
+            # Alltid: ersätt iCloud med local
+            {
+              gsub(/FileManager\.iCloud\(\)/, "FileManager.local()")
+              print
+            }
+          ' OnePower.js > tmp && mv tmp OnePower.js
 
       - name: Upload assets to release
         uses: softprops/action-gh-release@v1

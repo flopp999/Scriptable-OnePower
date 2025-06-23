@@ -116,7 +116,7 @@ async function updatecode() {
 				    console.error(`❌ Fel vid nedladdning av ${filename}:`, error)
 				  }
 				}
-			  let updateNotify = new Notification();
+			  let Notify = new Notification();
 			  updateNotify.title = Script.name();
 			  updateNotify.body = "New version installed, " + serverVersion;
 			  updateNotify.sound = "default";

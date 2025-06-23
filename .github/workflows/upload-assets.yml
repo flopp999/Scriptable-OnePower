@@ -17,9 +17,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Find and Replace URL
+      - name: Replace Version.txt URL
         run: |
-          sed -i -E 's|https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/(?!assets/)(.*)|https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/\1|g' OenPower.js
+          # Ersätter URL för Version.txt
+          # Denna rad matchar exakt raden med Version.txt och ändrar den.
+          sed -i 's|"https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Version.txt"|"https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/Version.txt"|g' OnePower.js
+
+      - name: Replace OnePower.js URL
+        run: |
+          # Ersätter URL för OnePower.js
+          # Matchar exakt raden med OnePower.js och ändrar den.
+          sed -i 's|"https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/OnePower.js"|"https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/OnePower.js"|g' OnePower.js
+
+      - name: Replace Translations.json URL
+        run: |
+          # Ersätter URL för Translations.json när den är en del av 'let url ='
+          # Detta är den specifika raden som ska peka på 'assets/' i releasen.
+          sed -i 's|"https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Translations.json"|"https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/assets/Translations.json"|g' OnePower.js
 
       - name: Upload assets to release
         uses: softprops/action-gh-release@v1

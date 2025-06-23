@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.13
+let version = 0.14
 let allValues = [];
 let widget;
 let day;
@@ -53,6 +53,54 @@ if (config.runsInWidget){
   await createVariables();
 }
 
+async function downLoadFiles() {
+	const baseUrl = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/assets/"
+	// Filer att hämta – json + bilder
+	const filesToDownload = [
+		"Translations.json",
+		"batterysocgreen.png",
+		"batterysocorange.png",
+		"batterysocred.png",
+		"batterysocyellow.png",
+		"charge.png",
+		"discharge.png",
+		"export.png",
+		"home.png",
+		"homepercentgreen.png",
+		"homepercentorange.png",
+		"homepercentred.png",
+		"homepercentyellow.png",
+		"import.png",
+		"logo.png",
+		"sun.png"
+	]
+	// Ladda ner varje fil
+	for (let filename of filesToDownload) {
+		const url = baseUrl + filename
+		const filePath = fm.joinPath(dir, filename)
+		try {
+			const req = new Request(url)
+			req.timeoutInterval = 5
+			if (filename.endsWith(".json")) {
+				const response = await req.load()
+				const status = req.response.statusCode
+				if (status !== 200) throw new Error(`HTTP ${status}`)
+				const text = response.toRawString()
+				fm.writeString(filePath, text)
+				console.log(`✅ ${filename} (JSON) nedladdad`)
+			} else if (filename.endsWith(".png")) {
+				const image = await req.loadImage()
+				fm.writeImage(filePath, image)
+				console.log(`✅ ${filename} (bild) nedladdad`)
+			} else {
+				console.warn(`⚠️ Okänt filformat: ${filename} – hoppas det funkar!`)
+			}
+		} catch (error) {
+			console.error(`❌ Fel vid nedladdning av ${filename}:`, error)
+		}
+	}
+}
+
 async function updatecode() {
   try {
     const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Version.txt");
@@ -69,54 +117,8 @@ async function updatecode() {
         }
         const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
-				const baseUrl = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/assets/"
-
-				// Filer att hämta – json + bilder
-				const filesToDownload = [
-				  "Translations.json",
-				  "batterysocgreen.png",
-				  "batterysocorange.png",
-				  "batterysocred.png",
-				  "batterysocyellow.png",
-				  "charge.png",
-				  "discharge.png",
-				  "export.png",
-				  "home.png",
-				  "homepercentgreen.png",
-				  "homepercentorange.png",
-				  "homepercentred.png",
-				  "homepercentyellow.png",
-				  "import.png",
-				  "logo.png",
-				  "sun.png"
-				]
-
-				// Ladda ner varje fil
-				for (let filename of filesToDownload) {
-				  const url = baseUrl + filename
-				  const filePath = fm.joinPath(dir, filename)
-				  try {
-				    const req = new Request(url)
-				    req.timeoutInterval = 5
-				    if (filename.endsWith(".json")) {
-				      const response = await req.load()
-				      const status = req.response.statusCode
-				      if (status !== 200) throw new Error(`HTTP ${status}`)
-				      const text = response.toRawString()
-				      fm.writeString(filePath, text)
-				      console.log(`✅ ${filename} (JSON) nedladdad`)
-				    } else if (filename.endsWith(".png")) {
-				      const image = await req.loadImage()
-				      fm.writeImage(filePath, image)
-				      console.log(`✅ ${filename} (bild) nedladdad`)
-				    } else {
-				      console.warn(`⚠️ Okänt filformat: ${filename} – hoppas det funkar!`)
-				    }
-				  } catch (error) {
-				    console.error(`❌ Fel vid nedladdning av ${filename}:`, error)
-				  }
-				}
-			  let Notify = new Notification();
+				await downLoadFiles();
+				let Notify = new Notification();
 			  updateNotify.title = Script.name();
 			  updateNotify.body = "New version installed, " + serverVersion;
 			  updateNotify.sound = "default";

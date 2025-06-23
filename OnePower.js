@@ -77,7 +77,7 @@ async function downLoadFiles() {
 	// Ladda ner varje fil
 	for (let filename of filesToDownload) {
 		const url = baseUrl + filename
-		const filePath = fm.joinPath(dir, Script.name() + filename)
+		const filePath = fm.joinPath(dir, Script.name() + "_" + filename)
 		try {
 			const req = new Request(url)
 			req.timeoutInterval = 5
@@ -87,16 +87,16 @@ async function downLoadFiles() {
 				if (status !== 200) throw new Error(`HTTP ${status}`)
 				const text = response.toRawString()
 				fm.writeString(filePath, text)
-				console.log(`✅ ${filename} (JSON) nedladdad`)
+				console.log(`${filename} (JSON) nedladdad`)
 			} else if (filename.endsWith(".png")) {
 				const image = await req.loadImage()
 				fm.writeImage(filePath, image)
-				console.log(`✅ ${filename} (bild) nedladdad`)
+				console.log(`${filename} (bild) nedladdad`)
 			} else {
-				console.warn(`⚠️ Okänt filformat: ${filename} – hoppas det funkar!`)
+				console.warn(`Okänt filformat: ${filename} – hoppas det funkar!`)
 			}
 		} catch (error) {
-			console.error(`❌ Fel vid nedladdning av ${filename}:`, error)
+			console.error(`Fel vid nedladdning av ${filename}:`, error)
 		}
 	}
 }
@@ -208,7 +208,7 @@ async function fetchData(jwtToken) {
         settings.updateminute = String(DateObj.getMinutes()).padStart(2, "0");
 				fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
 			} else {
-				console.error("❌ Fel statuskod:", req.response.statusCode);
+				console.error("Fel statuskod:", req.response.statusCode);
 			}
 		} catch (err) {
 	  	console.error("Fel vid API-anrop:", err);

@@ -27,7 +27,7 @@ let hour;
 let minute;
 let translationData;
 let currentLang;
-const fileNameSettings = "_Settings.json";
+const fileNameSettings = Script.name() + "_Settings.json";
 const fileNameTranslations = Script.name() + "_Translations.json";
 const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();

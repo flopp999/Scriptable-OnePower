@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.15
+let version = 0.16
 let allValues = [];
 let widget;
 let day;
@@ -57,7 +57,6 @@ async function downLoadFiles() {
 	const baseUrl = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/assets/"
 	// Filer att hämta – json + bilder
 	const filesToDownload = [
-		"Translations.json",
 		"batterysocgreen.png",
 		"batterysocorange.png",
 		"batterysocred.png",
@@ -117,6 +116,16 @@ async function updatecode() {
         }
         const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
+				
+        const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Translations.json");
+        reqTranslations.timeoutInterval = 1;
+        const responseTranslations = await reqTranslations.load();
+        const statusTranslations = reqTranslations.response.statusCode;
+        if (statusTranslations !== 200) {
+          throw new Error(`Error: HTTP ${statusTranslations}`);
+        }
+        const codeStringTranslations = responseTranslations.toRawString();
+        fm.writeString(filePathTranslations, codeStringTranslations);
 				await downLoadFiles();
 				let Notify = new Notification();
 			  updateNotify.title = Script.name();

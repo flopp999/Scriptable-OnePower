@@ -407,8 +407,7 @@ async function Graph(day, graphOption) {
       counterdot += 1
     }
     while (counterdot < 24)
-    log(settings.height)
-    let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h="+settings.height+"&c="
+    let graphtoday = "https://quickchart.io/chart?bkg=black&w=1300&h=" + settings.height + "&c="
     graphtoday += encodeURI("{\
       data: { \
         labels: ["+hours+"],\
@@ -465,7 +464,7 @@ async function Graph(day, graphOption) {
             }\
           }\
     }")
-    graphtoday.timeoutInterval = 1;
+    graphtoday.timeoutInterval = 5;
     const GRAPH = await new Request(graphtoday).loadImage()
     let emptyrow = listwidget.addStack()
     listwidget.addSpacer(5)

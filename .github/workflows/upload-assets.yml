@@ -33,7 +33,7 @@ jobs:
         run: |
           # Ersätter URL för Translations.json när den är en del av 'let url ='
           # Detta är den specifika raden som ska peka på 'assets/' i releasen.
-          sed -i 's|"https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Translations.json"|"https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/assets/Translations.json"|g' OnePower.js
+          sed -i 's|"https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Translations.json"|"https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/Translations.json"|g' OnePower.js
 
       - name: Upload assets to release
         uses: softprops/action-gh-release@v1

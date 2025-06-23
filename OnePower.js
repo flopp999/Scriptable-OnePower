@@ -158,6 +158,7 @@ async function readsettings() {
       if (config.runsInWidget) {
         return;
       }
+			await downLoadFiles();
       await askForLanguage();
       await readTranslations();
       let alert = new Alert();

@@ -17,19 +17,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Replace URLs in OnePower.js except lines with /assets/
+      - name: Replace URLs in OnePower.js except /assets/ lines
         run: |
           awk '
-            /\/assets\// {
-              # Om raden innehåller "/assets/", hoppa över ändringar
+            # Om raden innehåller raw.githubusercontent.../assets/, lämna den orörd
+            /https:\/\/raw\.githubusercontent\.com\/flopp999\/Scriptable-OnePower\/main\/assets\// {
               print
               next
             }
             {
-              # Ersätt URL
+              # Annars ersätt raw-URL och FileManager
               gsub(/https:\/\/raw\.githubusercontent\.com\/flopp999\/Scriptable-OnePower\/main\//,
                    "https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/")
-              # Ersätt FileManager
               gsub(/FileManager\.iCloud\(\)/, "FileManager.local()")
               print
             }

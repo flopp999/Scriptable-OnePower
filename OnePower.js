@@ -4,10 +4,9 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.12
+let version = 0.13
 let allValues = [];
 let widget;
-let daybefore;
 let day;
 let date;
 let prices;
@@ -35,7 +34,6 @@ const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
 const filePathSettings = fm.joinPath(dir, fileNameSettings);
 const filePathTranslations = fm.joinPath(dir, fileNameTranslations);
-let keys = [];
 let token;
 let deviceSn;
 
@@ -72,72 +70,66 @@ async function updatecode() {
         }
         const codeString = response.toRawString();
         fm.writeString(module.filename, codeString);
+				const baseUrl = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/assets/"
 
-	const baseUrl = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/assets/"
+				// Filer att hämta – json + bilder
+				const filesToDownload = [
+				  "Translations.json",
+				  "batterysocgreen.png",
+				  "batterysocorange.png",
+				  "batterysocred.png",
+				  "batterysocyellow.png",
+				  "charge.png",
+				  "discharge.png",
+				  "export.png",
+				  "home.png",
+				  "homepercentgreen.png",
+				  "homepercentorange.png",
+				  "homepercentred.png",
+				  "homepercentyellow.png",
+				  "import.png",
+				  "logo.png",
+				  "sun.png"
+				]
 
-	// Filer att hämta – json + bilder
-	const filesToDownload = [
-	  "Translations.json",
-	  "batterysocgreen.png",
-	  "batterysocorange.png",
-	  "batterysocred.png",
-	  "batterysocyellow.png",
-	  "charge.png",
-	  "discharge.png",
-	  "export.png",
-	  "home.png",
-	  "homepercentgreen.png",
-	  "homepercentorange.png",
-	  "homepercentred.png",
-	  "homepercentyellow.png",
-	  "import.png",
-	  "logo.png",
-	  "sun.png"
-	]
-
-	// Ladda ner varje fil
-	for (let filename of filesToDownload) {
-	  const url = baseUrl + filename
-	  const filePath = fm.joinPath(dir, filename)
-
-	  try {
-	    const req = new Request(url)
-	    req.timeoutInterval = 5
-	
-	    if (filename.endsWith(".json")) {
-	      const response = await req.load()
-	      const status = req.response.statusCode
-	      if (status !== 200) throw new Error(`HTTP ${status}`)
-	      const text = response.toRawString()
-	      fm.writeString(filePath, text)
-	      console.log(`✅ ${filename} (JSON) nedladdad`)
-	    } else if (filename.endsWith(".png")) {
-	      const image = await req.loadImage()
-	      fm.writeImage(filePath, image)
-	      console.log(`✅ ${filename} (bild) nedladdad`)
-	    } else {
-	      console.warn(`⚠️ Okänt filformat: ${filename} – hoppas det funkar!`)
-	    }
-	  } catch (error) {
-	    console.error(`❌ Fel vid nedladdning av ${filename}:`, error)
-	  }
-	}
-
-        //fm.remove(filePathSettings);
-        let updateNotify = new Notification();
-        updateNotify.title = Script.name();
-        updateNotify.body = "New version installed, " + serverVersion;
-        updateNotify.sound = "default";
-        await updateNotify.schedule();
-      } catch (error) {
-        console.error(error);
-      }
+				// Ladda ner varje fil
+				for (let filename of filesToDownload) {
+				  const url = baseUrl + filename
+				  const filePath = fm.joinPath(dir, filename)
+				  try {
+				    const req = new Request(url)
+				    req.timeoutInterval = 5
+				    if (filename.endsWith(".json")) {
+				      const response = await req.load()
+				      const status = req.response.statusCode
+				      if (status !== 200) throw new Error(`HTTP ${status}`)
+				      const text = response.toRawString()
+				      fm.writeString(filePath, text)
+				      console.log(`✅ ${filename} (JSON) nedladdad`)
+				    } else if (filename.endsWith(".png")) {
+				      const image = await req.loadImage()
+				      fm.writeImage(filePath, image)
+				      console.log(`✅ ${filename} (bild) nedladdad`)
+				    } else {
+				      console.warn(`⚠️ Okänt filformat: ${filename} – hoppas det funkar!`)
+				    }
+				  } catch (error) {
+				    console.error(`❌ Fel vid nedladdning av ${filename}:`, error)
+				  }
+				}
+			  let updateNotify = new Notification();
+			  updateNotify.title = Script.name();
+			  updateNotify.body = "New version installed, " + serverVersion;
+			  updateNotify.sound = "default";
+			  await updateNotify.schedule();
+			} catch (error) {
+  			console.error(error);
+  		}
     }
   } catch (error) {
     console.error("The update failed. Please try again later." + error);
   }
 }
-
 
 async function readsettings() {
   try {
@@ -192,7 +184,6 @@ async function readsettings() {
   }
 }
 
-
 async function fetchData(jwtToken) {
 	Path = filePathData
 	DateObj = new Date();
@@ -211,8 +202,7 @@ async function fetchData(jwtToken) {
 			if (req.response.statusCode === 200) {
 				const dataJSON = JSON.stringify(response, null ,2);
 				fm.writeString(filePathData, dataJSON);
-		  	console.log("Svar från Growatt:", response);
-		    settings.updatehour = String(DateObj.getHours()).padStart(2, "0");
+		  	settings.updatehour = String(DateObj.getHours()).padStart(2, "0");
         settings.updateminute = String(DateObj.getMinutes()).padStart(2, "0");
 				fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
 			} else {
@@ -222,44 +212,27 @@ async function fetchData(jwtToken) {
 	  	console.error("Fel vid API-anrop:", err);
 		}
 	}
-	
 	if (fm.fileExists(filePathData)) {
 		let modified = fm.modificationDate(filePathData);
 		let now = new Date();
 		let minutesDiff = (now - modified) / (1000 * 60);
-		let modifiedDay = modified.getDate();
-		let modifiedMonth = modified.getMonth();
-		let modifiedYear = modified.getFullYear();
-		let yesterday = new Date(now);
-		yesterday.setDate(now.getDate() - 1);
-		let isFromYesterday =
-		modifiedDay === yesterday.getDate() &&
-		modifiedMonth === yesterday.getMonth() &&
-		modifiedYear === yesterday.getFullYear();
-		if (minutesDiff > 6 || isFromYesterday) {
+		if (minutesDiff > 10 ) {
 			await getData();
 		}
 	} else {
 		await getData();
 	}
-	//hour = DateObj.getHours();
-	//minute = DateObj.getMinutes();
 	let content = fm.readString(filePathData);
 	data = JSON.parse(content);
-
-
 	epv1 = data["data"]["epv1Today"];
-		    epv2 = data["data"]["epv2Today"];
-		    batterysoc = data["data"]["bmsSoc"];
-		    homekwh = data["data"]["elocalLoadToday"];
-		    exportkwh = data["data"]["etoGridToday"];
-  		  importkwh = data["data"]["etoUserToday"];
-		    batterychargekwh = data["data"]["echargeToday"];
-		    batterydischargekwh = data["data"]["edischargeToday"];
-
-	//updated = "" + hour + minute + "";
+	epv2 = data["data"]["epv2Today"];
+	batterysoc = data["data"]["bmsSoc"];
+	homekwh = data["data"]["elocalLoadToday"];
+	exportkwh = data["data"]["etoGridToday"];
+  importkwh = data["data"]["etoUserToday"];
+	batterychargekwh = data["data"]["echargeToday"];
+	batterydischargekwh = data["data"]["edischargeToday"];
 }
-
 
 async function createVariables() {
   area = settings.area;
@@ -275,7 +248,6 @@ async function createVariables() {
 	updateminute = settings.updateminute;
 }
 
-
 async function readTranslations() {
   if (!fm.fileExists(filePathTranslations)) {
     let url = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/assets/Translations.json";
@@ -288,7 +260,6 @@ async function readTranslations() {
     translationData = JSON.parse(fm.readString(filePathTranslations));
     const langMap = {
       1: "en",
-      2: "de",
       3: "sv"
     };
     currentLang = langMap[langId] || "en"; // fallback to english
@@ -307,7 +278,6 @@ async function ask() {
   [settings.area, settings.vat, settings.currency] = await askForArea();
   settings.includevat = await askForIncludeVAT();
   settings.extras = await askForExtras();
-  //await askForAllShowPositions("top");
   settings.showattop = "graph, today"
   settings.showatmiddle = "pricestats, today"
   settings.graphOption = {"top": "line"},
@@ -315,7 +285,7 @@ async function ask() {
   settings.token = await askForToken();
   settings.deviceSn = await askForDeviceSn();
   settings.height = 550
-   return settings
+  return settings
 }
 
 async function askForToken() {
@@ -343,102 +313,16 @@ async function askForDeviceSn() {
   return input;
 }
 
-
-async function askForAllShowPositions() {
-  const options = ["graph", "table", "pricestats", "nothing"];
-  const days = ["today", "tomorrow"];
-  const graphTypes = ["line", "bar"];
-  const chosenCombinations = [];
-  const positions = ["top", "middle", "bottom"];
-  const graphOption = {};
-  for (let position of positions) {
-    const usedCount = (type) =>
-      chosenCombinations.filter(c => c && c.type === type).length;
-
-    const usedGraph = usedCount("graph");
-    const usedTable = usedCount("table");
-
-    let filteredOptions = options.filter(type => {
-      if (type === "graph" && usedGraph >= 2) return false;
-      if (type === "table" && usedTable >= 2) return false;
-      if ((usedGraph + usedTable) >= 3 && (type === "graph" || type === "table")) return false;
-      return true;
-    });
-
-    const alert = new Alert();
-    alert.message = `${t("showwhat")} ${t(position)}?`;
-    filteredOptions.forEach(o => alert.addAction(t(o)));
-    const index = await alert.presentAlert();
-    const choice = filteredOptions[index];
-
-    let day = "";
-    if (choice === "graph") {
-      const graphTypeAlert = new Alert();
-      graphTypeAlert.title = t(position).charAt(0).toUpperCase() + t(position).slice(1);
-      graphTypeAlert.message = t("choosegraphtype");
-      graphTypes.forEach(g => graphTypeAlert.addAction(t(g)));
-      const gIndex = await graphTypeAlert.presentAlert();
-      const selectedGraphType = graphTypes[gIndex];
-      graphOption[position] = selectedGraphType;
-    }
-    if (choice !== "nothing") {
-      const usedDaysForType = chosenCombinations
-        .filter(c => c.type === choice)
-        .map(c => c.day);
-      const availableDays = days.filter(d => !usedDaysForType.includes(d));
-      const dayAlert = new Alert();
-      dayAlert.title = t(position).charAt(0).toUpperCase() + t(position).slice(1);
-      dayAlert.message = t("showday") + "?";
-      availableDays.forEach(d => dayAlert.addAction(t(d)));
-      const dayIndex = await dayAlert.presentAlert();
-      day = availableDays[dayIndex];
-    }
-
-    chosenCombinations.push({ position, type: choice, day });
-    settings[`showat${position}`] = `${choice}, ${day}`;
-  }
-  settings.graphOption = graphOption;
-  
-  fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
-  const totalGraph = chosenCombinations.filter(c => c.type === "graph").length;
-  const totalTable = chosenCombinations.filter(c => c.type === "table").length;
-  const totalPriceStats = chosenCombinations.filter(c => c.type === "pricestats").length;
-  const heightMap = {
-    "1-0-0": 1200,
-    "0-1-0": 800,
-    "0-0-1": 800,
-  
-    "1-1-0": 750,
-    "1-0-1": 1130,
-    "0-1-1": 900,
-    "2-0-0": 550,
-    "0-2-0": 600,
-  
-    "1-1-1": 730,
-    "2-1-0": 380,
-    "1-2-0": 540,
-    "2-0-1": 470,
-    "0-2-1": 580,
-    "1-0-2": 1050,
-    "0-1-2": 900,
-  };
-  
-  const key = `${totalGraph}-${totalTable}-${totalPriceStats}`;
-  settings.height = heightMap[key] ?? 1150;
-  return settings;
-  }
-
-
 // Select resolution
 async function askForLanguage() {
   let alert = new Alert();
-  alert.message = "Language/Sprache/Språk:";
+  alert.message = "Language/Språk:";
   alert.addAction("English");
   alert.addAction("Svenska");
   let index = await alert.presentAlert();
   settings.language = [1,3][index];
   fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
-  langId = settings.language; // 1 = ENG, 2 = DE, 3 = SV
+  langId = settings.language; // 1 = ENG, 3 = SV
   return [1,3][index];
 }
 
@@ -452,9 +336,9 @@ async function askForArea() {
   }
   let index = await alert.presentAlert();
   let area = ["SE1","SE2","SE3","SE4"][index];
-  let vat = 20;
-  let currencies2 = "SEK";
-  return [area, vat, currencies2];
+  let vat = 25;
+  let currencies = "SEK";
+  return [area, vat, currencies];
 }
 
 // Select resolution
@@ -491,31 +375,17 @@ async function askForExtras() {
   return newCost;
 }
 
-
-
 async function Graph(day, graphOption) {
 //chart
   await Data(day);
-  if (daybefore != day){ 
-    let left = listwidget.addStack();
-    let whatday = left.addText(date);
-    whatday.textColor = new Color("#ffffff");
-    whatday.font = Font.lightSystemFont(13);
-    left.addSpacer();
-    if (prices == 0) {
-      whatday = left.addText("Available after 13:00");
-      whatday.textColor = new Color("#ffffff");
-      whatday.font = Font.lightSystemFont(13);
-      listwidget.addSpacer(5);
-      daybefore = day;
-      return;
-    } else {
-      let updatetext = left.addText("Nord Pool " + updated);
-      updatetext.font = Font.lightSystemFont(13);
-      updatetext.textColor = new Color("#ffffff");
-    }
-  }
-  daybefore = day;
+  let left = listwidget.addStack();
+  let whatday = left.addText(date);
+  whatday.textColor = new Color("#ffffff");
+  whatday.font = Font.lightSystemFont(13);
+  left.addSpacer();
+  let updatetext = left.addText("Nord Pool " + updated);
+  updatetext.font = Font.lightSystemFont(13);
+  updatetext.textColor = new Color("#ffffff");
   if (resolution == 60) {
     let avgtoday = []
     let dotNow = ""
@@ -608,20 +478,15 @@ async function Graph(day, graphOption) {
 
 async function PriceStats(day) {
   await Data(day);
-  
-  daybefore = day;
   if (prices == 0) {
     return;
     }
   let bottom = listwidget.addStack();
-  if (day != "tomorrow"){
-  
   // now
-  let now = bottom.addText(t("now") + " " + Math.round(pricesJSON[hour]));
-  now.font = Font.lightSystemFont(11);
-  now.textColor = new Color("#00ffff");
-  bottom.addSpacer();
-    }
+	let now = bottom.addText(t("now") + " " + Math.round(pricesJSON[hour]));
+	now.font = Font.lightSystemFont(11);
+	now.textColor = new Color("#00ffff");
+	bottom.addSpacer();
   // lowest
   let lowest = bottom.addText(t("lowest") + " " + Math.round(priceLowest));
   lowest.font = Font.lightSystemFont(11);
@@ -650,7 +515,6 @@ async function Data(day) {
   Path = fm.joinPath(dir, "NordPool_" + day + "Prices.json");
   DateObj = new Date();
   async function getData() {
-    
     const yyyy = DateObj.getFullYear();
     const mm = String(DateObj.getMonth() + 1).padStart(2, '0');
     const dd = String(DateObj.getDate()).padStart(2, '0');
@@ -702,9 +566,7 @@ async function Data(day) {
 
 async function renderSection(position) {
   const value = settings[`showat${position}`];
-
   if (!value || value === "nothing") return;
-
   const [type, day] = value.split(",").map(s => s.trim());
   const graphOption = settings.graphOption[position]
   switch (type) {
@@ -727,12 +589,11 @@ async function createWidget(){
   listwidget.backgroundColor = new Color("#000000");
   await renderSection("top");
   await renderSection("middle");
-  //await renderSection("bottom");  
   let moms = listwidget.addStack();
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
-  moms.addSpacer(50);
+  moms.addSpacer(40);
   momstext = moms.addText(t("updated") + String(updatehour) + ":" + String(updateminute));
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
@@ -754,152 +615,144 @@ async function createWidget(){
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   
-listwidget.addSpacer(5)
-
-  await fetchData(token);
+	listwidget.addSpacer(5)
+	await fetchData(token);
 	const date = new Date();
 	let solarkwh = epv1+epv2
+	let first = listwidget.addStack()
+	let spacesize = 3;
+	let textsize = 17;
+	let imagesize = 35;
+	let growattrow = first.addStack()
+	let exportrow=growattrow.addStack()
+	growattrow.addSpacer(spacesize)
+	let exportrowvalue=growattrow.addStack()
+	growattrow.addSpacer()
+	let sunhomerow=growattrow.addStack()
+	growattrow.addSpacer(spacesize)
+	let sunhomerowvalue=growattrow.addStack()
+	growattrow.addSpacer()
+	let batteryrow=growattrow.addStack()
+	growattrow.addSpacer(spacesize)
+	let batteryrowvalue=growattrow.addStack()
+	growattrow.addSpacer()
+	let percentrow=growattrow.addStack()
+	growattrow.addSpacer(spacesize)
+	let percentrowvalue=growattrow.addStack()
+	listwidget.addSpacer(5)
+	let jjj=listwidget.addStack()
+	exportrow.layoutVertically()
+	exportrowvalue.layoutVertically()
+	sunhomerow.layoutVertically()
+	sunhomerowvalue.layoutVertically()
+	batteryrow.layoutVertically()
+	batteryrowvalue.layoutVertically()
+	percentrow.layoutVertically()
+	percentrowvalue.layoutVertically()
+	
+	let fm = FileManager.iCloud()
+	let exportpath = fm.joinPath(fm.documentsDirectory(), "export.png")
+	exportimage = await fm.readImage(exportpath)
+	let importpath = fm.joinPath(fm.documentsDirectory(), "import.png")
+	importimage = await fm.readImage(importpath)
+	let solarpath = fm.joinPath(fm.documentsDirectory(), "sun.png")
+	solarimage = await fm.readImage(solarpath)
+	let homepath = fm.joinPath(fm.documentsDirectory(), "home.png")
+	homeimage = await fm.readImage(homepath)
+	loadpercent=(homekwh-importkwh)/homekwh*100
+	
+	if (loadpercent < 20) {
+	  homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentred.png")
+	} else if (loadpercent < 40) {
+	  homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentorange.png")
+	} else if (loadpercent < 70) {
+	  homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentyellow.png")
+	} else {
+	  homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentgreen.png")
+	}
+	
+	homepercentimage = await fm.readImage(homepercentpath)
+	let batterychargepath = fm.joinPath(fm.documentsDirectory(), "discharge.png")
+	batterychargeimage = await fm.readImage(batterychargepath)
+	let batterydischargepath = fm.joinPath(fm.documentsDirectory(), "charge.png")
+	batterydischargeimage = await fm.readImage(batterydischargepath)
+	let batterysocpath
+	if (batterysoc < 20) {
+	  batterysocpath = fm.joinPath(fm.documentsDirectory(), "batterysocred.png")
+	} else if (batterysoc < 40) {
+	  batterysocpath = fm.joinPath(fm.documentsDirectory(), "batterysocorange.png")
+	} else if (batterysoc < 70) {
+	  batterysocpath = fm.joinPath(fm.documentsDirectory(), "batterysocyellow.png")
+	} else {
+	  batterysocpath = fm.joinPath(fm.documentsDirectory(), "batterysocgreen.png")
+	}
+	batterysocimage = await fm.readImage(batterysocpath)
+	let logopath = fm.joinPath(fm.documentsDirectory(), "logo.png")
+	logoimage = await fm.readImage(logopath)
+	
+	exportrow.addSpacer(2);
+	ii=exportrow.addImage(exportimage);
+	ii.imageSize = new Size(imagesize, imagesize);
+	exportrow.addSpacer(10)
+	pp=exportrow.addImage(importimage);
+	pp.imageSize = new Size(imagesize, imagesize);
+	
+	sunhomerow.addSpacer(2);
+	kk=sunhomerow.addImage(solarimage);
+	kk.imageSize = new Size(imagesize, imagesize);
+	sunhomerow.addSpacer(9)
+	ss=sunhomerow.addImage(homeimage);
+	ss.imageSize = new Size(imagesize, imagesize);
+	
+	batteryrow.addSpacer(2);
+	de=batteryrow.addImage(batterydischargeimage);
+	de.imageSize = new Size(imagesize, imagesize);
+	batteryrow.addSpacer(10)
+	ll=batteryrow.addImage(batterychargeimage);
+	ll.imageSize = new Size(imagesize, imagesize);
+	
+	percentrow.addSpacer(2);
+	l=percentrow.addImage(batterysocimage);
+	l.imageSize = new Size(imagesize, imagesize);
+	percentrow.addSpacer(10)
+	lp=percentrow.addImage(homepercentimage);
+	lp.imageSize = new Size(imagesize, imagesize);
+	
+	oooo=jjj.addImage(logoimage)
 
-let first = listwidget.addStack()
-
-let spacesize = 3;
-let textsize = 17;
-let imagesize = 35;
-let growattrow = first.addStack()
-let exportrow=growattrow.addStack()
-growattrow.addSpacer(spacesize)
-let exportrowvalue=growattrow.addStack()
-growattrow.addSpacer()
-let sunhomerow=growattrow.addStack()
-growattrow.addSpacer(spacesize)
-let sunhomerowvalue=growattrow.addStack()
-growattrow.addSpacer()
-let batteryrow=growattrow.addStack()
-growattrow.addSpacer(spacesize)
-let batteryrowvalue=growattrow.addStack()
-growattrow.addSpacer()
-let percentrow=growattrow.addStack()
-growattrow.addSpacer(spacesize)
-let percentrowvalue=growattrow.addStack()
-//growattrow.addSpacer(spacesize)
-
-listwidget.addSpacer(5)
-
-let jjj=listwidget.addStack()
-exportrow.layoutVertically()
-exportrowvalue.layoutVertically()
-sunhomerow.layoutVertically()
-sunhomerowvalue.layoutVertically()
-batteryrow.layoutVertically()
-batteryrowvalue.layoutVertically()
-percentrow.layoutVertically()
-percentrowvalue.layoutVertically()
-
-let fm = FileManager.iCloud()
-let exportpath = fm.joinPath(fm.documentsDirectory(), "export.png")
-exportimage = await fm.readImage(exportpath)
-let importpath = fm.joinPath(fm.documentsDirectory(), "import.png")
-importimage = await fm.readImage(importpath)
-let solarpath = fm.joinPath(fm.documentsDirectory(), "sun.png")
-solarimage = await fm.readImage(solarpath)
-let homepath = fm.joinPath(fm.documentsDirectory(), "home.png")
-homeimage = await fm.readImage(homepath)
-loadpercent=(homekwh-importkwh)/homekwh*100
-
-
-if (loadpercent < 20) {
-  homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentred.png")
-} else if (loadpercent < 40) {
-  homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentorange.png")
-} else if (loadpercent < 70) {
-  homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentyellow.png")
-} else {
-  homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentgreen.png")
-}
-
-//let homepercentpath = fm.joinPath(fm.documentsDirectory(), "homepercentgreen.png")
-homepercentimage = await fm.readImage(homepercentpath)
-let batterychargepath = fm.joinPath(fm.documentsDirectory(), "discharge.png")
-batterychargeimage = await fm.readImage(batterychargepath)
-let batterydischargepath = fm.joinPath(fm.documentsDirectory(), "charge.png")
-batterydischargeimage = await fm.readImage(batterydischargepath)
-let batterysocpath
-if (batterysoc < 20) {
-  batterysocpath = fm.joinPath(fm.documentsDirectory(), "batterysocred.png")
-} else if (batterysoc < 40) {
-  batterysocpath = fm.joinPath(fm.documentsDirectory(), "batterysocorange.png")
-} else if (batterysoc < 70) {
-  batterysocpath = fm.joinPath(fm.documentsDirectory(), "batterysocyellow.png")
-} else {
-  batterysocpath = fm.joinPath(fm.documentsDirectory(), "batterysocgreen.png")
-}
-batterysocimage = await fm.readImage(batterysocpath)
-let logopath = fm.joinPath(fm.documentsDirectory(), "logo.png")
-logoimage = await fm.readImage(logopath)
-
-exportrow.addSpacer(2);
-ii=exportrow.addImage(exportimage);
-ii.imageSize = new Size(imagesize, imagesize);
-exportrow.addSpacer(10)
-pp=exportrow.addImage(importimage);
-pp.imageSize = new Size(imagesize, imagesize);
-
-sunhomerow.addSpacer(2);
-kk=sunhomerow.addImage(solarimage);
-kk.imageSize = new Size(imagesize, imagesize);
-sunhomerow.addSpacer(9)
-ss=sunhomerow.addImage(homeimage);
-ss.imageSize = new Size(imagesize, imagesize);
-
-batteryrow.addSpacer(2);
-de=batteryrow.addImage(batterydischargeimage);
-de.imageSize = new Size(imagesize, imagesize);
-batteryrow.addSpacer(10)
-ll=batteryrow.addImage(batterychargeimage);
-ll.imageSize = new Size(imagesize, imagesize);
-
-percentrow.addSpacer(2);
-l=percentrow.addImage(batterysocimage);
-l.imageSize = new Size(imagesize, imagesize);
-percentrow.addSpacer(10)
-lp=percentrow.addImage(homepercentimage);
-lp.imageSize = new Size(imagesize, imagesize);
-
-oooo=jjj.addImage(logoimage)
-
-// Value
-let exportkwhtext = exportrowvalue.addText(Math.round(exportkwh) + "\nkWh");
-exportkwhtext.font = Font.lightSystemFont(textsize);
-exportrowvalue.addSpacer(3);
-let importkwhtext = exportrowvalue.addText(Math.round(importkwh)+"\nkWh");
-importkwhtext.font = Font.lightSystemFont(textsize);
-
-let solarkwhtext = sunhomerowvalue.addText(Math.round(solarkwh) + "\nkWh");
-solarkwhtext.font = Font.lightSystemFont(textsize);
-sunhomerowvalue.addSpacer(4);
-let homekwhtext = sunhomerowvalue.addText(Math.round(homekwh) + "\nkWh");
-homekwhtext.font = Font.lightSystemFont(textsize);
-
-let batterychargekwhtext = batteryrowvalue.addText(Math.round(batterychargekwh) + "\nkWh");
-batterychargekwhtext.font = Font.lightSystemFont(textsize);
-batteryrowvalue.addSpacer(3);
-let batterydischargekwhtext = batteryrowvalue.addText(Math.round(batterydischargekwh) + "\nkWh");
-batterydischargekwhtext.font = Font.lightSystemFont(textsize);
-
-let batterysoctext = percentrowvalue.addText(Math.round(batterysoc) + "\n%");
-batterysoctext.font = Font.lightSystemFont(textsize);
-percentrowvalue.addSpacer(3);
-let loadpercenttext = percentrowvalue.addText(Math.round(loadpercent) + "\n%");
-loadpercenttext.font = Font.lightSystemFont(textsize);
-
-solarkwhtext.textColor = new Color("#ffffff");
-homekwhtext.textColor = new Color("#ffffff");
-exportkwhtext.textColor = new Color("#ffffff");
-importkwhtext.textColor = new Color("#ffffff");
-batterychargekwhtext.textColor = new Color("#ffffff");
-batterydischargekwhtext.textColor = new Color("#ffffff");
-batterysoctext.textColor = new Color("#ffffff");
-loadpercenttext.textColor = new Color("#ffffff");
+	// Value
+	let exportkwhtext = exportrowvalue.addText(Math.round(exportkwh) + "\nkWh");
+	exportkwhtext.font = Font.lightSystemFont(textsize);
+	exportrowvalue.addSpacer(3);
+	let importkwhtext = exportrowvalue.addText(Math.round(importkwh)+"\nkWh");
+	importkwhtext.font = Font.lightSystemFont(textsize);
+	
+	let solarkwhtext = sunhomerowvalue.addText(Math.round(solarkwh) + "\nkWh");
+	solarkwhtext.font = Font.lightSystemFont(textsize);
+	sunhomerowvalue.addSpacer(4);
+	let homekwhtext = sunhomerowvalue.addText(Math.round(homekwh) + "\nkWh");
+	homekwhtext.font = Font.lightSystemFont(textsize);
+	
+	let batterychargekwhtext = batteryrowvalue.addText(Math.round(batterychargekwh) + "\nkWh");
+	batterychargekwhtext.font = Font.lightSystemFont(textsize);
+	batteryrowvalue.addSpacer(3);
+	let batterydischargekwhtext = batteryrowvalue.addText(Math.round(batterydischargekwh) + "\nkWh");
+	batterydischargekwhtext.font = Font.lightSystemFont(textsize);
+	
+	let batterysoctext = percentrowvalue.addText(Math.round(batterysoc) + "\n%");
+	batterysoctext.font = Font.lightSystemFont(textsize);
+	percentrowvalue.addSpacer(3);
+	let loadpercenttext = percentrowvalue.addText(Math.round(loadpercent) + "\n%");
+	loadpercenttext.font = Font.lightSystemFont(textsize);
+	
+	solarkwhtext.textColor = new Color("#ffffff");
+	homekwhtext.textColor = new Color("#ffffff");
+	exportkwhtext.textColor = new Color("#ffffff");
+	importkwhtext.textColor = new Color("#ffffff");
+	batterychargekwhtext.textColor = new Color("#ffffff");
+	batterydischargekwhtext.textColor = new Color("#ffffff");
+	batterysoctext.textColor = new Color("#ffffff");
+	loadpercenttext.textColor = new Color("#ffffff");
 
   return listwidget;
 }
@@ -909,15 +762,19 @@ widget = await createWidget();
 if (config.runsInWidget) {
   Script.setWidget(widget);
 } else {
-  if (Math.random() < 0) {
+  if (Math.random() < 0.5) {
     let alert = new Alert();
-    alert.title = "Support";
+		alert.title = "Support";
     alert.message = t("buymeacoffee") + "?";
-    alert.addCancelAction(t("ofcourse"));
     alert.addAction(t("noway"));
+		alert.addAction("Ko-fi");
+    alert.addCancelAction("Buymeacoffee");
     let response = await alert.present();
     if (response === -1) {
-      Safari.open("https://buymeacoffee.com/flopp999");
+  	  Safari.open("https://buymeacoffee.com/flopp999");
+    }
+		if (response === 1) {
+    	Safari.open("https://ko-fi.com/flopp999");
     }
   }
 }

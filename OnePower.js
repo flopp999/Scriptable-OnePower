@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.14
+let version = 0.15
 let allValues = [];
 let widget;
 let day;
@@ -27,7 +27,7 @@ let hour;
 let minute;
 let translationData;
 let currentLang;
-const fileNameSettings = Script.name() + "_Settings.json";
+const fileNameSettings = "_Settings.json";
 const fileNameTranslations = Script.name() + "_Translations.json";
 const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
@@ -77,7 +77,7 @@ async function downLoadFiles() {
 	// Ladda ner varje fil
 	for (let filename of filesToDownload) {
 		const url = baseUrl + filename
-		const filePath = fm.joinPath(dir, filename)
+		const filePath = fm.joinPath(dir, Script.name() + filename)
 		try {
 			const req = new Request(url)
 			req.timeoutInterval = 5
@@ -580,6 +580,7 @@ let listwidget = new ListWidget();
 
 async function createWidget(){
   listwidget.backgroundColor = new Color("#000000");
+	await fetchData(token);
   await renderSection("top");
   await renderSection("middle");
   let moms = listwidget.addStack();
@@ -587,7 +588,7 @@ async function createWidget(){
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   moms.addSpacer(40);
-  momstext = moms.addText(t("updated") + String(updatehour) + ":" + String(updateminute));
+  momstext = moms.addText(t("updated") + String(settings.updatehour) + ":" + String(settings.updateminute));
   momstext.font = Font.lightSystemFont(10);
   momstext.textColor = new Color("#ffffff");
   moms.addSpacer();
@@ -609,7 +610,7 @@ async function createWidget(){
   momstext.textColor = new Color("#ffffff");
   
 	listwidget.addSpacer(5)
-	await fetchData(token);
+	
 	const date = new Date();
 	let solarkwh = epv1+epv2
 	let first = listwidget.addStack()

@@ -20,13 +20,16 @@ jobs:
       - name: Replace URLs in OnePower.js except baseUrl line
         run: |
           awk '
-            # Om raden inte innehåller baseUrl, gör URL-ersättning
-            !/const baseUrl = "https:\/\/raw\.githubusercontent\.com\/flopp999\/Scriptable-OnePower\/main\/assets\// {
+            /const baseUrl = "https:\/\/raw\.githubusercontent\.com\/flopp999\/Scriptable-OnePower\/main\/assets\// {
+              # Om det är just baseUrl-raden, skriv ut den oförändrad
+              print
+              next
+            }
+            {
+              # Ersätt URL på övriga rader
               gsub(/https:\/\/raw\.githubusercontent\.com\/flopp999\/Scriptable-OnePower\/main\//,
                    "https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/")
-            }
-            # Alltid: ersätt iCloud med local
-            {
+              # Ersätt FileManager
               gsub(/FileManager\.iCloud\(\)/, "FileManager.local()")
               print
             }

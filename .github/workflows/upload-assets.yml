@@ -17,22 +17,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Replace URLs in OnePower.js except /assets/ lines
+      - name: Find and Replace URL
         run: |
-          awk '
-            # Om raden innehåller raw.githubusercontent.../assets/, lämna den orörd
-            /https:\/\/raw\.githubusercontent\.com\/flopp999\/Scriptable-OnePower\/main\/assets\// {
-              print
-              next
-            }
-            {
-              # Annars ersätt raw-URL och FileManager
-              gsub(/https:\/\/raw\.githubusercontent\.com\/flopp999\/Scriptable-OnePower\/main\//,
-                   "https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/")
-              gsub(/FileManager\.iCloud\(\)/, "FileManager.local()")
-              print
-            }
-          ' OnePower.js > tmp && mv tmp OnePower.js
+          sed -i -E 's|https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/(?!assets/)(.*)|https://github.com/flopp999/Scriptable-OnePower/releases/latest/download/\1|g' OenPower.js
 
       - name: Upload assets to release
         uses: softprops/action-gh-release@v1

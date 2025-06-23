@@ -14,7 +14,6 @@ let pricesJSON;
 let priceAvg;
 let priceLowest;
 let priceHighest;
-let priceDiff;
 let area;
 let resolution;
 let currency;
@@ -142,7 +141,7 @@ async function readsettings() {
 			if (!settings.deviceSn || settings.deviceSn.length === 0) {
   			settings.deviceSn = "deviceSn"
 			}
-			if (!settings.updatehour || String(settings.updatehour).length === 0) {
+			if (!settings.update || String(settings.updatehour).length === 0) {
   			settings.updatehour = "0"
 			}
 			if (!settings.updateminute || String(settings.updateminute).length === 0) {
@@ -529,17 +528,8 @@ async function Data(day) {
   if (fm.fileExists(Path)) {
     let modified = fm.modificationDate(Path);
     let now = new Date();
-    let hoursDiff = (now - modified) / (1000 * 60 * 60);
-    let modifiedDay = modified.getDate();
-    let modifiedMonth = modified.getMonth();
-    let modifiedYear = modified.getFullYear();
-    let yesterday = new Date(now);
-    yesterday.setDate(now.getDate() - 1);
-    let isFromYesterday =
-    modifiedDay === yesterday.getDate() &&
-    modifiedMonth === yesterday.getMonth() &&
-    modifiedYear === yesterday.getFullYear();
-    if (hoursDiff > 6 || isFromYesterday) {
+    let minutesDiff = (now - modified) / (1000 * 60 * 60);
+    if (minutesDiff > 10) {
       await getData();
     }
   } else {

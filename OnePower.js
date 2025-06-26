@@ -140,7 +140,7 @@ async function readsettings() {
 			if (!settings.deviceSn || settings.deviceSn.length === 0) {
   			settings.deviceSn = "deviceSn"
 			}
-			if (!settings.update || String(settings.updatehour).length === 0) {
+			if (!settings.updatehour || String(settings.updatehour).length === 0) {
   			settings.updatehour = "0"
 			}
 			if (!settings.updateminute || String(settings.updateminute).length === 0) {

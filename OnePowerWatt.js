@@ -4,10 +4,13 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.45
+let version = 0.46
 let widget;
 let day;
 let todaydate;
+let yyyy;
+let mm;
+let dd;
 let date;
 let settings = {}
 let hour;
@@ -142,8 +145,11 @@ async function readsettings() {
 			if (!settings.deviceType || settings.deviceType.length === 0) {
 				settings.deviceType = ""
 			}
-			if (!settings.token || settings.token.length === 0) {
-				settings.token = "token"
+			if (!settings.username || settings.username.length === 0) {
+				settings.username = "username"
+			}
+			if (!settings.password || settings.password.length === 0) {
+				settings.password = "password"
 			}
 			if (!settings.deviceSn || settings.deviceSn.length === 0) {
 				settings.deviceSn = "deviceSn"
@@ -346,8 +352,8 @@ async function ask() {
   settings.graphOption = {"top": "line"},
   settings.resolution = 60;
   settings.height = 550
-	settings.token = await askForUsername();
-	settings.deviceSn = await askForPassword();
+	settings.username = await askForUsername();
+	settings.password = await askForPassword();
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
 	return settings
 }
@@ -438,11 +444,11 @@ async function askForUsername() {
 	let alert = new Alert();
 	alert.title = "Username";
 	alert.message = (t("askforusername") + "?");
-	alert.addTextField("example@mail.com",settings.token).setDefaultKeyboard();
+	alert.addTextField("example@mail.com",settings.username).setDefaultKeyboard();
 	alert.addAction("OK");
 	await alert.present();
 	let input = alert.textFieldValue(0);
-	settings.token = input
+	settings.username = input
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
 	return input;
 }
@@ -556,7 +562,7 @@ async function askForPassword() {
 	alert.addAction("OK");
 	await alert.present();
 	let input = alert.textFieldValue(0);
-	settings.deviceSn = input;
+	settings.password = input;
 	return input;
 }
 
@@ -583,16 +589,12 @@ async function nordpoolData(day) {
   allValues = [];
   Path = fm.joinPath(dir, "NordPool_" + day + "Prices.json");
   DateObj = new Date();
-  const yyyy = DateObj.getFullYear();
-    const mm = String(DateObj.getMonth() + 1).padStart(2, '0');
-    const dd = String(DateObj.getDate()).padStart(2, '0');
-    todaydate = `${yyyy}-${mm}-${dd}`;
+  yyyy = DateObj.getFullYear();
+  mm = String(DateObj.getMonth() + 1).padStart(2, '0');
+  dd = String(DateObj.getDate()).padStart(2, '0');
+  todaydate = `${yyyy}-${mm}-${dd}`;
     
 	async function getData() {
-    const yyyy = DateObj.getFullYear();
-    const mm = String(DateObj.getMonth() + 1).padStart(2, '0');
-    const dd = String(DateObj.getDate()).padStart(2, '0');
-    todaydate = `${yyyy}-${mm}-${dd}`;
     const Url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${todaydate}&market=DayAhead&indexNames=${settings.area}&currency=${settings.currency}&resolutionInMinutes=${settings.resolution}`;
     const request = new Request(Url);
     request.timeoutInterval = 1;
@@ -1133,6 +1135,36 @@ async function hamtaSystemData(token, stationId) {
 			batterydischargekwh=0
 
 }
+async function hamtaSystemInfo(token, stationId) {
+  DateObj = new Date()
+	log(dd)
+	const req = new Request(`https://lb-eu.solinteg-cloud.com/gen2api/pc/owner/inverter/power_generate/selective?sn=${deviceSn}&date=${yyyy}-${mm}&dateType=MONTH`);
+  req.headers = {
+    "accept": "application/json, text/plain, */*",
+    "lang": "en_US",
+    "odm": "WAT",
+    "offset": "-120",
+    "origin": "https://www.wattsonic.cloud",
+    "referer": "https://www.wattsonic.cloud/",
+    "token": token,
+    "var": "pc",
+  };
+  const response = await req.loadJSON();
+  if (!response.successful || response.errorCode !== 0) {
+    throw new Error("❌ Kunde inte hämta systeminfo: " + JSON.stringify(response));
+  }
+	const dataJSON = JSON.stringify(response, null ,2);
+	fm.writeString(filePathData, dataJSON);
+	settings.updatehour = String(DateObj.getHours()).padStart(2,"0");
+	settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");
+	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
+	ppv = response["body"]["currentPower"] * 1000
+	solarkwh = response["body"]["powerGenerationToday"]
+	batterysoc=response["body"]["soc"]
+	return response.body;
+}
+
+
 
 async function hamtaSystemInfo(token, stationId) {
   DateObj = new Date()
@@ -1154,10 +1186,11 @@ async function hamtaSystemInfo(token, stationId) {
   }
 	const dataJSON = JSON.stringify(response, null ,2);
 	fm.writeString(filePathData, dataJSON);
+	settings.deviceSn = response["body"]["singleEnergyInverterProps"]
 	settings.updatehour = String(DateObj.getHours()).padStart(2,"0");
 	settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
-	ppv = response["body"]["currentPower"]
+	ppv = response["body"]["currentPower"] * 1000
 	solarkwh = response["body"]["powerGenerationToday"]
 	batterysoc=response["body"]["soc"]
 	return response.body;
@@ -1166,8 +1199,8 @@ async function hamtaSystemInfo(token, stationId) {
 // =============== Huvudflöde ===============
 
 async function main() {
-  const email = settings.token;
-  const password = settings.deviceSn;
+  const email = settings.username;
+  const password = settings.password;
   const token = await loggaIn(email, password);
   const stationer = await hamtaStationer(token);
 	for (const s of stationer) {

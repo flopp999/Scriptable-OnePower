@@ -593,7 +593,7 @@ async function nordpoolData(day) {
     const mm = String(DateObj.getMonth() + 1).padStart(2, '0');
     const dd = String(DateObj.getDate()).padStart(2, '0');
     todaydate = `${yyyy}-${mm}-${dd}`;
-    const Url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${date}&market=DayAhead&indexNames=${settings.area}&currency=${settings.currency}&resolutionInMinutes=${settings.resolution}`;
+    const Url = `https://dataportal-api.nordpoolgroup.com/api/DayAheadPriceIndices?date=${todaydate}&market=DayAhead&indexNames=${settings.area}&currency=${settings.currency}&resolutionInMinutes=${settings.resolution}`;
     const request = new Request(Url);
     request.timeoutInterval = 1;
     let response = (await request.loadJSON());

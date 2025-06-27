@@ -1105,9 +1105,7 @@ async function hamtaStationer(token) {
 
 async function hamtaSystemData(token, stationId) {
   DateObj = new Date()
-	log(todaydate)
 	const req = new Request(`https://lb-eu.solinteg-cloud.com/gen2api/pc/distributor/station/view/history/elec/system/percentage?date=${todaydate}&stationId=${stationId}`);
-  log(req)
 	req.headers = {
     "accept": "application/json, text/plain, */*",
     "lang": "en_US",
@@ -1127,15 +1125,12 @@ async function hamtaSystemData(token, stationId) {
 				settings.updatehour = String(DateObj.getHours()).padStart(2,"0");
 				settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");
 				fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
-			
-			//solarkwh = response["body"]["powerGenerationToday"]
-			//batterysoc=response["body"]["soc"]
+
 			homekwh=response["body"]["elecPercentage"]["elecUse"]
 			importkwh=response["body"]["elecPercentage"]["importEnergy"]
 			exportkwh=response["body"]["elecPercentage"]["exportEnergy"]
-			//batterychargekwh=0
-			//batterydischargekwh=0
-  //return response.body;
+			batterychargekwh=0
+			batterydischargekwh=0
 
 }
 
@@ -1158,21 +1153,14 @@ async function hamtaSystemInfo(token, stationId) {
     throw new Error("❌ Kunde inte hämta systeminfo: " + JSON.stringify(response));
   }
 	const dataJSON = JSON.stringify(response, null ,2);
-				fm.writeString(filePathData, dataJSON);
-				settings.updatehour = String(DateObj.getHours()).padStart(2,"0");
-				settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");
-				fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
-			//log(response["body"])
-			ppv = response["body"]["currentPower"]
-			
-			solarkwh = response["body"]["powerGenerationToday"]
-			batterysoc=response["body"]["soc"]
-			//homekwh=0
-			//importkwh=0
-			//exportkwh=0
-			batterychargekwh=0
-			batterydischargekwh=0
-  return response.body;
+	fm.writeString(filePathData, dataJSON);
+	settings.updatehour = String(DateObj.getHours()).padStart(2,"0");
+	settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");
+	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
+	ppv = response["body"]["currentPower"]
+	solarkwh = response["body"]["powerGenerationToday"]
+	batterysoc=response["body"]["soc"]
+	return response.body;
 }
 
 // =============== Huvudflöde ===============

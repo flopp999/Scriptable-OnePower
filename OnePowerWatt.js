@@ -57,7 +57,7 @@ if (config.runsInWidget){
 }
 
 async function downLoadFiles() {
-	const baseUrl = "https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/assets/"
+	const baseUrl = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/assets/"
 	const filesToDownload = [
 		"charge.png",
 		"discharge.png",
@@ -92,12 +92,12 @@ async function downLoadFiles() {
 
 async function updatecode() {
 	try {
-		const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Version.txt");
+		const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Version.txt");
 		req.timeoutInterval = 10;
 		const serverVersion = await req.loadString()
 		if (version < serverVersion) {
 			try {
-				const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Growatt2.js");
+				const req = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/OnePowerWatt.js");
 				req.timeoutInterval = 10;
 				const response = await req.load();
 				const status = req.response.statusCode;
@@ -107,7 +107,7 @@ async function updatecode() {
 				const codeString = response.toRawString();
 				fm.writeString(module.filename, codeString);
 				
-				const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Translations.json");
+				const reqTranslations = new Request("https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Translations.json");
 				reqTranslations.timeoutInterval = 10;
 				const responseTranslations = await reqTranslations.load();
 				const statusTranslations = reqTranslations.response.statusCode;
@@ -313,7 +313,7 @@ async function fetchData() {
 
 async function readTranslations() {
 	if (!fm.fileExists(filePathTranslations)) {
-		let url = "https://raw.githubusercontent.com/flopp999/Scriptable-Growatt/main/Translations.json";
+		let url = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/Translations.json";
 		let req = new Request(url);
 		req.timeoutInterval = 10;
 		let content = await req.loadString();

@@ -33,14 +33,14 @@ let ppv;
 
 const fileNameData = Script.name() + "_Data.json";
 const fileNameData2 = Script.name() + "_Data2.json";
-
+const fileNameData3 = Script.name() + "_Data3.json";
 const fileNameSettings = Script.name() + "_Settings.json";
 const fileNameTranslations = Script.name() + "_Translations.json";
 const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
 const filePathData = fm.joinPath(dir, fileNameData);
 const filePathData2 = fm.joinPath(dir, fileNameData2);
-
+const filePathData3 = fm.joinPath(dir, fileNameData3);
 const filePathSettings = fm.joinPath(dir, fileNameSettings);
 const filePathTranslations = fm.joinPath(dir, fileNameTranslations);
 
@@ -1131,14 +1131,13 @@ async function hamtaSystemData(token, stationId) {
 			homekwh=response["body"]["elecPercentage"]["elecUse"]
 			importkwh=response["body"]["elecPercentage"]["importEnergy"]
 			exportkwh=response["body"]["elecPercentage"]["exportEnergy"]
-			batterychargekwh=0
-			batterydischargekwh=0
+
 
 }
-async function hamtaSystemInfo(token, stationId) {
+async function hamtaSystemBatteryInfo(token, stationId) {
   DateObj = new Date()
 	log(dd)
-	const req = new Request(`https://lb-eu.solinteg-cloud.com/gen2api/pc/owner/inverter/power_generate/selective?sn=${deviceSn}&date=${yyyy}-${mm}&dateType=MONTH`);
+	const req = new Request(`https://lb-eu.solinteg-cloud.com/gen2api/pc/owner/inverter/power_generate/selective?sn=${settings.deviceSn}&date=${yyyy}-${mm}&dateType=MONTH`);
   req.headers = {
     "accept": "application/json, text/plain, */*",
     "lang": "en_US",
@@ -1154,13 +1153,15 @@ async function hamtaSystemInfo(token, stationId) {
     throw new Error("❌ Kunde inte hämta systeminfo: " + JSON.stringify(response));
   }
 	const dataJSON = JSON.stringify(response, null ,2);
-	fm.writeString(filePathData, dataJSON);
+	batterychargekwh=response["body"]["data"][3][dd-1]["value"]
+	batterydischargekwh=response["body"]["data"][1][dd-1]["value"]
+	fm.writeString(filePathData3, dataJSON);
 	settings.updatehour = String(DateObj.getHours()).padStart(2,"0");
 	settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
-	ppv = response["body"]["currentPower"] * 1000
-	solarkwh = response["body"]["powerGenerationToday"]
-	batterysoc=response["body"]["soc"]
+	//ppv = response["body"]["currentPower"] * 1000
+	//solarkwh = response["body"]["powerGenerationToday"]
+	//batterysoc=response["body"]["soc"]
 	return response.body;
 }
 
@@ -1186,7 +1187,7 @@ async function hamtaSystemInfo(token, stationId) {
   }
 	const dataJSON = JSON.stringify(response, null ,2);
 	fm.writeString(filePathData, dataJSON);
-	settings.deviceSn = response["body"]["singleEnergyInverterProps"]
+	settings.deviceSn = response["body"]["singleEnergyInverterProps"]["sn"];
 	settings.updatehour = String(DateObj.getHours()).padStart(2,"0");
 	settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
@@ -1204,8 +1205,9 @@ async function main() {
   const token = await loggaIn(email, password);
   const stationer = await hamtaStationer(token);
 	for (const s of stationer) {
-    await hamtaSystemInfo(token, s.stationId);
-    await hamtaSystemData(token, s.stationId);
+  await hamtaSystemInfo(token, s.stationId);
+  await hamtaSystemData(token, s.stationId);
+	await hamtaSystemBatteryInfo(token, s.stationId);
   }
 }
 

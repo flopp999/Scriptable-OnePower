@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.47
+let version = 0.48
 let widget;
 let day;
 let todaydate;
@@ -363,6 +363,7 @@ async function ask() {
 	if (settings.whatbrand == "growatt") {
 		settings.token = await askForToken();
 		settings.devicesn = await askForDeviceSn();
+		settings.deviceType = await getDeviceType()
 	} else if (settings.whatbrand == "wattsonic") {
 		settings.token = await askForUsername();
 		settings.devicesn = await askForPassword();
@@ -1238,6 +1239,11 @@ async function hamtaSystemInfo(token, stationId) {
 	settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
 	ppv = response["body"]["currentPower"] * 1000
+	if (ppv > 10000) {
+		ppv = ( ppv / 1000).toFixed(1) + "\nkW"
+	} else {
+		ppv = Math.round(ppv) + "\nW"
+	}
 	solarkwh = response["body"]["powerGenerationToday"]
 	batterysoc=response["body"]["soc"]
 	return response.body;

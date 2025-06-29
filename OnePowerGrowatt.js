@@ -1,8 +1,5 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
-// icon-color: blue; icon-glyph: magic;
-// Variables used by Scriptable.
-// These must be at the very top of the file. Do not edit.
 // icon-color: green; icon-glyph: magic;
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
@@ -48,21 +45,18 @@ const filePathSettings = fm.joinPath(dir, fileNameSettings);
 const filePathTranslations = fm.joinPath(dir, fileNameTranslations);
 
 if (!config.runsInWidget){
-	await downLoadFiles();
+	await downloadFiles();
 	await updatecode();
 	await readTranslations();
 	await readsettings();
-	//await createVariables();
-	//await start();
 }
 
 if (config.runsInWidget){
 	await readsettings();
 	await updatecode();
-	//await createVariables();
 }
 
-async function downLoadFiles() {
+async function downloadFiles() {
 	const baseUrl = "https://raw.githubusercontent.com/flopp999/Scriptable-OnePower/main/assets/"
 	const filesToDownload = [
 		"charge.png",
@@ -154,6 +148,12 @@ async function readsettings() {
 			if (!settings.devicesn || settings.devicesn.length === 0) {
 				settings.devicesn = "devicesn"
 			}
+			if (!settings.username || settings.username.length === 0) {
+				settings.username = "username"
+			}
+			if (!settings.password || settings.password.length === 0) {
+				settings.password = "password"
+			}
 			if (!settings.updatehour || settings.updatehour.length === 0) {
 				settings.updatehour = "0"
 			}
@@ -191,6 +191,7 @@ async function readsettings() {
 			return;
 		}
 		console.warn("Settings file not found or error reading file: " + error.message);
+		settings.brand = await askForBrand();
 		settings = await ask();
 		fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
 	}
@@ -209,7 +210,7 @@ async function getDeviceType() {
 	try {
 		req.timeoutInterval = 10;
 		response = await req.loadJSON();
-		log(response)
+
 		if (req.response.statusCode === 200) {
 			//const dataJSON = JSON.stringify(response, null ,2);
 			settings.deviceType = response["data"]["data"][0]["deviceType"]
@@ -228,7 +229,6 @@ async function fetchData() {
 	Path = filePathData
 	DateObj = new Date();
 	async function getData() {
-		log("börja h")
 		const url = "https://openapi.growatt.com/v4/new-api/queryLastData";
 		let req = new Request(url);
 		req.method = "POST";
@@ -236,33 +236,24 @@ async function fetchData() {
 			"Content-Type": "application/x-www-form-urlencoded",
 			"token": settings.token
 		};
-		
 		req.body = `deviceSn=${encodeURIComponent(settings.devicesn)}&deviceType=${encodeURIComponent(settings.deviceType)}`;
-		log("asw")
 		try {
 			req.timeoutInterval = 10;
 			const response = await req.loadJSON();
-			log(req.response.statusCode)
 			if (req.response.statusCode === 200) {
 				if ((response["message"] === "FREQUENTLY_ACCESS" && response["code"] == "102") ||
 					 (response["message"] === "FREQUENTLY_ACCESS" && response["code"] == "true")){
-					log(response)
-					log("fel")
 					return
 				}
-				log("hh")
 				const dataJSON = JSON.stringify(response, null ,2);
-				log("data hämtad")
 				fm.writeString(filePathData, dataJSON);
 				settings.updatehour = String(DateObj.getHours()).padStart(2,"0");
 				settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");
 				fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
 			} else {
-				log("3:")
 				console.error("Fel statuskod:", req.response.statusCode);
 			}
 		} catch (err) {
-			log("86(")
 			console.error(response)
 			console.error("Fel vid API-anrop:", err);
 		}
@@ -276,15 +267,10 @@ async function fetchData() {
 			await getData();
 		}
 	} else {
-		log("ingen fil")
 		await getData();
 	}
-	log("/:")
 	let content = fm.readString(filePathData);
-	log("8kr:")
 	data = JSON.parse(content);
-	log(data["data"])
-	log(settings.deviceType)
 	if (settings.deviceType == "min") {
 		ppv = data["data"][settings.deviceType][0]["ppv"];
 		if (ppv > 10000) {
@@ -373,8 +359,14 @@ async function ask() {
   settings.graphOption = {"top": "line"},
   settings.resolution = 60;
   settings.height = 550
-	settings.token = await askForToken();
-	settings.devicesn = await askForDeviceSn();
+	log(settings.whatbrand)
+	if (settings.whatbrand == "growatt") {
+		settings.token = await askForToken();
+		settings.devicesn = await askForDeviceSn();
+	} else if (settings.whatbrand == "wattsonic") {
+		settings.token = await askForUsername();
+		settings.devicesn = await askForPassword();
+	}
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
 	return settings
 }
@@ -422,6 +414,17 @@ async function askForExtras() {
 	return newCost;
 }
 
+async function askForBrand() {
+  let alert = new Alert();
+  alert.message = t("whatbrand") + "?";
+  alert.addAction("Growatt");
+	alert.addAction("WattSonic");
+  let index = await alert.presentAlert();
+	settings.whatbrand = ["growatt","wattsonic"][index];
+	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
+  return ["growatt","wattsonic"][index];
+}
+
 async function askForIncludeVAT() {
   let alert = new Alert();
   alert.message = t("doyouwantvat") + "?";
@@ -448,7 +451,6 @@ async function askForArea() {
   return [settings.area, settings.vat, currencies];
 }
 
-// Select resolution
 async function askForLanguage() {
 	let alert = new Alert();
 	alert.message = "Language/Språk:";
@@ -460,7 +462,19 @@ async function askForLanguage() {
 	return [1,3][index];
 }
 
-// Include extra cost?
+async function askForTUsername() {
+	let alert = new Alert();
+	alert.title = "Username";
+	alert.message = (t("askforusername") + "?");
+	alert.addTextField("example@mail.com",settings.username).setDefaultKeyboard();
+	alert.addAction("OK");
+	await alert.present();
+	let input = alert.textFieldValue(0);
+	settings.username = input
+	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
+	return input;
+}
+
 async function askForToken() {
 	let alert = new Alert();
 	alert.title = "Token";
@@ -574,7 +588,6 @@ async function Graph(day, graphOption) {
   listwidget.addSpacer(5);
 }
 
-// Include extra cost?
 async function askForDeviceSn() {
 	let alert = new Alert();
 	alert.title = ("Device Serial number");
@@ -584,6 +597,18 @@ async function askForDeviceSn() {
 	await alert.present();
 	let input = alert.textFieldValue(0);
 	settings.devicesn = input;
+	return input;
+}
+
+async function askForPassword() {
+	let alert = new Alert();
+	alert.title = ("Password");
+	alert.message = (t("askforpassword") + "?");
+	alert.addTextField().setDefaultKeyboard();
+	alert.addAction("OK");
+	await alert.present();
+	let input = alert.textFieldValue(0);
+	settings.password = input;
 	return input;
 }
 
@@ -655,11 +680,16 @@ async function nordpoolData(day) {
 async function createWidget(){
 	//token = set loginAndGetToken();
 	listwidget.backgroundColor = new Color("#000000");
-	await fetchData(settings.deviceType);
-	
+	if (settings.whatbrand == "growatt") {
+		await fetchData(settings.deviceType);
+		
+	} else if (settings.whatbrand == "wattsonic") {
+		await main();
+	}
+		
 	await renderSection("top");
   await renderSection("middle");
-	//await main();
+
 	let moms = listwidget.addStack();
   momstext = moms.addText("v. " + version);
   momstext.font = Font.lightSystemFont(10);
@@ -1062,9 +1092,6 @@ function md5(str) {
   return hex(md51(str));
 }
 
-
-// =============== API-anrop ===============
-
 async function loggaIn(account, password) {
   const req = new Request("https://lb-eu.solinteg-cloud.com/gen2api/pc/user/login");
   req.method = "POST";
@@ -1081,7 +1108,6 @@ async function loggaIn(account, password) {
     account: account,
     pwd: skapaPwd(password),
   });
-
   const response = await req.loadJSON();
   if (!response.successful || response.errorCode !== 0) {
     throw new Error("❌ Inloggning misslyckades: " + JSON.stringify(response));
@@ -1157,7 +1183,6 @@ async function hamtaSystemData(token, stationId) {
 }
 async function hamtaSystemBatteryInfo(token, stationId) {
   DateObj = new Date()
-	log(dd)
 	const req = new Request(`https://lb-eu.solinteg-cloud.com/gen2api/pc/owner/inverter/power_generate/selective?sn=${settings.devicesn}&date=${yyyy}-${mm}&dateType=MONTH`);
   req.headers = {
     "accept": "application/json, text/plain, */*",

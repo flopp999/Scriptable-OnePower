@@ -221,7 +221,7 @@ async function getDeviceType() {
 		}
 	} catch (err) {
 		console.error(response)
-		console.error("Fel vid API-anrop:", err);
+		console.error("Fel vid get device type", err);
 	}
 }
 
@@ -243,7 +243,11 @@ async function fetchData() {
 			if (req.response.statusCode === 200) {
 				if ((response["message"] === "FREQUENTLY_ACCESS" && response["code"] == "102") ||
 					 (response["message"] === "FREQUENTLY_ACCESS" && response["code"] == "true")){
-					return
+						alert.title = "Vänta";
+						alert.message = ("Du har haft för tätt kontakt med Growatt server, vänta 5 minuter och prova igen");
+						alert.addAction("OK");
+						await alert.present();
+						return
 				}
 				const dataJSON = JSON.stringify(response, null ,2);
 				fm.writeString(filePathData, dataJSON);
@@ -255,7 +259,7 @@ async function fetchData() {
 			}
 		} catch (err) {
 			console.error(response)
-			console.error("Fel vid API-anrop:", err);
+			console.error("Fel vid fetchdata", err);
 		}
 	}
 	

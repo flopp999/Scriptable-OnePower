@@ -686,7 +686,7 @@ async function createWidget(){
 	//token = set loginAndGetToken();
 	listwidget.backgroundColor = new Color("#000000");
 	if (settings.whatbrand == "growatt") {
-		await fetchData(settings.deviceType);
+		await fetchData();
 		
 	} else if (settings.whatbrand == "wattsonic") {
 		await main();

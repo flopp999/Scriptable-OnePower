@@ -1,4 +1,8 @@
 {
+"whatbrand": {
+    "en": "Select the manufacturer of your inverter",
+    "sv": "Välj tillverkare för din växelriktare"
+  },
 
 "enterextra": {
     "en": "Enter the total extra cost per kWh incl. VAT(e.g. grid fees, taxes, markup) in ",

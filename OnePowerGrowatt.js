@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.49
+let version = 0.50
 let widget;
 let day;
 let todaydate;
@@ -212,6 +212,15 @@ async function getDeviceType() {
 		response = await req.loadJSON();
 
 		if (req.response.statusCode === 200) {
+			if ((response["message"] === "FREQUENTLY_ACCESS" && response["code"] == "102") ||
+					 (response["message"] === "FREQUENTLY_ACCESS" && response["code"] == "true")){
+						let alert = new Alert();
+						alert.title = "Vänta";
+						alert.message = ("Du har haft för tätt kontakt med Growatt server, vänta 5 minuter och prova igen");
+						alert.addAction("OK");
+						await alert.present();
+						return
+				}
 			//const dataJSON = JSON.stringify(response, null ,2);
 			settings.deviceType = response["data"]["data"][0]["deviceType"]
 			//fm.writeString(filePathData, dataJSON);
@@ -243,6 +252,7 @@ async function fetchData() {
 			if (req.response.statusCode === 200) {
 				if ((response["message"] === "FREQUENTLY_ACCESS" && response["code"] == "102") ||
 					 (response["message"] === "FREQUENTLY_ACCESS" && response["code"] == "true")){
+						let alert = new Alert();
 						alert.title = "Vänta";
 						alert.message = ("Du har haft för tätt kontakt med Growatt server, vänta 5 minuter och prova igen");
 						alert.addAction("OK");

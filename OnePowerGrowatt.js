@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.50
+let version = 0.51
 let widget;
 let day;
 let todaydate;
@@ -139,20 +139,24 @@ async function readsettings() {
 			if (!settings.area) {
 				await askForArea();
 			}
-			if (!settings.deviceType || settings.deviceType.length === 0) {
-				await getDeviceType()
-			}
-			if (!settings.token || settings.token.length === 0) {
-				settings.token = "token"
+			if (settings.brand == "growatt") {
+				if (!settings.deviceType || settings.deviceType.length === 0) {
+					await getDeviceType()
+				}
+				if (!settings.token || settings.token.length === 0) {
+					settings.token = "token"
+				}
 			}
 			if (!settings.devicesn || settings.devicesn.length === 0) {
 				settings.devicesn = "devicesn"
 			}
-			if (!settings.username || settings.username.length === 0) {
-				settings.username = "username"
-			}
-			if (!settings.password || settings.password.length === 0) {
-				settings.password = "password"
+			if (settings.brand == "wattsonic") {
+				if (!settings.username || settings.username.length === 0) {
+					settings.username = "username"
+				}
+				if (!settings.password || settings.password.length === 0) {
+					settings.password = "password"
+				}
 			}
 			if (!settings.updatehour || settings.updatehour.length === 0) {
 				settings.updatehour = "0"
@@ -191,7 +195,7 @@ async function readsettings() {
 			return;
 		}
 		console.warn("Settings file not found or error reading file: " + error.message);
-		settings.brand = await askForBrand();
+		await askForBrand();
 		settings = await ask();
 		fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
 	}
@@ -373,12 +377,12 @@ async function ask() {
   settings.graphOption = {"top": "line"},
   settings.resolution = 60;
   settings.height = 550
-	if (settings.whatbrand == "growatt") {
+	if (settings.brand == "growatt") {
 		settings.token = await askForToken();
 		settings.devicesn = await askForDeviceSn();
 		settings.deviceType = await getDeviceType()
-	} else if (settings.whatbrand == "wattsonic") {
-		settings.token = await askForUsername();
+	} else if (settings.brand == "wattsonic") {
+		settings.username = await askForUsername();
 		settings.devicesn = await askForPassword();
 	}
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
@@ -434,9 +438,9 @@ async function askForBrand() {
   alert.addAction("Growatt");
 	alert.addAction("WattSonic");
   let index = await alert.presentAlert();
-	settings.whatbrand = ["growatt","wattsonic"][index];
+	settings.brand = ["growatt","wattsonic"][index];
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
-  return ["growatt","wattsonic"][index];
+  return;
 }
 
 async function askForIncludeVAT() {
@@ -476,7 +480,7 @@ async function askForLanguage() {
 	return [1,3][index];
 }
 
-async function askForTUsername() {
+async function askForUsername() {
 	let alert = new Alert();
 	alert.title = "Username";
 	alert.message = (t("askforusername") + "?");
@@ -648,10 +652,8 @@ async function renderSection(position) {
 async function nordpoolData(day) {
   allValues = [];
   Path = fm.joinPath(dir, "NordPool_" + day + "Prices.json");
-  DateObj = new Date();
-  yyyy = DateObj.getFullYear();
-  mm = String(DateObj.getMonth() + 1).padStart(2, '0');
-  dd = String(DateObj.getDate()).padStart(2, '0');
+  
+  
   todaydate = `${yyyy}-${mm}-${dd}`;
     
 	async function getData() {
@@ -694,10 +696,10 @@ async function nordpoolData(day) {
 async function createWidget(){
 	//token = set loginAndGetToken();
 	listwidget.backgroundColor = new Color("#000000");
-	if (settings.whatbrand == "growatt") {
+	if (settings.brand == "growatt") {
 		await fetchData();
 		
-	} else if (settings.whatbrand == "wattsonic") {
+	} else if (settings.brand == "wattsonic") {
 		await main();
 	}
 		
@@ -890,6 +892,10 @@ async function createWidget(){
 
   return listwidget;
 }
+DateObj = new Date();
+yyyy = DateObj.getFullYear();
+mm = String(DateObj.getMonth() + 1).padStart(2, '0');
+dd = String(DateObj.getDate()).padStart(2, '0');
 
 const smallFont = 10;
 const mediumFont = 12;

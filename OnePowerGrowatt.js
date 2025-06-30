@@ -373,7 +373,6 @@ async function ask() {
   settings.graphOption = {"top": "line"},
   settings.resolution = 60;
   settings.height = 550
-	log(settings.whatbrand)
 	if (settings.whatbrand == "growatt") {
 		settings.token = await askForToken();
 		settings.devicesn = await askForDeviceSn();

@@ -810,7 +810,7 @@ async function createWidget(){
 	let loadpercenttext = percentrowvalue.addText(Math.round(loadpercent) + "\n%");
 	loadpercenttext.font = Font.lightSystemFont(textsize);
 
-	let realtimevaluetext2 = realtimevaluetext.addText(Math.round(ppv) + "\nW");
+	let realtimevaluetext2 = realtimevaluetext.addText(ppv);
 	realtimevaluetext2.font = Font.lightSystemFont(textsize);
 	
 	solarkwhtext.textColor = new Color("#ffffff");

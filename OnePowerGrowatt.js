@@ -287,7 +287,7 @@ async function fetchData() {
 	data = JSON.parse(content);
 	if (settings.deviceType == "min") {
 		ppv = data["data"][settings.deviceType][0]["ppv"];
-		if (ppv > 10000) {
+		if (ppv > 1000) {
 			ppv = ( ppv / 1000).toFixed(1) + "\nkW"
 		} else {
 			ppv = Math.round(ppv) + "\nW"

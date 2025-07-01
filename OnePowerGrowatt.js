@@ -1249,7 +1249,7 @@ async function hamtaSystemInfo(token, stationId) {
     throw new Error("Kunde inte hämta systeminfo: " + JSON.stringify(response));
   }
 	const dataJSON = JSON.stringify(response, null ,2);
-	//fm.writeString(filePathData, dataJSON);
+	fm.writeString(filePathData, dataJSON);
 	settings.devicesn = response["body"]["singleEnergyInverterProps"]["sn"];
 	settings.updatehour = String(DateObj.getHours()).padStart(2,"0");
 	settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");

@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.52
+let version = 0.53
 let widget;
 let day;
 let todaydate;
@@ -32,15 +32,15 @@ let extras;
 let ppv;
 
 const fileNameData = Script.name() + "_Data.json";
-const fileNameData2 = Script.name() + "_Data2.json";
-const fileNameData3 = Script.name() + "_Data3.json";
+const fileNameSystemData = Script.name() + "_SystemData.json";
+const fileNameBatteryData = Script.name() + "_BatteryData.json";
 const fileNameSettings = Script.name() + "_Settings.json";
 const fileNameTranslations = Script.name() + "_Translations.json";
 const fm = FileManager.iCloud();
 const dir = fm.documentsDirectory();
 const filePathData = fm.joinPath(dir, fileNameData);
-const filePathData2 = fm.joinPath(dir, fileNameData2);
-const filePathData3 = fm.joinPath(dir, fileNameData3);
+const filePathSystemData = fm.joinPath(dir, fileNameSystemData);
+const filePathBatteryData = fm.joinPath(dir, fileNameBatteryData);
 const filePathSettings = fm.joinPath(dir, fileNameSettings);
 const filePathTranslations = fm.joinPath(dir, fileNameTranslations);
 
@@ -1184,10 +1184,10 @@ async function hamtaSystemData(token, stationId) {
   };
   const response = await req.loadJSON();
   if (!response.successful || response.errorCode !== 0) {
-    throw new Error("❌ Kunde inte hämta systeminfo: " + JSON.stringify(response));
+    throw new Error("Kunde inte hämta systemdata: " + JSON.stringify(response));
   }
 	const dataJSON = JSON.stringify(response, null ,2);
-				fm.writeString(filePathData2, dataJSON);
+				fm.writeString(filePathSystemData, dataJSON);
 				settings.updatehour = String(DateObj.getHours()).padStart(2,"0");
 				settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");
 				fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
@@ -1213,12 +1213,12 @@ async function hamtaSystemBatteryInfo(token, stationId) {
   };
   const response = await req.loadJSON();
   if (!response.successful || response.errorCode !== 0) {
-    throw new Error("❌ Kunde inte hämta systeminfo: " + JSON.stringify(response));
+    throw new Error("Kunde inte hämta batteryinfo: " + JSON.stringify(response));
   }
 	const dataJSON = JSON.stringify(response, null ,2);
 	batterychargekwh=response["body"]["data"][3][dd-1]["value"]
 	batterydischargekwh=response["body"]["data"][1][dd-1]["value"]
-	fm.writeString(filePathData3, dataJSON);
+	fm.writeString(filePathBatteryData, dataJSON);
 	settings.updatehour = String(DateObj.getHours()).padStart(2,"0");
 	settings.updateminute = String(DateObj.getMinutes()).padStart(2,"0");
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2)); // Pretty print
@@ -1246,7 +1246,7 @@ async function hamtaSystemInfo(token, stationId) {
   };
   const response = await req.loadJSON();
   if (!response.successful || response.errorCode !== 0) {
-    throw new Error("❌ Kunde inte hämta systeminfo: " + JSON.stringify(response));
+    throw new Error("Kunde inte hämta systeminfo: " + JSON.stringify(response));
   }
 	const dataJSON = JSON.stringify(response, null ,2);
 	//fm.writeString(filePathData, dataJSON);

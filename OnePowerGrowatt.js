@@ -4,7 +4,7 @@
 // License: Personal use only. See LICENSE for details.
 // This script was created by Flopp999
 // Support me with a coffee https://www.buymeacoffee.com/flopp999 
-let version = 0.51
+let version = 0.52
 let widget;
 let day;
 let todaydate;
@@ -378,12 +378,12 @@ async function ask() {
   settings.resolution = 60;
   settings.height = 550
 	if (settings.brand == "growatt") {
-		settings.token = await askForToken();
-		settings.devicesn = await askForDeviceSn();
-		settings.deviceType = await getDeviceType()
+		await askForToken();
+		await askForDeviceSn();
+		await getDeviceType()
 	} else if (settings.brand == "wattsonic") {
-		settings.username = await askForUsername();
-		settings.devicesn = await askForPassword();
+		await askForUsername();
+		await askForPassword();
 	}
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
 	return settings
@@ -487,10 +487,9 @@ async function askForUsername() {
 	alert.addTextField("example@mail.com",settings.username).setDefaultKeyboard();
 	alert.addAction("OK");
 	await alert.present();
-	let input = alert.textFieldValue(0);
-	settings.username = input
+	settings.username = alert.textFieldValue(0);
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
-	return input;
+	return;
 }
 
 async function askForToken() {
@@ -503,7 +502,7 @@ async function askForToken() {
 	let input = alert.textFieldValue(0);
 	settings.token = input
 	fm.writeString(filePathSettings, JSON.stringify(settings, null, 2));
-	return input;
+	return;
 }
 
 async function Graph(day, graphOption) {
@@ -613,9 +612,8 @@ async function askForDeviceSn() {
 	alert.addTextField().setDefaultKeyboard();
 	alert.addAction("OK");
 	await alert.present();
-	let input = alert.textFieldValue(0);
-	settings.devicesn = input;
-	return input;
+	settings.devicesn = alert.textFieldValue(0);
+	return;
 }
 
 async function askForPassword() {
@@ -625,9 +623,8 @@ async function askForPassword() {
 	alert.addTextField().setDefaultKeyboard();
 	alert.addAction("OK");
 	await alert.present();
-	let input = alert.textFieldValue(0);
-	settings.password = input;
-	return input;
+	settings.password = alert.textFieldValue(0);
+	return;
 }
 
 async function renderSection(position) {
